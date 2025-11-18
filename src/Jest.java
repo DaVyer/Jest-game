@@ -19,19 +19,14 @@ public class Jest extends Carte{
         return cartes.get(idJest);
     }
 
-    public int choisirOffre(Joueur joueur, Offre offre){
+    public Joueur getJoueur() {
+        return this.joueur;
+    }
+    public int ajouterAuJest(Joueur joueur, Carte carte) {
         return 1;
     }
 
-    public int faireOffre(){
-        return 1;
-    }
-
-    private int ajouterAuJest(Carte carte, Offre offre){
-        return 1;
-    }
-
-    public int accept(Visitor visitor){
-        return 1;
+    public int recupererCarteOffre(Carte carte) {
+        return 0;
     }
 }
