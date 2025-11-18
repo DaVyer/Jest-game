@@ -6,7 +6,8 @@ import java.util.List;
  *
  * <p>Gère la création, le mélange et la distribution des cartes pour une
  * partie. Certaines méthodes ici sont des stubs et doivent être complétées
- * (voir les commentaires `À compléter`).</p>
+ * </p>
+ * 
  *
  * @author Tristan
  * @version 1.0
@@ -21,6 +22,8 @@ public class Pioche {
 
     /**
      * Définit l'identifiant de la pioche.
+     * 
+     * A completer, je ne sais pas comment on gere des id.
      *
      * @param idPioche identifiant à affecter à la pioche
      */
