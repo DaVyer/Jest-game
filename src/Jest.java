@@ -1,15 +1,13 @@
-import javax.xml.stream.FactoryConfigurationError;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Jest extends Carte{
     private static AtomicInteger ID_GENERATOR = new AtomicInteger(0);
-    private int idJest;
     private final ArrayList<Carte> cartes;
     private Joueur joueur;
 
     public Jest(ArrayList<Carte> cartes, Joueur joueur) {
-        idJest = ID_GENERATOR.getAndIncrement();
+        int idJest = ID_GENERATOR.getAndIncrement();
         this.cartes = cartes;
         this.joueur = joueur;
 
