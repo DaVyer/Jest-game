@@ -2,6 +2,11 @@ public class Carte {
     private CouleurCarte couleur;
     private ValeurCarte valeur;
 
+    public Carte(ValeurCarte valeur,  CouleurCarte couleur) {
+        this.valeur = valeur;
+        this.couleur = couleur;
+    }
+
     public CouleurCarte getCouleur() {
         return couleur;
     }
@@ -16,5 +21,10 @@ public class Carte {
 
     public void setValeur(ValeurCarte valeur) {
         this.valeur = valeur;
+    }
+
+    @Override
+    public String toString() {
+        return valeur + " de " +  couleur;
     }
 }
