@@ -45,11 +45,13 @@ public class Pioche {
      *
      * <p>Cette méthode crée une nouvelle liste vide pour contenir les cartes.
      * Utiliser cette méthode lors de la création d'une pioche vide.
-     * Une fois la pioche crée, la méthode initPioche() est appelé.</p>
+     * Une fois la pioche crée, la méthode initPioche() est appelé.
+     * La pioche courante est ensuite mélangé.</p>
      */
     public void setPioche(){
         this.pioche = new ArrayList<>();
         initPioche();
+        melanger();
     }
 
     /**
@@ -116,7 +118,7 @@ public class Pioche {
      * pour réordonner aléatoirement les éléments de `pioche`.</p>
      */
     public void melanger(){
-
+        Collections.shuffle(this.pioche);
     }
 
     /**
