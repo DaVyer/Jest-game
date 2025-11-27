@@ -21,6 +21,15 @@ public class Pioche {
     private List<Carte> pioche;
 
     /**
+     * Constructeur de pioche
+     * 
+     * @param id
+     */
+    public Pioche(int id){
+        this.idPioche = id;
+    }
+
+    /**
      * Définit l'identifiant de la pioche.
      * 
      * A completer, je ne sais pas comment on gere des id.
