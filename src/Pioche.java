@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -10,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * </p>
  * 
  *
- * @author Tristan
+ * @author Tristan Crémonat, Gwendal Rodrigues
  * @version %I%, %G%
  */
 public class Pioche {
@@ -19,7 +18,7 @@ public class Pioche {
     private final int idPioche;
 
     /** Liste des cartes contenues dans la pioche. */
-    private List<Carte> pioche;
+    private ArrayList<Carte> pioche;
 
     /**
      * Constructeur de pioche
@@ -58,7 +57,7 @@ public class Pioche {
      *
      * @return la liste des cartes de la pioche (peut être `null` si non initialisée)
      */
-    public List<Carte> getPioche(){
+    public ArrayList<Carte> getPioche(){
         return this.pioche;
     }
 
@@ -89,7 +88,7 @@ public class Pioche {
      *
      * @return la liste des cartes piochées (ou une liste vide si aucune carte piochée)
      */
-    public List<Carte> piocher(){
+    public ArrayList<Carte> piocher(){
         return new ArrayList<>();
     }
 
