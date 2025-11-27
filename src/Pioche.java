@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Représente une pioche de cartes du jeu.
@@ -10,12 +11,12 @@ import java.util.List;
  * 
  *
  * @author Tristan
- * @version 1.0
+ * @version %I%, %G%
  */
 public class Pioche {
-
+    private final static AtomicInteger ID_GENERATOR = new AtomicInteger(0);
     /** Identifiant de la pioche. */
-    private int idPioche;
+    private final int idPioche;
 
     /** Liste des cartes contenues dans la pioche. */
     private List<Carte> pioche;
@@ -23,21 +24,11 @@ public class Pioche {
     /**
      * Constructeur de pioche
      * 
-     * @param id
+     * @param id -- id de la Pioche.
      */
     public Pioche(int id){
-        this.idPioche = id;
-    }
+        idPioche = ID_GENERATOR.getAndIncrement();
 
-    /**
-     * Définit l'identifiant de la pioche.
-     * 
-     * A completer, je ne sais pas comment on gere des id.
-     *
-     * @param idPioche identifiant à affecter à la pioche
-     */
-    public void setIdPioche(int idPioche){
-        this.idPioche = idPioche;
     }
 
     /**
@@ -74,7 +65,7 @@ public class Pioche {
     /**
      * Ajoute une carte au sommet (ou à la fin) de la pioche.
      *
-     * @param carte la carte à ajouter (doit être non null)
+     * @param carte la carte à ajouter (doit être non null).
      */
     public void ajouterCartePioche(Carte carte){
         this.pioche.add(carte);
@@ -83,7 +74,7 @@ public class Pioche {
     /**
      * Supprime une carte de la pioche.
      *
-     * @param carte la carte à supprimer (si présente)
+     * @param carte la carte à supprimer (si présente).
      */
     public void enleverCartePioche(Carte carte){
         this.pioche.remove(carte);
@@ -99,8 +90,7 @@ public class Pioche {
      * @return la liste des cartes piochées (ou une liste vide si aucune carte piochée)
      */
     public List<Carte> piocher(){
-        List<Carte> carte;
-        return carte;
+        return new ArrayList<>();
     }
 
     /**
