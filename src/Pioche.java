@@ -130,6 +130,6 @@ public class Pioche {
      * @return `true` si la pioche est vide, `false` sinon
      */
     public boolean estVide(){
-        return true;
+        return this.pioche.isEmpty();
     }
 }
