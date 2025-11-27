@@ -27,6 +27,16 @@ public class Offre {
     /**Attribut permettant de savoir si la pioche est disponible ou non */
     private boolean disponible;
 
+    /**Constructeur de Offre 
+     * 
+     * @param idOffre
+    */
+    public Offre(int idOffre){
+        // En vrai ici je verrais bien une varible static pour les id, qui permettent de savoir et initialiser les id
+        this.idOffre = idOffre;
+        this.disponible = true;
+    }
+
     /**Getter de idOffre */
     public int getIdOffre(){
         return this.idOffre;
