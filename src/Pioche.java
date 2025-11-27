@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -43,10 +44,26 @@ public class Pioche {
      * Initialise la pioche comme une liste vide.
      *
      * <p>Cette méthode crée une nouvelle liste vide pour contenir les cartes.
-     * Utiliser cette méthode lors de la création d'une pioche vide.</p>
+     * Utiliser cette méthode lors de la création d'une pioche vide.
+     * Une fois la pioche crée, la méthode initPioche() est appelé.</p>
      */
     public void setPioche(){
         this.pioche = new ArrayList<>();
+        initPioche();
+    }
+
+    /**
+     * Remplie la pioche avec toutes les combinaisons de carte et de valeur possible présente dans CouleurCarte et ValeurCarte.
+     *
+     * <p>Cette méthode prend la liste vide courante et insert toutes les combinaisons de cartes possibles.
+     * Cette méthode est utilisé lors de l'appel de la méthode setPioche().</p>
+     */
+    public void initPioche(){
+        for (ValeurCarte v: ValeurCarte.values()){
+            for (CouleurCarte c: CouleurCarte.values()){
+                this.pioche.add(new Carte(v, c));
+            }
+        }
     }
 
     /**
