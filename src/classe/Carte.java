@@ -9,6 +9,7 @@ package classe;
 public class Carte {
     private CouleurCarte couleur;
     private ValeurCarte valeur;
+    private ConditionTrophee trophee;
 
     /**
      * Constructor of the Carte class
@@ -18,6 +19,17 @@ public class Carte {
     public Carte(ValeurCarte valeur,  CouleurCarte couleur) {
         this.valeur = valeur;
         this.couleur = couleur;
+        this.trophee = calculTrophee();
+
+    }
+
+    private ConditionTrophee calculTrophee(){
+        if (this.valeur == ValeurCarte.DEUX && this.couleur == CouleurCarte.TREFLE) {
+            return ConditionTrophee.PLUSBASSE;
+        }
+
+        // IMPORTANT : Il faut retourner null si ce n'est pas une carte à trophée
+        return null; 
     }
 
     /**
@@ -50,6 +62,14 @@ public class Carte {
      */
     public void setValeur(ValeurCarte valeur) {
         this.valeur = valeur;
+    }
+
+    /**
+     * Method that return the trophy value of a card?
+     * 
+     */
+    public ConditionTrophee getTrophee(){
+        return this.trophee;
     }
 
     /**
