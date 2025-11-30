@@ -11,7 +11,7 @@ import java.util.List;
  * 
  *
  * @author Tristan
- * @version 1.0
+ * @version %I%, %G%
  */
 
 public class Offre {
