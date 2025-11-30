@@ -1,3 +1,4 @@
+package classe;
 /**
  * A class that permits to create cards with their color and value.
  *
