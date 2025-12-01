@@ -1,9 +1,10 @@
+package classe;
 import java.util.ArrayList;
 
 public class Trophee {
-    public static void main(Carte carte, conditionTrophee condition) {
+    public static void main(Carte carte, ConditionTrophee condition) {
         carte = carte;
-        conditionTrophee cond = condition;
+        ConditionTrophee cond = condition;
     }
 
     public static Carte getCarte() {

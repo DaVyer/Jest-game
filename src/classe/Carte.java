@@ -1,0 +1,110 @@
+package classe;
+/**
+ * A class that permits to create cards with their color and value.
+ *
+ * @author Gwendal Rodrigues
+ * @version %I%, %G%
+ */
+
+public class Carte {
+    private CouleurCarte couleur;
+    private ValeurCarte valeur;
+    private ConditionTrophee trophee;
+
+    /**
+     * Constructor of the Carte class
+     * @param valeur the value of the card (see @CouleurCarte enum).
+     * @param couleur the color of the card (see @ValeurCarte enum).
+     */
+    public Carte(ValeurCarte valeur,  CouleurCarte couleur) {
+        this.valeur = valeur;
+        this.couleur = couleur;
+        this.trophee = calculTrophee();
+
+    }
+
+    /**
+     * Calcul de quel trophé associer à quel carte
+     * @param valeur the value of the card (see @CouleurCarte enum).
+     * @param couleur the color of the card (see @ValeurCarte enum).
+     */
+    private ConditionTrophee calculTrophee(){
+        if ((this.valeur == ValeurCarte.DEUX && this.couleur == CouleurCarte.TREFLE)
+        || ( this.valeur == ValeurCarte.TROIS && this.couleur == CouleurCarte.CARREAU)
+        || ( this.valeur == ValeurCarte.QUATRE && this.couleur == CouleurCarte.TREFLE)
+        || ( this.valeur == ValeurCarte.QUATRE && this.couleur == CouleurCarte.PIQUE)) {
+            return ConditionTrophee.PLUSBASSE;
+        }else if((this.valeur == ValeurCarte.TROIS && this.couleur == CouleurCarte.TREFLE)
+        || ( this.valeur == ValeurCarte.DEUX && this.couleur == CouleurCarte.CARREAU)
+        || ( this.valeur == ValeurCarte.AS && this.couleur == CouleurCarte.PIQUE)
+        || ( this.valeur == ValeurCarte.AS && this.couleur == CouleurCarte.TREFLE)){
+            return ConditionTrophee.PLUSHAUTE;
+        }else if((this.valeur == ValeurCarte.TROIS && this.couleur == CouleurCarte.PIQUE)
+        || ( this.valeur == ValeurCarte.DEUX && this.couleur == CouleurCarte.PIQUE)
+        || ( this.valeur == ValeurCarte.AS && this.couleur == CouleurCarte.TREFLE)){
+            return ConditionTrophee.MAJORITE;
+        }else if (( this.valeur == ValeurCarte.AS && this.couleur == CouleurCarte.COEUR)
+        || ( this.valeur == ValeurCarte.DEUX && this.couleur == CouleurCarte.COEUR)
+        || ( this.valeur == ValeurCarte.TROIS && this.couleur == CouleurCarte.COEUR)
+        || ( this.valeur == ValeurCarte.QUATRE && this.couleur == CouleurCarte.COEUR)){
+            return ConditionTrophee.JOKER;
+        }else if (this.couleur == CouleurCarte.JOKER){
+            return ConditionTrophee.MEILLEURJEST;
+        }else if ( this.valeur == ValeurCarte.QUATRE && this.couleur == CouleurCarte.CARREAU){
+            return ConditionTrophee.MEILLEURJESTSANSJOKER;
+        }
+
+
+        // IMPORTANT : Il faut retourner null si ce n'est pas une carte à trophée
+        return null; 
+    }
+
+    /**
+     * Method that get the current color of a card.
+     * @return CouleurCarte
+     */
+    public CouleurCarte getCouleur() {
+        return couleur;
+    }
+
+    /**
+     * Method that set a "couleur" to the current color of a card.
+     * @param couleur -- color of a card.
+     */
+    public void setCouleur(CouleurCarte couleur) {
+        this.couleur = couleur;
+    }
+
+    /**
+     * Method that get the current value of a card.
+     * @return ValeurCarte
+     */
+    public ValeurCarte getValeur() {
+        return valeur;
+    }
+
+    /**
+     * Method that set a "valeur" to the current value of a card.
+     * @param valeur -- value of a card.
+     */
+    public void setValeur(ValeurCarte valeur) {
+        this.valeur = valeur;
+    }
+
+    /**
+     * Method that return the trophy value of a card?
+     * 
+     */
+    public ConditionTrophee getTrophee(){
+        return this.trophee;
+    }
+
+    /**
+     * Method that returns a formated string.
+     * @return String -- a String with the value and the color of the card.
+     */
+    @Override
+    public String toString() {
+        return valeur + " de " +  couleur;
+    }
+}
