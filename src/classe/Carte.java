@@ -23,10 +23,37 @@ public class Carte {
 
     }
 
+    /**
+     * Calcul de quel trophé associer à quel carte
+     * @param valeur the value of the card (see @CouleurCarte enum).
+     * @param couleur the color of the card (see @ValeurCarte enum).
+     */
     private ConditionTrophee calculTrophee(){
-        if (this.valeur == ValeurCarte.DEUX && this.couleur == CouleurCarte.TREFLE) {
+        if ((this.valeur == ValeurCarte.DEUX && this.couleur == CouleurCarte.TREFLE)
+        || ( this.valeur == ValeurCarte.TROIS && this.couleur == CouleurCarte.CARREAU)
+        || ( this.valeur == ValeurCarte.QUATRE && this.couleur == CouleurCarte.TREFLE)
+        || ( this.valeur == ValeurCarte.QUATRE && this.couleur == CouleurCarte.PIQUE)) {
             return ConditionTrophee.PLUSBASSE;
+        }else if((this.valeur == ValeurCarte.TROIS && this.couleur == CouleurCarte.TREFLE)
+        || ( this.valeur == ValeurCarte.DEUX && this.couleur == CouleurCarte.CARREAU)
+        || ( this.valeur == ValeurCarte.AS && this.couleur == CouleurCarte.PIQUE)
+        || ( this.valeur == ValeurCarte.AS && this.couleur == CouleurCarte.TREFLE)){
+            return ConditionTrophee.PLUSHAUTE;
+        }else if((this.valeur == ValeurCarte.TROIS && this.couleur == CouleurCarte.PIQUE)
+        || ( this.valeur == ValeurCarte.DEUX && this.couleur == CouleurCarte.PIQUE)
+        || ( this.valeur == ValeurCarte.AS && this.couleur == CouleurCarte.TREFLE)){
+            return ConditionTrophee.MAJORITE;
+        }else if (( this.valeur == ValeurCarte.AS && this.couleur == CouleurCarte.COEUR)
+        || ( this.valeur == ValeurCarte.DEUX && this.couleur == CouleurCarte.COEUR)
+        || ( this.valeur == ValeurCarte.TROIS && this.couleur == CouleurCarte.COEUR)
+        || ( this.valeur == ValeurCarte.QUATRE && this.couleur == CouleurCarte.COEUR)){
+            return ConditionTrophee.JOKER;
+        }else if (this.couleur == CouleurCarte.JOKER){
+            return ConditionTrophee.MEILLEURJEST;
+        }else if ( this.valeur == ValeurCarte.QUATRE && this.couleur == CouleurCarte.CARREAU){
+            return ConditionTrophee.MEILLEURJESTSANSJOKER;
         }
+
 
         // IMPORTANT : Il faut retourner null si ce n'est pas une carte à trophée
         return null; 
