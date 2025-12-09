@@ -34,3 +34,6 @@ bin/
 ### Main.java (test file) ###
 Main.java
 
+### Compiled Java files ###
+*.class
+

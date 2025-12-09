@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Random;
 
 /**
  * Représente une pioche de cartes du jeu.
@@ -52,10 +53,6 @@ public class Pioche {
     public void setPioche(){
         this.pioche = new LinkedList<>();
         initPioche();
-        melanger();
-        melanger();
-        melanger();
-        melanger();
         melanger();
     }
 
@@ -135,7 +132,7 @@ public class Pioche {
      * pour réordonner aléatoirement les éléments de `pioche`.</p>
      */
     public void melanger(){
-        Collections.shuffle(this.pioche);
+        Collections.shuffle(this.pioche, new Random(System.nanoTime()));
     }
 
     /**
