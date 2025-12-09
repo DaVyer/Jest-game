@@ -1,6 +1,7 @@
 package classe;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -20,16 +21,15 @@ public class Pioche {
     private final int idPioche;
 
     /** Liste des cartes contenues dans la pioche. */
-    private ArrayList<Carte> pioche;
+    private LinkedList<Carte> pioche;
 
     /**
      * Constructeur de pioche
      * 
      * @param id -- id de la Pioche.
      */
-    public Pioche(int id){
+    public Pioche(){
         idPioche = ID_GENERATOR.getAndIncrement();
-
     }
 
     /**
@@ -50,8 +50,12 @@ public class Pioche {
      * La pioche courante est ensuite mélangé.</p>
      */
     public void setPioche(){
-        this.pioche = new ArrayList<>();
+        this.pioche = new LinkedList<>();
         initPioche();
+        melanger();
+        melanger();
+        melanger();
+        melanger();
         melanger();
     }
 
@@ -62,11 +66,23 @@ public class Pioche {
      * Cette méthode est utilisé lors de l'appel de la méthode setPioche().</p>
      */
     public void initPioche(){
-        for (ValeurCarte v: ValeurCarte.values()){
-            for (CouleurCarte c: CouleurCarte.values()){
-                this.pioche.add(new Carte(v, c));
-            }
-        }
+        this.pioche.add(new Carte(ValeurCarte.AS, CouleurCarte.JOKER, ConditionTrophee.MEILLEURJEST)); // Je ne savais pas quelle valeur mettre pour le joker, j'ai mis l'as, mais on s'en fou
+        this.pioche.add(new Carte(ValeurCarte.AS, CouleurCarte.COEUR, ConditionTrophee.JOKER));
+        this.pioche.add(new Carte(ValeurCarte.QUATRE, CouleurCarte.PIQUE, ConditionTrophee.PLUSBASSE_TREFLE));
+        this.pioche.add(new Carte(ValeurCarte.QUATRE, CouleurCarte.TREFLE, ConditionTrophee.PLUSBASSE_PIQUE));
+        this.pioche.add(new Carte(ValeurCarte.DEUX, CouleurCarte.COEUR, ConditionTrophee.JOKER));
+        this.pioche.add(new Carte(ValeurCarte.QUATRE, CouleurCarte.CARREAU, ConditionTrophee.MEILLEURJESTSANSJOKER));
+        this.pioche.add(new Carte(ValeurCarte.QUATRE, CouleurCarte.COEUR, ConditionTrophee.JOKER));
+        this.pioche.add(new Carte(ValeurCarte.TROIS, CouleurCarte.COEUR, ConditionTrophee.JOKER));
+        this.pioche.add(new Carte(ValeurCarte.AS, CouleurCarte.PIQUE, ConditionTrophee.PLUSHAUTE_TREFLE));
+        this.pioche.add(new Carte(ValeurCarte.AS, CouleurCarte.TREFLE, ConditionTrophee.PLUSHAUTE_PIQUE));
+        this.pioche.add(new Carte(ValeurCarte.AS, CouleurCarte.CARREAU, ConditionTrophee.MAJORITE_4));
+        this.pioche.add(new Carte(ValeurCarte.DEUX, CouleurCarte.PIQUE, ConditionTrophee.MAJORITE_3));
+        this.pioche.add(new Carte(ValeurCarte.DEUX, CouleurCarte.TREFLE, ConditionTrophee.PLUSBASSE_COEUR));
+        this.pioche.add(new Carte(ValeurCarte.DEUX, CouleurCarte.CARREAU, ConditionTrophee.PLUSHAUTE_CARREAU));
+        this.pioche.add(new Carte(ValeurCarte.TROIS, CouleurCarte.PIQUE, ConditionTrophee.MAJORITE_2));
+        this.pioche.add(new Carte(ValeurCarte.TROIS, CouleurCarte.TREFLE, ConditionTrophee.PLUSHAUTE_COEUR));
+        this.pioche.add(new Carte(ValeurCarte.TROIS, CouleurCarte.CARREAU, ConditionTrophee.PLUSBASSE_CARREAU));
     }
 
     /**
@@ -77,7 +93,7 @@ public class Pioche {
      *
      * @return la liste des cartes de la pioche (peut être `null` si non initialisée)
      */
-    public ArrayList<Carte> getPioche(){
+    public LinkedList<Carte> getPioche(){
         return this.pioche;
     }
 
