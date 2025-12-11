@@ -2,12 +2,15 @@ package classe;
 import java.util.ArrayList;
 
 public class Trophee {
-    public static void main(Carte carte, ConditionTrophee condition) {
-        carte = carte;
-        ConditionTrophee cond = condition;
+    private Carte carte;
+    private ConditionTrophee condition;
+
+    public Trophee(Carte carte, ConditionTrophee condition) {
+        this.carte = carte;
+        this.condition = condition;
     }
 
-    public static Carte getCarte() {
+    public Carte getCarte() {
         return carte;
     }
 

@@ -37,5 +37,6 @@ public abstract class Joueur {
 
     }
 
-    public abstract void accept(Visitor visitor);
+    // TODO: Implement when Visitor class is created
+    // public abstract void accept(Visitor visitor);
 }

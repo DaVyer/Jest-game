@@ -121,8 +121,8 @@ public class Pioche {
      *
      * @return la liste des cartes piochées (ou une liste vide si aucune carte piochée)
      */
-    public ArrayList<Carte> piocher(){
-        return new ArrayList<>();
+    public Carte piocher(){
+        return this.pioche.pop();
     }
 
     /**
