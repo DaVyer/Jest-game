@@ -1,3 +1,4 @@
+package classe;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * 
  *
  * @author Tristan
- * @version 1.0
+ * @version %I%, %G%
  */
 public class Manche {
     private int numero;
