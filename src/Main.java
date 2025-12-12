@@ -44,6 +44,25 @@ public class Main {
         return nom;
     }
 
+    public static int demanderNombreJoueurs(Scanner scanner){
+        int nombreJoueurs = 0;
+        System.out.println("Combien de joueurs voulez vous dans votre partie (3 à 4) ? ");
+        
+        while (nombreJoueurs != 3 && nombreJoueurs != 4) {
+            if (scanner.hasNextInt()) {
+                nombreJoueurs = scanner.nextInt();
+                scanner.nextLine(); // consommer le retour à la ligne
+                
+                if (nombreJoueurs != 3 && nombreJoueurs != 4) { 
+                    System.out.println("Veuillez rentrer un nombre de joueurs valant 3 ou 4.");
+                }
+            }
+        }
+        
+        System.out.println("\n\n===============\n");
+        return nombreJoueurs;
+    }
+
     public static void main(String[] arg){
         Scanner scanner = new Scanner(System.in);
         AtomicBoolean enJeu = new AtomicBoolean(true);
@@ -57,18 +76,18 @@ public class Main {
                         enJeu.set(false);
                     }
                     if (input.equalsIgnoreCase("start")) {
-                        System.out.println("===============");
-                        System.out.println("Création des joueurs...\n");
-
-                        String nom1 = demanderNomJoueur(scanner, 1);
-                        String nom2 = demanderNomJoueur(scanner, 2);
-
-                        Joueur joueur1 = new Joueur(nom1);
-                        Joueur joueur2 = new Joueur(nom2);
-
+                        System.out.println("\n===============\n");
+                        
                         Partie partie = new Partie();
-                        partie.ajouterJoueurs(joueur1);
-                        partie.ajouterJoueurs(joueur2);
+
+                        int nombreJoueurs = demanderNombreJoueurs(scanner);
+                        for(int i = 1; i<=nombreJoueurs; i++){
+                            
+                            String nom = demanderNomJoueur(scanner, i);
+                            Joueur joueur = new Joueur(nom);
+                            partie.ajouterJoueurs(joueur);
+
+                        }
                     }
                 }
             }

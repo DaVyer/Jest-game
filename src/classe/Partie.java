@@ -40,7 +40,8 @@ public class Partie{
         System.out.println("\nTrophé Tiré : "); 
         System.out.println("Trophé 1 : " + this.trophees.get(0) + " de condition : " + this.trophees.get(0).getTrophee());
         System.out.println("Trophé 2 : " + this.trophees.get(1) + " de condition : " + this.trophees.get(1).getTrophee());
-        System.out.println("Pioche : " + this.getPioche().getPioche()); 
+        System.out.println("Pioche : " + this.getPioche().getPioche());
+        System.out.println("\n===============\n"); 
 
         this.setJoueurs();
     }
@@ -119,7 +120,7 @@ public class Partie{
      */
     public void ajouterJoueurs(Joueur joueur){
         this.joueurs.add(joueur);
-        System.out.println("\n===============\n\n\t Joueur " + joueur.getIdJoueur() + " ajouté");
+        System.out.println("\t Joueur " + joueur.getIdJoueur() + " ajouté" + "\n\n===============\n");
     }
 
     /**
