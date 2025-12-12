@@ -30,3 +30,10 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### Main.java (test file) ###
+Main.java
+
+### Compiled Java files ###
+*.class
+
