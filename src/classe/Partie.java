@@ -19,7 +19,7 @@ public class Partie{
     private final static AtomicInteger ID_GENERATOR = new AtomicInteger(0);
     private int idPartie;
     private Pioche pioche;
-    private List<Joueur> joueurs;
+    private LinkedList<Joueur> joueurs;
     private LinkedList<Carte> trophees;
 
     /**
@@ -42,13 +42,7 @@ public class Partie{
         System.out.println("Trophé 2 : " + this.trophees.get(1) + " de condition : " + this.trophees.get(1).getTrophee());
         System.out.println("Pioche : " + this.getPioche().getPioche()); 
 
-        // En attendant
-        // this.joueurs = new ArrayList<>();
-        // for (Joueur joueur : joueurs) {
-        //     this.joueurs.add(joueur);
-        // }
-
-        //Jsp comment mettre pioche et trophee a reflechir
+        this.setJoueurs();
     }
 
     /**
@@ -83,7 +77,7 @@ public class Partie{
      *
      * @return la liste des joueurs (peut être vide)
      */
-    public List<Joueur> getJoueurs() {
+    public LinkedList<Joueur> getJoueurs() {
         return this.joueurs;
     }
 
@@ -94,7 +88,7 @@ public class Partie{
      * par une nouvelle liste vide.</p>
      */
     public void setJoueurs() {
-        this.joueurs = new ArrayList<>();
+        this.joueurs = new LinkedList<>();
     }
 
     /**
@@ -125,6 +119,7 @@ public class Partie{
      */
     public void ajouterJoueurs(Joueur joueur){
         this.joueurs.add(joueur);
+        System.out.println("\n===============\n\n\t Joueur " + joueur.getIdJoueur() + " ajouté");
     }
 
     /**
