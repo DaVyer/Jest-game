@@ -8,6 +8,7 @@ public class Jest extends Carte{
     private Joueur joueur;
 
     public Jest(ArrayList<Carte> cartes, Joueur joueur) {
+        super(ValeurCarte.AS, CouleurCarte.JOKER, ConditionTrophee.MEILLEURJEST); // Jest est un joker
         int idJest = ID_GENERATOR.getAndIncrement();
         this.cartes = cartes;
         this.joueur = joueur;

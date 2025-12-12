@@ -1,6 +1,8 @@
 package classe;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Représente la partie, du début jusqu'à la fin de la partie
@@ -14,10 +16,11 @@ import java.util.List;
  */
 
 public class Partie{
+    private final static AtomicInteger ID_GENERATOR = new AtomicInteger(0);
     private int idPartie;
     private Pioche pioche;
-    private List<Joueur> joueurs;
-    private List<Trophee> trophees;
+    private LinkedList<Joueur> joueurs;
+    private LinkedList<Carte> trophees;
 
     /**
      * Constructeur
@@ -25,15 +28,21 @@ public class Partie{
      * @param id identifiant de la partie
      * @param joueurs liste initiale des joueurs participant à la partie
      */
-    public Partie(int id, List<Joueur> joueurs){
-        this.idPartie = id;
+    public Partie(){
+        this.idPartie = ID_GENERATOR.getAndIncrement();
+        System.out.println("\nNouvelle partie créé :\n\t" + this.getIdPartie() + "\n\n===============" ); 
 
-        this.joueurs = new ArrayList<>();
-        for (Joueur joueur : joueurs) {
-            this.joueurs.add(joueur);
-        }
+        this.pioche = new Pioche();
+        this.pioche.setPioche();
+        System.out.println("\nPioche créé : \n" + this.pioche.getPioche() +"\n\n==============="); // A supprimer, on ne veut pas voir la pioche a chaque parties.
 
-        //Jsp comment mettre pioche et trophee a reflechir
+        this.setTrophees();
+        System.out.println("\nTrophé Tiré : "); 
+        System.out.println("Trophé 1 : " + this.trophees.get(0) + " de condition : " + this.trophees.get(0).getTrophee());
+        System.out.println("Trophé 2 : " + this.trophees.get(1) + " de condition : " + this.trophees.get(1).getTrophee());
+        System.out.println("Pioche : " + this.getPioche().getPioche()); 
+
+        this.setJoueurs();
     }
 
     /**
@@ -64,20 +73,11 @@ public class Partie{
     }
 
     /**
-     * Définit la pioche utilisée pour la partie.
-     *
-     * @param pioche la pioche à associer à la partie
-     */
-    public void setPioche(Pioche pioche) {
-        this.pioche = pioche;
-    }
-
-    /**
      * Retourne la liste des joueurs participant à la partie.
      *
      * @return la liste des joueurs (peut être vide)
      */
-    public List<Joueur> getJoueurs() {
+    public LinkedList<Joueur> getJoueurs() {
         return this.joueurs;
     }
 
@@ -88,7 +88,7 @@ public class Partie{
      * par une nouvelle liste vide.</p>
      */
     public void setJoueurs() {
-        this.joueurs = new ArrayList<>();
+        this.joueurs = new LinkedList<>();
     }
 
     /**
@@ -96,7 +96,7 @@ public class Partie{
      *
      * @return la liste des trophées (peut être vide)
      */
-    public List<Trophee> getTrophees() {
+    public LinkedList<Carte> getTrophees() {
         return this.trophees;
     }
 
@@ -106,7 +106,10 @@ public class Partie{
      * <p>Cette méthode crée et associe une nouvelle liste vide à l'attribut interne.</p>
      */
     public void setTrophees() {
-        this.trophees = new ArrayList<>();
+        this.trophees = new LinkedList<>();
+        this.trophees.add(this.pioche.piocher());
+        this.trophees.add(this.pioche.piocher());
+
     } 
     
     /**
@@ -116,16 +119,9 @@ public class Partie{
      */
     public void ajouterJoueurs(Joueur joueur){
         this.joueurs.add(joueur);
+        System.out.println("\n===============\n\n\t Joueur " + joueur.getIdJoueur() + " ajouté");
     }
 
-    /**
-     * Ajoute un trophée à la partie.
-     *
-     * @param trophee le trophée à ajouter
-     */
-    public void ajouterTrophee(Trophee trophee){
-        this.trophees.add(trophee);
-    }
     /**
      * Supprime un joueur de la partie.
      *
@@ -159,18 +155,6 @@ public class Partie{
      */
     public void finPartie(){
         // A definir
-    }
-    /**
-     * Pioche et retourne une liste de trophées pour la partie.
-     *
-     * <p>À définir : sélectionner les trophées selon les règles de la partie.</p>
-     *
-     * @return liste des trophées piochés (peut être vide)
-     */
-    private List<Trophee> piocherTrophees(){
-        // A definir
-        List<Trophee> trophee = new ArrayList<>();
-        return trophee;
     }
     /**
      * Affiche ou prépare le résultat/score de la partie.
