@@ -1,18 +1,14 @@
 package classe;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Jest extends Carte{
-    private static AtomicInteger ID_GENERATOR = new AtomicInteger(0);
     private final ArrayList<Carte> cartes;
     private Joueur joueur;
 
-    public Jest(ArrayList<Carte> cartes, Joueur joueur) {
+    public Jest() {
         super(ValeurCarte.AS, CouleurCarte.JOKER, ConditionTrophee.MEILLEURJEST); // Jest est un joker
-        int idJest = ID_GENERATOR.getAndIncrement();
-        this.cartes = cartes;
-        this.joueur = joueur;
-
+        this.cartes = new ArrayList<>();
+        this.joueur = null;
     }
 
     public Carte getCarte(int idJest) {
@@ -22,9 +18,31 @@ public class Jest extends Carte{
     public Joueur getJoueur() {
         return this.joueur;
     }
-    public int ajouterAuJest(Joueur joueur, Carte carte) {
-        return 1;
+
+    public void afficher() {
+        for (int i = 0; i < cartes.size(); i++) {
+            System.out.println("[" + i + "] " + cartes.get(i));
+        }
     }
+
+
+    public void ajouterAuJest(Carte carte) {
+        this.cartes.add(carte);
+    }
+
+    public void retirerCarte(int index) {
+        if (index < 0 || index >= cartes.size()) {
+            throw new IndexOutOfBoundsException(
+                    "Index invalide : " + index + " (taille=" + cartes.size() + ")"
+            );
+        }
+        cartes.remove(index);
+    }
+
+    public int taille(){
+        return cartes.size();
+    }
+
 
     public int recupererCarteOffre(Carte carte) {
         return 0;
