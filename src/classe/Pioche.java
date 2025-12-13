@@ -26,8 +26,6 @@ public class Pioche {
 
     /**
      * Constructeur de pioche
-     * 
-     * @param id -- id de la Pioche.
      */
     public Pioche(){
         idPioche = ID_GENERATOR.getAndIncrement();
@@ -123,6 +121,10 @@ public class Pioche {
      */
     public Carte piocher(){
         return this.pioche.pop();
+    }
+
+    public int getNombreCartes() {
+        return pioche.size();
     }
 
     /**
