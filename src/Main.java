@@ -22,12 +22,12 @@ public class Main {
                 System.out.println("Le nom ne peut pas être vide. Réessayez.");
                 continue;
             }
-            
+
             if (nom.replaceAll(" ", "").isEmpty()) {
                 System.out.println("Le nom ne peut pas être que des espaces. Réessayez.");
                 continue;
             }
-            
+
             if (nom.matches("\\d+")) {
                 System.out.println("Le nom ne peut pas être que des chiffres. Réessayez.");
                 continue;
@@ -37,7 +37,7 @@ public class Main {
                 System.out.println("Le nom doit contenir au moins 2 caractères. Réessayez.");
                 continue;
             }
-            
+
             valide = true;
             System.out.println("Joueur " + numeroJoueur + " : " + nom);
         }
@@ -48,6 +48,18 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         AtomicBoolean enJeu = new AtomicBoolean(true);
 
+        System.out.println("===============");
+        System.out.println("Création des joueurs...\n");
+
+        String nom1 = demanderNomJoueur(scanner, 1);
+        String nom2 = demanderNomJoueur(scanner, 2);
+
+        Joueur joueur1 = new Joueur(nom1);
+        Joueur joueur2 = new Joueur(nom2);
+
+        Partie partie = new Partie();
+        partie.ajouterJoueurs(joueur1);
+        partie.ajouterJoueurs(joueur2);
         // Thread pour lire l'input sans bloquer la boucle
        Thread inputThread = new Thread(() -> {
             while (enJeu.get()) {
@@ -56,19 +68,23 @@ public class Main {
                     if (input.equalsIgnoreCase("exit")) {
                         enJeu.set(false);
                     }
-                    if (input.equalsIgnoreCase("start")) {
-                        System.out.println("===============");
-                        System.out.println("Création des joueurs...\n");
-
-                        String nom1 = demanderNomJoueur(scanner, 1);
-                        String nom2 = demanderNomJoueur(scanner, 2);
-
-                        Joueur joueur1 = new Joueur(nom1);
-                        Joueur joueur2 = new Joueur(nom2);
-
-                        Partie partie = new Partie();
-                        partie.ajouterJoueurs(joueur1);
-                        partie.ajouterJoueurs(joueur2);
+                    if (input.equalsIgnoreCase("manche")) {
+                        partie.jouerManche(scanner);
+                        if (partie.getPioche().estVide()) {
+                            partie.finDePartie();
+                        } else {
+                            System.out.println("\n--- Nouvelle manche ---");
+                        }
+                    }
+                    if (input.equalsIgnoreCase("help")) {
+                        System.out.println("Commandes disponibles :");
+                        System.out.println("-----------");
+                        System.out.println("manche - Jouer une nouvelle manche");
+                        System.out.println("exit   - Quitter le jeu");
+                        System.out.println("help   - Afficher cette aide");
+                        System.out.println("save   - Sauvegarder la partie (non implémenté)");
+                        System.out.println("load   - Charger une partie (non implémenté)");
+                        System.out.println("-----------");
                     }
                 }
             }
