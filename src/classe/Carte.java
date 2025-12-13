@@ -62,6 +62,22 @@ public class Carte {
         return this.trophee;
     }
 
+    public int valeurPourManche() {
+        if (this.getCouleur() == CouleurCarte.JOKER) return 0;
+        if (this.getValeur() == ValeurCarte.AS) return 1;
+        return this.getValeur().getValeur();
+    }
+
+    public int forceCouleur() {
+        return switch (this.getCouleur()) {
+            case PIQUE -> 4;
+            case TREFLE -> 3;
+            case CARREAU -> 2;
+            case COEUR -> 1;
+            default -> 0;
+        };
+    }
+
     /**
      * Method that returns a formated string.
      * @return String -- a String with the value and the color of the card.
