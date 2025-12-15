@@ -34,6 +34,9 @@ public class DTOMapper {
                 j.ajouterAuJest(carteFromDTO(cDTO));
             }
         }
+        System.out.println("DEBUG joueurFromDTO " + dto.nom
+                + " cartesDTO="
+                + (dto.jest == null ? "null" : dto.jest.cartes.size()));
 
         return j;
     }

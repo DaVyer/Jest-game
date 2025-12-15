@@ -337,8 +337,6 @@ public class Partie{
         }
     }
 
-
-
     /**
      * Calcule les scores des joueurs selon les règles du jeu.
      *
@@ -371,5 +369,17 @@ public class Partie{
 
     public void setPartieTerminee(boolean partieTerminee) {
         this.partieTerminee = partieTerminee;
+    }
+
+    public void afficherEtat() {
+        System.out.println("\n===== ÉTAT DE LA PARTIE =====");
+        System.out.println("Nombre de joueurs : " + joueurs.size());
+
+        for (Joueur j : joueurs) {
+            j.afficherMain();
+        }
+
+        System.out.println("Cartes restantes dans la pioche : "
+                + pioche.getPioche().size());
     }
 }

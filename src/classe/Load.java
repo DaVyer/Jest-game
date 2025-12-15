@@ -12,6 +12,13 @@ public class Load {
                      new ObjectInputStream(new FileInputStream(fichier))) {
 
             PartieDTO dto = (PartieDTO) ois.readObject();
+            System.out.println("DEBUG DTO APRÈS READ");
+            for (JoueurDTO j : dto.joueurs) {
+                int n = (j.jest == null || j.jest.cartes == null)
+                        ? -1
+                        : j.jest.cartes.size();
+                System.out.println(" - " + j.nom + " jestDTO=" + n);
+            }
             return DTOMapper.partieFromDTO(dto);
         }
     }
