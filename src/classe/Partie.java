@@ -174,16 +174,35 @@ public class Partie{
     }
 
     private void resolutionOffres(Scanner scanner) {
-        List<Joueur> ordre = ordreDeJeuParCarteVisible();
 
-        for (Joueur j : ordre) {
-            List<Offre> offresAdverses = offres.stream()
-                    .filter(o -> !o.getJoueur().equals(j))
-                    .collect(Collectors.toList());
+        Set<Joueur> joueursAyantJoue = new HashSet<>();
 
-            Offre choisie = j.choisirOffre(offresAdverses, scanner);
-            Carte prise = j.choisirCarteOffre(choisie, scanner);
-            j.ajouterAuJest(prise);
+        for (Joueur joueurActuel : joueurs) {
+
+            // Offres encore complètes (2 cartes)
+            List<Offre> offresCompletes = offres.stream()
+                    .filter(Offre::isDisponible)
+                    .toList();
+
+            // Cas spécial : dernier joueur
+            List<Offre> offresDisponibles;
+
+            if (offresCompletes.size() == 1 &&
+                    offresCompletes.getFirst().getJoueur().equals(joueurActuel)) {
+
+                offresDisponibles = offresCompletes;
+
+            } else {
+                offresDisponibles = offresCompletes.stream()
+                        .filter(o -> !o.getJoueur().equals(joueurActuel))
+                        .toList();
+            }
+
+            Offre choisie = joueurActuel.choisirOffre(offresDisponibles, scanner);
+            Carte prise = joueurActuel.choisirCarteOffre(choisie, scanner);
+            joueurActuel.ajouterAuJest(prise);
+
+            joueursAyantJoue.add(joueurActuel);
         }
     }
 
