@@ -133,7 +133,9 @@ public class Partie{
         manche.incrementNumero();
 
         distribuerCartes();
+        System.out.println("===============");
         System.out.println("Manche numéro : " + manche.getNumero());
+        System.out.println("===============");
 
         faireOffre(scanner);
         carteLaPlusHaute();
