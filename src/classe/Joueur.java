@@ -1,16 +1,20 @@
 package classe;
-import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Joueur {
-    private static AtomicInteger ID_GENERATOR = new AtomicInteger(1);
-    private int idJoueur;
+    private static final AtomicInteger ID_GENERATOR = new AtomicInteger(1);
+    private final int idJoueur;
     private String nom;
-    private Jest main;
+    private final Jest main;
+    private final StrategieJoueur strategieJoueur;
 
-    public Joueur(String nom) {
+    public Joueur(String nom, StrategieJoueur strategieJoueur) {
         idJoueur = ID_GENERATOR.getAndIncrement();
         this.nom = nom;
+        this.strategieJoueur = strategieJoueur;
+        this.main = new Jest();
         System.out.println("\n===============\n\n\tNouveau Joueur créé :\t " + this.getNom() + "\n\tJoueur numéro :\t" + this.getIdJoueur() + "\n\n===============\n");
     }
 
@@ -22,22 +26,42 @@ public class Joueur {
         return this.nom;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
     public Jest getMain() {
-        return this.main;
+        return main;
     }
 
     // public abstract void choisirOffre(Joueur joueur, Offre offre);
 
     // public abstract Offre FaireOffre(Joueur joueur);
 
-    private void ajouterAuJest(Carte carte, Offre offre){
-
+    public void ajouterAuJest(Carte carte){
+        main.ajouterAuJest(carte);
     }
 
-    // TODO: Implement when Visitor class is created
-    // public abstract void accept(Visitor visitor);
+    public void afficherMain() {
+        System.out.println("Main de " + nom + " :");
+        main.afficher();
+    }
+
+
+    public Offre faireOffre(Scanner scanner){
+        return strategieJoueur.faireOffre(this, scanner);
+    }
+
+
+    public Offre choisirOffre(List<Offre> offres, Scanner scanner) {
+        return strategieJoueur.choisirOffre(offres, this, scanner);
+    }
+
+    public Carte choisirCarteOffre(Offre offre, Scanner scanner) {
+        return strategieJoueur.choisirCarteOffre(offre, this, scanner);
+    }
+
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
+
+    public StrategieJoueur getStrategie() {
+        return strategieJoueur;
+    }
 }

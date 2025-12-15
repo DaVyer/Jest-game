@@ -1,7 +1,7 @@
 package classe;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.Random;
 
@@ -26,20 +26,9 @@ public class Pioche {
 
     /**
      * Constructeur de pioche
-     * 
-     * @param id -- id de la Pioche.
      */
     public Pioche(){
         idPioche = ID_GENERATOR.getAndIncrement();
-    }
-
-    /**
-     * Retourne l'identifiant de cette pioche.
-     *
-     * @return l'identifiant de la pioche (valeur entière, généralement >= 0)
-     */
-    public int getIdPioche(){
-        return this.idPioche;
     }
 
     /**
@@ -95,24 +84,6 @@ public class Pioche {
     }
 
     /**
-     * Ajoute une carte au sommet (ou à la fin) de la pioche.
-     *
-     * @param carte la carte à ajouter (doit être non null).
-     */
-    public void ajouterCartePioche(Carte carte){
-        this.pioche.add(carte);
-    }
-
-    /**
-     * Supprime une carte de la pioche.
-     *
-     * @param carte la carte à supprimer (si présente).
-     */
-    public void enleverCartePioche(Carte carte){
-        this.pioche.remove(carte);
-    }
-
-    /**
      * Pioche une ou plusieurs cartes depuis la pioche.
      *
      * <p>À compléter : implémentation nécessaire. Cette méthode doit définir
@@ -123,6 +94,10 @@ public class Pioche {
      */
     public Carte piocher(){
         return this.pioche.pop();
+    }
+
+    public int getNombreCartes() {
+        return pioche.size();
     }
 
     /**
@@ -145,5 +120,16 @@ public class Pioche {
      */
     public boolean estVide(){
         return this.pioche.isEmpty();
+    }
+
+    public void setPiocheDepuisDTO(List<CarteDTO> pioche) {
+        this.pioche = new LinkedList<>();
+        for (CarteDTO cDTO : pioche) {
+            this.pioche.add(DTOMapper.carteFromDTO(cDTO));
+        }
+    }
+
+    public void ajouterCarte(Carte carte) {
+        this.pioche.add(carte);
     }
 }
