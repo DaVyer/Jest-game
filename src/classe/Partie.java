@@ -169,7 +169,7 @@ public class Partie{
     private void creerOffres(Scanner scanner) {
         offres.clear();
         for (Joueur j : joueurs) {
-            offres.add(j.faireOffre(scanner));
+            offres.add(j.getStrategie().faireOffre(j, scanner));
         }
     }
 
@@ -179,12 +179,10 @@ public class Partie{
 
         for (Joueur joueurActuel : joueurs) {
 
-            // Offres encore complètes (2 cartes)
             List<Offre> offresCompletes = offres.stream()
                     .filter(Offre::isDisponible)
                     .toList();
 
-            // Cas spécial : dernier joueur
             List<Offre> offresDisponibles;
 
             if (offresCompletes.size() == 1 &&
@@ -198,8 +196,10 @@ public class Partie{
                         .toList();
             }
 
-            Offre choisie = joueurActuel.choisirOffre(offresDisponibles, scanner);
-            Carte prise = joueurActuel.choisirCarteOffre(choisie, scanner);
+            StrategieJoueur strategie = joueurActuel.getStrategie();
+
+            Offre choisie = strategie.choisirOffre(offresDisponibles, joueurActuel, scanner);
+            Carte prise = strategie.choisirCarteOffre(choisie, joueurActuel, scanner);
             joueurActuel.ajouterAuJest(prise);
 
             joueursAyantJoue.add(joueurActuel);
@@ -214,25 +214,6 @@ public class Partie{
             }
         }
         offres.clear();
-    }
-
-    private List<Joueur> ordreDeJeuParCarteVisible() {
-        Map<Joueur, Offre> offreParJoueur = offres.stream()
-                .collect(Collectors.toMap(Offre::getJoueur, o -> o));
-
-        List<Joueur> ordre = new ArrayList<>(joueurs);
-
-        ordre.sort((j1, j2) -> {
-            Carte c1 = offreParJoueur.get(j1).getVisible();
-            Carte c2 = offreParJoueur.get(j2).getVisible();
-
-            int cmp = Integer.compare(c2.valeurPourManche(), c1.valeurPourManche());
-            if (cmp != 0) return cmp;
-
-            return Integer.compare(c2.forceCouleur(), c1.forceCouleur());
-        });
-
-        return ordre;
     }
 
     public void finDePartie() {

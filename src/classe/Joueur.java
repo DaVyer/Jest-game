@@ -41,19 +41,6 @@ public class Joueur {
         main.afficher();
     }
 
-
-    public Offre faireOffre(Scanner scanner) {
-        return strategieJoueur.faireOffre(this, scanner);
-    }
-
-    public Offre choisirOffre(List<Offre> offres, Scanner scanner) {
-        return strategieJoueur.choisirOffre(offres, this, scanner);
-    }
-
-    public Carte choisirCarteOffre(Offre offre, Scanner scanner) {
-        return strategieJoueur.choisirCarteOffre(offre, this, scanner);
-    }
-
     public void accept(Visitor visitor) {
         visitor.visit(this);
     }

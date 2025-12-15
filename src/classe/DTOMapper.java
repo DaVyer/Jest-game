@@ -5,10 +5,6 @@ import java.util.List;
 
 public class DTOMapper {
 
-    /* =========================
-       CARTE
-       ========================= */
-
     public static Carte carteFromDTO(CarteDTO dto) {
         return new Carte(dto.valeur, dto.couleur, dto.condition);
     }
@@ -23,20 +19,22 @@ public class DTOMapper {
 
     public static Joueur joueurFromDTO(JoueurDTO dto) {
 
-        StrategieJoueur strategie = dto.typeStrategie.equals("StrategieAleatoire")
+        StrategieJoueur strategie = dto.typeStrategie.equals("StrategieRobotAleatoire")
                                     ? new StrategieRobotAleatoire()
                                     : new StrategieHumaine();
 
         Joueur j = new Joueur(dto.nom, strategie);
 
-        if (dto.jest != null && dto.jest.cartes != null) {
-            for (CarteDTO cDTO : dto.jest.cartes) {
-                j.ajouterAuJest(carteFromDTO(cDTO));
-            }
+        if (dto.jest == null) {
+            dto.jest = new JestDTO();
         }
-        System.out.println("DEBUG joueurFromDTO " + dto.nom
-                + " cartesDTO="
-                + (dto.jest == null ? "null" : dto.jest.cartes.size()));
+        if (dto.jest.cartes == null) {
+            dto.jest.cartes = new ArrayList<>();
+        }
+
+        for (CarteDTO cDTO : dto.jest.cartes) {
+            j.ajouterAuJest(carteFromDTO(cDTO));
+        }
 
         return j;
     }
@@ -55,8 +53,6 @@ public class DTOMapper {
 
         dto.jest = jestDTO;
 
-        System.out.println("DTO sauvegardé pour " + j.getNom()
-                + " : " + jestDTO.cartes.size() + " cartes");
 
         return dto;
     }

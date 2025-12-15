@@ -8,7 +8,10 @@ import java.util.List;
 public class JestDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
+    public List<CarteDTO> cartes;
 
-    public static List<CarteDTO> cartes = new ArrayList<>();
+    public JestDTO() {
+        this.cartes = new ArrayList<>();
+    }
 }
 
