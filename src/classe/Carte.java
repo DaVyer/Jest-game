@@ -9,7 +9,7 @@ package classe;
 public class Carte {
     private CouleurCarte couleur;
     private ValeurCarte valeur;
-    private ConditionTrophee trophee;
+    private final ConditionTrophee trophee;
 
     /**
      * Constructor of the Carte class
@@ -56,7 +56,7 @@ public class Carte {
 
     /**
      * Method that return the trophy value of a card?
-     * 
+     *
      */
     public ConditionTrophee getTrophee(){
         return this.trophee;

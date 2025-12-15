@@ -1,14 +1,13 @@
 package classe;
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Joueur {
-    private static AtomicInteger ID_GENERATOR = new AtomicInteger(1);
-    private int idJoueur;
+    private static final AtomicInteger ID_GENERATOR = new AtomicInteger(1);
+    private final int idJoueur;
     private String nom;
-    private Jest main = new Jest();
+    private final Jest main = new Jest();
 
     public Joueur(String nom) {
         idJoueur = ID_GENERATOR.getAndIncrement();
@@ -22,10 +21,6 @@ public class Joueur {
 
     public String getNom() {
         return this.nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
     }
 
     public Jest getMain() {

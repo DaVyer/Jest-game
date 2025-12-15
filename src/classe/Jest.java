@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class Jest extends Carte{
     private final ArrayList<Carte> cartes;
-    private Joueur joueur;
+    private final Joueur joueur;
 
     public Jest() {
         super(ValeurCarte.AS, CouleurCarte.JOKER, ConditionTrophee.MEILLEURJEST); // Jest est un joker

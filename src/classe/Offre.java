@@ -1,6 +1,4 @@
 package classe;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Représente une offre d'un joueur
@@ -17,7 +15,7 @@ import java.util.List;
 public class Offre {
 
     /**Attribut du Joueur */
-    private Joueur joueur;
+    private final Joueur joueur;
 
     /**Attribut de la carte visible */
     private Carte visible;
@@ -106,16 +104,5 @@ public class Offre {
 
     public boolean isDisponible() {
         return disponible;
-    }
-
-    /**
-     * Récupère les cartes restantes d'une offre après une action.
-     *
-     * <p>À définir</p>
-     *
-     * @param carte carte de référence pour la récupération (selon l'implémentation)
-     */
-    public void recupererCarteRestantes(Carte carte){
-        // À définir
     }
 }

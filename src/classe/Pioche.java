@@ -1,5 +1,4 @@
 package classe;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -29,15 +28,6 @@ public class Pioche {
      */
     public Pioche(){
         idPioche = ID_GENERATOR.getAndIncrement();
-    }
-
-    /**
-     * Retourne l'identifiant de cette pioche.
-     *
-     * @return l'identifiant de la pioche (valeur entière, généralement >= 0)
-     */
-    public int getIdPioche(){
-        return this.idPioche;
     }
 
     /**
@@ -90,24 +80,6 @@ public class Pioche {
      */
     public LinkedList<Carte> getPioche(){
         return this.pioche;
-    }
-
-    /**
-     * Ajoute une carte au sommet (ou à la fin) de la pioche.
-     *
-     * @param carte la carte à ajouter (doit être non null).
-     */
-    public void ajouterCartePioche(Carte carte){
-        this.pioche.add(carte);
-    }
-
-    /**
-     * Supprime une carte de la pioche.
-     *
-     * @param carte la carte à supprimer (si présente).
-     */
-    public void enleverCartePioche(Carte carte){
-        this.pioche.remove(carte);
     }
 
     /**

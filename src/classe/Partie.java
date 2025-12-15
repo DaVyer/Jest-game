@@ -17,14 +17,13 @@ import java.util.stream.Collectors;
 public class Partie{
     private final static AtomicInteger ID_GENERATOR = new AtomicInteger(0);
     private int idPartie;
-    private Pioche pioche;
+    private final Pioche pioche;
     private LinkedList<Joueur> joueurs;
     private LinkedList<Carte> trophees;
     private List<Offre> offres = new ArrayList<>();
     private ArrayList<Joueur> ordreDeJeu;
-    private java.util.Set<Joueur> joueursAyantJoue;
     private boolean partieTerminee = false;
-    private Manche manche = new Manche();
+    private final Manche manche = new Manche();
 
     /**
      * Constructeur de la classe Partie
@@ -53,15 +52,6 @@ public class Partie{
      */
     public int getIdPartie() {
         return this.idPartie;
-    }
-
-    /**
-     * Définit l'identifiant de la partie.
-     *
-     * @param idPartie nouvel identifiant de la partie
-     */
-    public void setIdPartie(int idPartie) {
-        this.idPartie = idPartie;
     }
 
     /**
@@ -213,7 +203,7 @@ public class Partie{
 
     public void choisirOffre(Scanner scanner) {
 
-        joueursAyantJoue = new HashSet<>();
+        Set<Joueur> joueursAyantJoue = new HashSet<>();
 
         for (Joueur joueurActuel : ordreDeJeu) {
 
@@ -230,7 +220,7 @@ public class Partie{
             List<Offre> offresDisponibles;
 
             if (offresCompletes.size() == 1 &&
-                    offresCompletes.get(0).getJoueur().equals(joueurActuel)) {
+                    offresCompletes.getFirst().getJoueur().equals(joueurActuel)) {
 
                 offresDisponibles = offresCompletes;
 
@@ -254,7 +244,7 @@ public class Partie{
             partieTerminee = true;
             System.out.println("\n===== FIN DE LA PARTIE =====");
 
-            récupérerDernièreCartesOffres();
+            recupererDerniereCartesOffres();
 
             attribuerTrophees();
 
@@ -294,7 +284,7 @@ public class Partie{
         }
     }
 
-    private void récupérerDernièreCartesOffres() {
+    private void recupererDerniereCartesOffres() {
         for (Offre o : offres) {
             Carte restante = o.prendreCarteRestante();
             o.getJoueur().ajouterAuJest(restante);

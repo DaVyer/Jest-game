@@ -149,7 +149,7 @@ public class TropheeVisitor implements Visitor {
             }
         }
 
-        if (sansJoker.isEmpty()) return joueurs.get(0); // sécurité
+        if (sansJoker.isEmpty()) return joueurs.getFirst(); // sécurité
         return gagnantBestJest(sansJoker);
     }
 
@@ -175,8 +175,8 @@ public class TropheeVisitor implements Visitor {
             }
         }
 
-        if (candidats.isEmpty()) return joueurs.get(0); // sécurité
-        if (candidats.size() == 1) return candidats.get(0);
+        if (candidats.isEmpty()) return joueurs.getFirst(); // sécurité
+        if (candidats.size() == 1) return candidats.getFirst();
 
         return gagnantBestJest(candidats);
     }
@@ -207,7 +207,7 @@ public class TropheeVisitor implements Visitor {
             }
         }
 
-        if (egalite.size() == 1) return egalite.get(0);
+        if (egalite.size() == 1) return egalite.getFirst();
         return departagerMajorite(egalite, valeur);
     }
 

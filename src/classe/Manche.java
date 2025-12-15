@@ -14,13 +14,12 @@ import java.util.List;
  */
 public class Manche {
     private int numero = 0;
-    private List<Offre> offres;
 
     /**
      * Le constructeur de la manche
      */
     public Manche(){
-        this.offres = new ArrayList<>();
+        List<Offre> offres = new ArrayList<>();
     }
 
     /**

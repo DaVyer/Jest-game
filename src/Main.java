@@ -44,7 +44,7 @@ public class Main {
         return nom;
     }
 
-    public static void main(String[] arg){
+    static void main(String[] arg){
         Scanner scanner = new Scanner(System.in);
         AtomicBoolean enJeu = new AtomicBoolean(true);
 
