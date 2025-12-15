@@ -135,4 +135,10 @@ public class Pioche {
             this.pioche.add(DTOMapper.carteFromDTO(cDTO));
         }
     }
+
+    public void remettre(Carte carte) {
+        if (carte == null) return;
+        this.pioche.addLast(carte); // ou add(carte) selon ton type
+    }
+
 }

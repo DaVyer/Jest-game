@@ -8,40 +8,37 @@ public class StrategieHumaine implements StrategieJoueur {
     @Override
     public Offre faireOffre(Joueur joueur, Scanner scanner) {
 
-        joueur.afficherMain();
+        joueur.afficherMainManche();
 
-        int indexCachee = choisirCarte(scanner, joueur.getMain(),
+        int indexCachee = choisirCarte(scanner, joueur.getMainManche(),
                 "Choisissez la carte FACE CACHÉE : ");
-        Carte cachee = joueur.getMain().getCarte(indexCachee);
-        joueur.getMain().retirerCarte(indexCachee);
+        Carte cachee = joueur.getMainManche().remove(indexCachee);
 
-        joueur.afficherMain();
+        joueur.afficherMainManche();
 
-        int indexVisible = choisirCarte(scanner, joueur.getMain(),
+        int indexVisible = choisirCarte(scanner, joueur.getMainManche(),
                 "Choisissez la carte FACE VISIBLE : ");
-        Carte visible = joueur.getMain().getCarte(indexVisible);
-        joueur.getMain().retirerCarte(indexVisible);
-
-        Offre offre = new Offre(cachee, visible, joueur);
+        Carte visible = joueur.getMainManche().remove(indexVisible);
 
         System.out.println("\nOffre créée :");
         System.out.println(" - Carte face cachée : [cachée]");
         System.out.println(" - Carte face visible : " + visible);
 
-        return offre;
+        return new Offre(cachee, visible, joueur);
     }
 
-    private int choisirCarte(Scanner scanner, Jest main, String message) {
+    private int choisirCarte(Scanner scanner, List<Carte> mainManche, String message) {
         while (true) {
             System.out.print(message);
             try {
                 int choix = Integer.parseInt(scanner.nextLine());
-                if (choix >= 0 && choix < main.taille()) return choix;
+                if (choix >= 0 && choix < mainManche.size()) {
+                    return choix;
+                }
             } catch (NumberFormatException ignored) {}
             System.out.println("Choix invalide. Réessayez.");
         }
     }
-
 
     @Override
     public Offre choisirOffre(List<Offre> offres, Joueur joueur, Scanner scanner) {

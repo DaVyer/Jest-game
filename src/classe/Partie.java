@@ -21,7 +21,6 @@ public class Partie{
     private LinkedList<Joueur> joueurs;
     private LinkedList<Carte> trophees;
     private List<Offre> offres = new ArrayList<>();
-    private ArrayList<Joueur> ordreDeJeu;
     private boolean partieTerminee = false;
     private final Manche manche = new Manche();
 
@@ -144,14 +143,14 @@ public class Partie{
 
         manche.incrementNumero();
 
-        distribuerCartes();
         System.out.println("===============");
         System.out.println("Manche numéro : " + manche.getNumero());
         System.out.println("===============");
 
-        faireOffre(scanner);
-        carteLaPlusHaute();
-        choisirOffre(scanner);
+        debutManche();
+        creerOffres(scanner);
+        resolutionOffres(scanner);
+        finManche();
 
         System.out.println("\n===== Fin de la manche =====");
         for (Joueur j : joueurs) {
@@ -160,105 +159,68 @@ public class Partie{
         System.out.println("\nTapez 'manche' pour jouer une nouvelle manche ou 'exit' pour terminer la partie. Tapez help pour l'aide.");
     }
 
-
-    public void distribuerCartes(){
-        if (pioche.estVide()) {
-            throw new IllegalStateException(
-                    "Pas assez de cartes dans la pioche pour distribuer une nouvelle manche."
-            );
-        }
-        for (Joueur j : joueurs){
-            j.ajouterAuJest(this.pioche.piocher());
-            j.ajouterAuJest(this.pioche.piocher());
+    private void debutManche() {
+        for (Joueur j : joueurs) {
+            j.viderMainManche();
+            j.ajouterCarteManche(pioche.piocher());
+            j.ajouterCarteManche(pioche.piocher());
         }
     }
 
-    public void faireOffre(Scanner scanner){
-        offres = new ArrayList<>();
-        for (Joueur j : joueurs){
-            System.out.println("Joueur "+j.getNom()+" : Faites une offre.");
-            Offre offre = j.faireOffre(scanner);
-            offres.add(offre);
+    private void creerOffres(Scanner scanner) {
+        offres.clear();
+        for (Joueur j : joueurs) {
+            offres.add(j.faireOffre(scanner));
         }
     }
 
-    public void carteLaPlusHaute(){
-        ordreDeJeu = new ArrayList<>(joueurs);
+    private void resolutionOffres(Scanner scanner) {
+        List<Joueur> ordre = ordreDeJeuParCarteVisible();
 
-        ordreDeJeu.sort((j1, j2) -> {
-            Offre o1 = getOffreDe(j1);
-            Offre o2 = getOffreDe(j2);
-
-            Carte c1 = o1.getVisible();
-            Carte c2 = o2.getVisible();
-
-            int cmp = Integer.compare(
-                    c2.valeurPourManche(),
-                    c1.valeurPourManche()
-            );
-
-            if (cmp != 0) return cmp;
-
-            return Integer.compare(
-                    c2.forceCouleur(),
-                    c1.forceCouleur()
-            );
-        });
-    }
-
-    private Offre getOffreDe(Joueur joueur) {
-        for (Offre o : offres) {
-            if (o.getJoueur().equals(joueur)) {
-                return o;
-            }
-        }
-        return null;
-    }
-
-    public void choisirOffre(Scanner scanner) {
-
-        Set<Joueur> joueursAyantJoue = new HashSet<>();
-
-        for (Joueur joueurActuel : ordreDeJeu) {
-
-            if (joueursAyantJoue.contains(joueurActuel)) {
-                continue;
-            }
-
-            System.out.println("\nTour de " + joueurActuel.getNom());
-
-            List<Offre> offresCompletes = offres.stream()
-                    .filter(Offre::isDisponible)
+        for (Joueur j : ordre) {
+            List<Offre> offresAdverses = offres.stream()
+                    .filter(o -> !o.getJoueur().equals(j))
                     .collect(Collectors.toList());
 
-            List<Offre> offresDisponibles;
-
-            if (offresCompletes.size() == 1 &&
-                    offresCompletes.getFirst().getJoueur().equals(joueurActuel)) {
-
-                offresDisponibles = offresCompletes;
-
-            } else {
-                offresDisponibles = offresCompletes.stream()
-                        .filter(o -> !o.getJoueur().equals(joueurActuel))
-                        .collect(Collectors.toList());
-            }
-
-            Offre choisie = joueurActuel.choisirOffre(offresDisponibles, scanner);
-
-            Carte prise = joueurActuel.choisirCarteOffre(choisie, scanner);
-            joueurActuel.ajouterAuJest(prise);
-
-            joueursAyantJoue.add(joueurActuel);
+            Offre choisie = j.choisirOffre(offresAdverses, scanner);
+            Carte prise = j.choisirCarteOffre(choisie, scanner);
+            j.ajouterAuJest(prise);
         }
+    }
+
+    private void finManche() {
+        for (Offre o : offres) {
+            Carte restante = o.prendreCarteRestante();
+            if (restante != null) {
+                pioche.remettre(restante);
+            }
+        }
+        offres.clear();
+    }
+
+    private List<Joueur> ordreDeJeuParCarteVisible() {
+        Map<Joueur, Offre> offreParJoueur = offres.stream()
+                .collect(Collectors.toMap(Offre::getJoueur, o -> o));
+
+        List<Joueur> ordre = new ArrayList<>(joueurs);
+
+        ordre.sort((j1, j2) -> {
+            Carte c1 = offreParJoueur.get(j1).getVisible();
+            Carte c2 = offreParJoueur.get(j2).getVisible();
+
+            int cmp = Integer.compare(c2.valeurPourManche(), c1.valeurPourManche());
+            if (cmp != 0) return cmp;
+
+            return Integer.compare(c2.forceCouleur(), c1.forceCouleur());
+        });
+
+        return ordre;
     }
 
     public void finDePartie() {
         if (!partieTerminee) {
             partieTerminee = true;
             System.out.println("\n===== FIN DE LA PARTIE =====");
-
-            recupererDerniereCartesOffres();
 
             attribuerTrophees();
 
@@ -295,13 +257,6 @@ public class Partie{
                 meilleur = score;
                 gagnant = j;
             }
-        }
-    }
-
-    private void recupererDerniereCartesOffres() {
-        for (Offre o : offres) {
-            Carte restante = o.prendreCarteRestante();
-            o.getJoueur().ajouterAuJest(restante);
         }
     }
 

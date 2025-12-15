@@ -1,4 +1,5 @@
 package classe;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -8,6 +9,7 @@ public class Joueur {
     private final int idJoueur;
     private String nom;
     private final Jest main;
+    private List<Carte> mainManche = new ArrayList<>();
     private final StrategieJoueur strategieJoueur;
 
     public Joueur(String nom, StrategieJoueur strategieJoueur) {
@@ -40,10 +42,9 @@ public class Joueur {
     }
 
 
-    public Offre faireOffre(Scanner scanner){
+    public Offre faireOffre(Scanner scanner) {
         return strategieJoueur.faireOffre(this, scanner);
     }
-
 
     public Offre choisirOffre(List<Offre> offres, Scanner scanner) {
         return strategieJoueur.choisirOffre(offres, this, scanner);
@@ -59,5 +60,24 @@ public class Joueur {
 
     public StrategieJoueur getStrategie() {
         return strategieJoueur;
+    }
+
+    public void ajouterCarteManche(Carte c) {
+        mainManche.add(c);
+    }
+
+    public void viderMainManche() {
+        mainManche.clear();
+    }
+
+    public List<Carte> getMainManche() {
+        return mainManche;
+    }
+
+    public void afficherMainManche() {
+        System.out.println("Cartes de manche de " + nom + " :");
+        for (int i = 0; i < mainManche.size(); i++) {
+            System.out.println("[" + i + "] " + mainManche.get(i));
+        }
     }
 }

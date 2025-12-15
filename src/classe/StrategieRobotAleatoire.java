@@ -11,15 +11,25 @@ public class StrategieRobotAleatoire implements StrategieJoueur {
     @Override
     public Offre faireOffre(Joueur joueur, Scanner scanner) {
 
-        int taille = joueur.getMain().taille();
-        int indexCachee = random.nextInt(taille);
+        List<Carte> mainManche = joueur.getMainManche();
 
-        Carte cachee = joueur.getMain().getCarte(indexCachee);
-        joueur.getMain().retirerCarte(indexCachee);
+        if (mainManche.size() != 2) {
+            throw new IllegalStateException(
+                    "Le robot doit avoir exactement 2 cartes pour faire une offre (actuel = "
+                            + mainManche.size() + ")"
+            );
+        }
 
-        int indexVisible = random.nextInt(joueur.getMain().taille());
-        Carte visible = joueur.getMain().getCarte(indexVisible);
-        joueur.getMain().retirerCarte(indexVisible);
+        Random random = new Random();
+
+        int indexCachee = random.nextInt(mainManche.size());
+        Carte cachee = mainManche.remove(indexCachee);
+
+        int indexVisible = random.nextInt(mainManche.size());
+        Carte visible = mainManche.remove(indexVisible);
+
+        System.out.println(joueur.getNom()
+                + " \n(robot) crée une offre : carte visible=" + visible + ", carte cachée=[cachée]");
 
         return new Offre(cachee, visible, joueur);
     }
