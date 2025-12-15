@@ -145,7 +145,7 @@ public class Partie{
         for (Joueur j : joueurs) {
             j.afficherMain();
         }
-
+        System.out.println("\nTapez 'manche' pour jouer une nouvelle manche ou 'exit' pour terminer la partie. Tapez help pour l'aide.");
     }
 
 

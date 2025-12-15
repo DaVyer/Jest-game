@@ -1,5 +1,4 @@
-import classe.Partie;
-import classe.Joueur;
+import classe.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,15 +59,26 @@ public class Main {
         return nb;
     }
 
-    private static List<Joueur> creerJoueurs(Scanner scanner, int nbJoueurs) {
+    private static StrategieJoueur demanderStrategie(Scanner scanner) {
+        while (true) {
+            System.out.print("Type (h = humain, r = robot) : ");
+            String type = scanner.nextLine().trim();
 
+            if (type.equalsIgnoreCase("h")) return new StrategieHumaine();
+            if (type.equalsIgnoreCase("r")) return new StrategieRobotAleatoire();
+
+            System.out.println("Choix invalide. Tape 'h' ou 'r'.");
+        }
+    }
+
+    private static List<Joueur> creerJoueurs(Scanner scanner, int nbJoueurs) {
         List<Joueur> joueurs = new ArrayList<>();
 
         for (int i = 1; i <= nbJoueurs; i++) {
             String nom = demanderNomJoueur(scanner, i);
-            joueurs.add(new Joueur(nom));
+            StrategieJoueur strat = demanderStrategie(scanner);
+            joueurs.add(new Joueur(nom, strat));
         }
-
         return joueurs;
     }
 
@@ -88,34 +98,29 @@ public class Main {
             partie.ajouterJoueurs(j);
         }
 
-        // Thread pour lire l'input sans bloquer la boucle
-        Thread inputThread = new Thread(() -> {
-        while (enJeu.get()) {
-        if (scanner.hasNextLine()) {
-            String input = scanner.nextLine();
-            if (input.equalsIgnoreCase("exit")) {
-                enJeu.set(false);
-            }
-            if (input.equalsIgnoreCase("manche")) {
-                partie.jouerManche(scanner);
-            }
-            if (input.equalsIgnoreCase("help")) {
-                System.out.println("Commandes disponibles :");
-                System.out.println("-----------");
-                System.out.println("manche - Jouer une nouvelle manche");
-                System.out.println("status - Afficher le statut actuel de la partie (non implémenté)");
-                System.out.println("exit   - Quitter le jeu");
-                System.out.println("help   - Afficher cette aide");
-                System.out.println("save   - Sauvegarder la partie (non implémenté)");
-                System.out.println("load   - Charger une partie (non implémenté)");
-                System.out.println("-----------");
-            }
-        }
-        }
-        });
 
-        inputThread.setDaemon(true);
-        inputThread.start();
+        while (enJeu.get()) {
+            if (scanner.hasNextLine()) {
+                String input = scanner.nextLine();
+                if (input.equalsIgnoreCase("exit")) {
+                    enJeu.set(false);
+                }
+                if (input.equalsIgnoreCase("manche")) {
+                    partie.jouerManche(scanner);
+                }
+                if (input.equalsIgnoreCase("help")) {
+                    System.out.println("Commandes disponibles :");
+                    System.out.println("-----------");
+                    System.out.println("manche - Jouer une nouvelle manche");
+                    System.out.println("status - Afficher le statut actuel de la partie (non implémenté)");
+                    System.out.println("exit   - Quitter le jeu");
+                    System.out.println("help   - Afficher cette aide");
+                    System.out.println("save   - Sauvegarder la partie (non implémenté)");
+                    System.out.println("load   - Charger une partie (non implémenté)");
+                    System.out.println("-----------");
+                }
+            }
+        }
 
         System.out.println("En jeu : " + enJeu.get());
 
