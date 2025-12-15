@@ -24,6 +24,7 @@ public class Partie{
     private ArrayList<Joueur> ordreDeJeu;
     private java.util.Set<Joueur> joueursAyantJoue;
     private boolean partieTerminee = false;
+    private Manche manche = new Manche();
 
     /**
      * Constructeur de la classe Partie
@@ -139,8 +140,6 @@ public class Partie{
             return;
         }
 
-
-        Manche manche = new Manche();
         manche.incrementNumero();
 
         distribuerCartes();
@@ -263,6 +262,24 @@ public class Partie{
             System.out.println("\n===== JESTS FINAUX =====");
             for (Joueur j : joueurs) {
                 j.afficherMain();
+            }
+
+            System.out.println("\n===== SCORES FINAUX =====");
+
+            Joueur gagnant = null;
+            int meilleur = Integer.MIN_VALUE;
+
+            for (Joueur j : joueurs) {
+                ScoreVisitor visitor = new ScoreVisitor();
+                j.accept(visitor);
+                int score = visitor.getScore();
+
+                System.out.println(j.getNom() + " : " + score);
+
+                if (score > meilleur) {
+                    meilleur = score;
+                    gagnant = j;
+                }
             }
         } else {
             System.out.println("La partie est déjà terminée.");

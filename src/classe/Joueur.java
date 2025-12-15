@@ -125,8 +125,7 @@ public class Joueur {
         return offre.prendreCarte(choix == 0);
     }
 
-
-
-    // TODO: Implement when Visitor class is created
-    // public abstract void accept(Visitor visitor);
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
 }
