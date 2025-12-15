@@ -9,7 +9,7 @@ package classe;
 public class Carte {
     private CouleurCarte couleur;
     private ValeurCarte valeur;
-    private ConditionTrophee trophee;
+    private final ConditionTrophee trophee;
 
     /**
      * Constructor of the Carte class
@@ -56,10 +56,26 @@ public class Carte {
 
     /**
      * Method that return the trophy value of a card?
-     * 
+     *
      */
     public ConditionTrophee getTrophee(){
         return this.trophee;
+    }
+
+    public int valeurPourManche() {
+        if (this.getCouleur() == CouleurCarte.JOKER) return 0;
+        if (this.getValeur() == ValeurCarte.AS) return 1;
+        return this.getValeur().getValeur();
+    }
+
+    public int forceCouleur() {
+        return switch (this.getCouleur()) {
+            case PIQUE -> 4;
+            case TREFLE -> 3;
+            case CARREAU -> 2;
+            case COEUR -> 1;
+            default -> 0;
+        };
     }
 
     /**

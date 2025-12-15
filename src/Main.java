@@ -1,7 +1,10 @@
-import classe.Partie;
-import classe.Joueur;
+import classe.*;
+
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Main {
 
@@ -22,12 +25,12 @@ public class Main {
                 System.out.println("Le nom ne peut pas être vide. Réessayez.");
                 continue;
             }
-            
+
             if (nom.replaceAll(" ", "").isEmpty()) {
                 System.out.println("Le nom ne peut pas être que des espaces. Réessayez.");
                 continue;
             }
-            
+
             if (nom.matches("\\d+")) {
                 System.out.println("Le nom ne peut pas être que des chiffres. Réessayez.");
                 continue;
@@ -37,76 +40,159 @@ public class Main {
                 System.out.println("Le nom doit contenir au moins 2 caractères. Réessayez.");
                 continue;
             }
-            
+
             valide = true;
             System.out.println("Joueur " + numeroJoueur + " : " + nom);
         }
         return nom;
     }
 
-    public static int demanderNombreJoueurs(Scanner scanner){
-        int nombreJoueurs = 0;
-        System.out.println("Combien de joueurs voulez vous dans votre partie (3 à 4) ? ");
-        
-        while (nombreJoueurs != 3 && nombreJoueurs != 4) {
-            if (scanner.hasNextInt()) {
-                nombreJoueurs = scanner.nextInt();
-                scanner.nextLine(); // consommer le retour à la ligne
-                
-                if (nombreJoueurs != 3 && nombreJoueurs != 4) { 
-                    System.out.println("Veuillez rentrer un nombre de joueurs valant 3 ou 4.");
-                }
+    private static int demanderNombreJoueurs(Scanner scanner) {
+        int nb = 0;
+        while (nb < 2 || nb > 4) {
+            System.out.print("Nombre de joueurs (2 à 4) : ");
+            try {
+                nb = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                nb = 0;
             }
         }
-        
-        System.out.println("\n\n===============\n");
-        return nombreJoueurs;
+        return nb;
     }
 
-    public static void main(String[] arg){
-        Scanner scanner = new Scanner(System.in);
-        AtomicBoolean enJeu = new AtomicBoolean(true);
+    private static StrategieJoueur demanderStrategie(Scanner scanner) {
+        while (true) {
+            System.out.print("Type (h = humain, r = robot) : ");
+            String type = scanner.nextLine().trim();
 
-        // Thread pour lire l'input sans bloquer la boucle
-       Thread inputThread = new Thread(() -> {
-            while (enJeu.get()) {
-                if (scanner.hasNextLine()) {
-                    String input = scanner.nextLine();
-                    if (input.equalsIgnoreCase("exit")) {
-                        enJeu.set(false);
-                    }
-                    if (input.equalsIgnoreCase("start")) {
-                        System.out.println("\n===============\n");
-                        
-                        Partie partie = new Partie();
+            if (type.equalsIgnoreCase("h")) return new StrategieHumaine();
+            if (type.equalsIgnoreCase("r")) return new StrategieRobotAleatoire();
 
-                        int nombreJoueurs = demanderNombreJoueurs(scanner);
-                        for(int i = 1; i<=nombreJoueurs; i++){
-                            
-                            String nom = demanderNomJoueur(scanner, i);
-                            Joueur joueur = new Joueur(nom);
-                            partie.ajouterJoueurs(joueur);
+            System.out.println("Choix invalide. Tape 'h' ou 'r'.");
+        }
+    }
 
-                        }
-                    }
-                }
+    private static List<Joueur> creerJoueurs(Scanner scanner, int nbJoueurs) {
+        List<Joueur> joueurs = new ArrayList<>();
+
+        for (int i = 1; i <= nbJoueurs; i++) {
+            String nom = demanderNomJoueur(scanner, i);
+            StrategieJoueur strat = demanderStrategie(scanner);
+            joueurs.add(new Joueur(nom, strat));
+        }
+        return joueurs;
+    }
+
+    private static void presentation() {
+        System.out.println("================================");
+        System.out.println("        BIENVENUE DANS JEST      ");
+        System.out.println("================================");
+        System.out.println("Jeu de cartes stratégique");
+        System.out.println("2 à 4 joueurs | Humains ou Robots");
+        System.out.println();
+    }
+
+    private static void afficherMenuPrincipal() {
+        System.out.println("Commandes principales :");
+        System.out.println(" - new   : Nouvelle partie");
+        System.out.println(" - load  : Charger une partie");
+        System.out.println(" - help  : Aide");
+        System.out.println(" - exit  : Quitter");
+    }
+
+    private static Partie creerNouvellePartie(Scanner scanner) {
+
+        int nbJoueurs = demanderNombreJoueurs(scanner);
+        List<Joueur> joueurs = creerJoueurs(scanner, nbJoueurs);
+
+        Partie partie = new Partie();
+        for (Joueur j : joueurs) {
+            partie.ajouterJoueurs(j);
+        }
+
+        System.out.println("Nouvelle partie créée !");
+        return partie;
+    }
+
+    private static void afficherCommandesJeu() {
+        System.out.println("\nCommandes de jeu :");
+        System.out.println(" - manche : jouer une manche");
+        System.out.println(" - save   : sauvegarder la partie");
+        System.out.println(" - status : afficher l'état");
+        System.out.println(" - help   : aide");
+        System.out.println(" - exit   : quitter");
+    }
+
+    private static void sauvegarder(Partie partie) {
+        try {
+            System.out.println("DEBUG AVANT SAVE");
+            for (Joueur j : partie.getJoueurs()) {
+                System.out.println(" - " + j.getNom()
+                        + " jest=" + j.getMain().taille());
             }
-        });
+            Save.sauvegarder(partie, "sauvegarde.ser");
+            System.out.println("Partie sauvegardée avec succès.");
+        } catch (Exception e) {
+            System.out.println("Erreur lors de la sauvegarde : " + e.getMessage());
+        }
+    }
 
-        inputThread.setDaemon(true);
-        inputThread.start();
+    private static Partie charger() {
+        try {
+            Partie partie = Load.charger("sauvegarde.ser");
+            System.out.println("DEBUG APRÈS LOAD");
+            for (Joueur j : partie.getJoueurs()) {
+                System.out.println(" - " + j.getNom()
+                        + " jest=" + j.getMain().taille());
+            }
+            System.out.println("Partie chargée avec succès.");
+            return partie;
+        } catch (Exception e) {
+            System.out.println("Erreur lors du chargement : " + e.getMessage());
+            return null;
+        }
+    }
 
-        System.out.println("En jeu : " + enJeu.get());
+    public static void main(String[] args) {
 
-        while (enJeu.get()) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        Scanner scanner = new Scanner(System.in);
+        boolean enCours = true;
+        Partie partie = null;
+
+        presentation();
+        afficherMenuPrincipal();
+
+        while (enCours) {
+            System.out.print("> ");
+            String input = scanner.nextLine().trim().toLowerCase();
+
+            if (partie == null) {
+
+                switch (input) {
+                    case "new" -> {
+                        partie = creerNouvellePartie(scanner);
+                        afficherCommandesJeu();
+                    }
+                    case "load" -> partie = charger();
+                    case "help" -> afficherMenuPrincipal();
+                    case "exit" -> enCours = false;
+                    default -> System.out.println("Commande inconnue (new / help / exit)");
+                }
+
+            } else {
+
+                switch (input) {
+                    case "manche" -> partie.jouerManche(scanner);
+                    case "save" -> sauvegarder(partie);
+                    case "status" -> partie.afficherEtat();
+                    case "exit" -> enCours = false;
+                    case "help" -> afficherCommandesJeu();
+                    default -> System.out.println("Commande inconnue (help)");
+                }
             }
         }
 
-        System.out.println("En jeu : " + enJeu.get());
+        System.out.println("Merci d'avoir joué !");
         scanner.close();
     }
 }
