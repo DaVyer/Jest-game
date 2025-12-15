@@ -254,35 +254,82 @@ public class Partie{
             partieTerminee = true;
             System.out.println("\n===== FIN DE LA PARTIE =====");
 
-            for (Offre o : offres) {
-                Carte restante = o.prendreCarteRestante();
-                o.getJoueur().ajouterAuJest(restante);
-            }
+            récupérerDernièreCartesOffres();
 
-            System.out.println("\n===== JESTS FINAUX =====");
-            for (Joueur j : joueurs) {
-                j.afficherMain();
-            }
+            attribuerTrophees();
 
-            System.out.println("\n===== SCORES FINAUX =====");
+            jestFinaux();
 
-            Joueur gagnant = null;
-            int meilleur = Integer.MIN_VALUE;
+            scoreFinaux();
 
-            for (Joueur j : joueurs) {
-                ScoreVisitor visitor = new ScoreVisitor();
-                j.accept(visitor);
-                int score = visitor.getScore();
-
-                System.out.println(j.getNom() + " : " + score);
-
-                if (score > meilleur) {
-                    meilleur = score;
-                    gagnant = j;
-                }
-            }
         } else {
             System.out.println("La partie est déjà terminée.");
+        }
+    }
+
+    private void jestFinaux(){
+        System.out.println("\n===== JESTS FINAUX =====");
+        for (Joueur j : joueurs) {
+            j.afficherMain();
+        }
+    }
+
+    private void scoreFinaux() {
+        System.out.println("\n===== SCORES FINAUX =====");
+
+        Joueur gagnant = null;
+        int meilleur = Integer.MIN_VALUE;
+
+        for (Joueur j : joueurs) {
+            ScoreVisitor visitor = new ScoreVisitor();
+            j.accept(visitor);
+            int score = visitor.getScore();
+
+            System.out.println(j.getNom() + " : " + score);
+
+            if (score > meilleur) {
+                meilleur = score;
+                gagnant = j;
+            }
+        }
+    }
+
+    private void récupérerDernièreCartesOffres() {
+        for (Offre o : offres) {
+            Carte restante = o.prendreCarteRestante();
+            o.getJoueur().ajouterAuJest(restante);
+        }
+    }
+
+    private void attribuerTrophees() {
+
+        TropheeVisitor visitor = new TropheeVisitor(trophees);
+
+        for (Joueur j : joueurs) {
+            j.accept(visitor);
+        }
+
+        Map<Joueur, List<Carte>> resultats = visitor.attribuerTrophees();
+
+        System.out.println("\n===== ATTRIBUTION DES TROPHÉES =====");
+        for (Carte t : trophees) {
+            Joueur gagnant = null;
+
+            for (Map.Entry<Joueur, List<Carte>> e : resultats.entrySet()) {
+                if (e.getValue().contains(t)) {
+                    gagnant = e.getKey();
+                    break;
+                }
+            }
+
+            System.out.println("- " + t + " (condition : " + t.getTrophee() + ") -> "
+                    + (gagnant != null ? gagnant.getNom() : "aucun"));
+        }
+
+        for (Map.Entry<Joueur, List<Carte>> e : resultats.entrySet()) {
+            for (Carte c : e.getValue()) {
+                e.getKey().ajouterAuJest(c);
+            }
         }
     }
 

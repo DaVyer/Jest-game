@@ -17,4 +17,8 @@ public class Trophee {
     public static void joueurGagnant(Joueur joueur) {
 
     }
+
+    public ConditionTrophee getCondition() {
+        return condition;
+    }
 }
