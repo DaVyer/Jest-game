@@ -116,7 +116,7 @@ public class ScoreVisitor implements Visitor {
         int nbCoeurs = parCouleur.getOrDefault(CouleurCarte.COEUR, List.of()).size();
         int v = valeurNumerique(c.getValeur());
 
-        return (nbCoeurs == 4) ? v : -v;
+        return (nbCoeurs >= 3) ? v*2 : -v;
     }
 
     private int valeurAs(Carte c,

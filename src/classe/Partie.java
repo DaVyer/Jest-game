@@ -40,7 +40,8 @@ public class Partie{
         System.out.println("\nTrophé Tiré : "); 
         System.out.println("Trophé 1 : " + this.trophees.get(0) + " de condition : " + this.trophees.get(0).getTrophee());
         System.out.println("Trophé 2 : " + this.trophees.get(1) + " de condition : " + this.trophees.get(1).getTrophee());
-        System.out.println("Pioche : " + this.getPioche().getPioche()); 
+        System.out.println("Pioche : " + this.getPioche().getPioche());
+        System.out.println("\n===============\n"); 
 
         this.setJoueurs();
     }
@@ -122,7 +123,7 @@ public class Partie{
      */
     public void ajouterJoueurs(Joueur joueur){
         this.joueurs.add(joueur);
-        System.out.println("\n===============\n\n\t Joueur " + joueur.getIdJoueur() + " ajouté");
+        System.out.println("\t Joueur " + joueur.getIdJoueur() + " ajouté" + "\n\n===============\n");
     }
 
     /**
@@ -337,8 +338,6 @@ public class Partie{
         }
     }
 
-
-
     /**
      * Calcule les scores des joueurs selon les règles du jeu.
      *
@@ -371,5 +370,17 @@ public class Partie{
 
     public void setPartieTerminee(boolean partieTerminee) {
         this.partieTerminee = partieTerminee;
+    }
+
+    public void afficherEtat() {
+        System.out.println("\n===== ÉTAT DE LA PARTIE =====");
+        System.out.println("Nombre de joueurs : " + joueurs.size());
+
+        for (Joueur j : joueurs) {
+            j.afficherMain();
+        }
+
+        System.out.println("Cartes restantes dans la pioche : "
+                + pioche.getPioche().size());
     }
 }

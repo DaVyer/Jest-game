@@ -21,22 +21,22 @@ public class DTOMapper {
         return dto;
     }
 
-    /* =========================
-       JOUEUR
-       ========================= */
-
     public static Joueur joueurFromDTO(JoueurDTO dto) {
 
-        StrategieJoueur strategie =
-                dto.typeStrategie.equals("StrategieAleatoire")
-                        ? new StrategieRobotAleatoire()
-                        : new StrategieHumaine();
+        StrategieJoueur strategie = dto.typeStrategie.equals("StrategieAleatoire")
+                                    ? new StrategieRobotAleatoire()
+                                    : new StrategieHumaine();
 
         Joueur j = new Joueur(dto.nom, strategie);
 
-        for (CarteDTO cDTO : dto.jest.cartes) {
-            j.ajouterAuJest(carteFromDTO(cDTO));
+        if (dto.jest != null && dto.jest.cartes != null) {
+            for (CarteDTO cDTO : dto.jest.cartes) {
+                j.ajouterAuJest(carteFromDTO(cDTO));
+            }
         }
+        System.out.println("DEBUG joueurFromDTO " + dto.nom
+                + " cartesDTO="
+                + (dto.jest == null ? "null" : dto.jest.cartes.size()));
 
         return j;
     }
@@ -48,19 +48,18 @@ public class DTOMapper {
         dto.typeStrategie = j.getStrategie().getClass().getSimpleName();
 
         JestDTO jestDTO = new JestDTO();
-        jestDTO.cartes = new ArrayList<>();
 
         for (int i = 0; i < j.getMain().taille(); i++) {
             jestDTO.cartes.add(carteToDTO(j.getMain().getCarte(i)));
         }
 
         dto.jest = jestDTO;
+
+        System.out.println("DTO sauvegardé pour " + j.getNom()
+                + " : " + jestDTO.cartes.size() + " cartes");
+
         return dto;
     }
-
-    /* =========================
-       PARTIE
-       ========================= */
 
     public static PartieDTO partieToDTO(Partie partie) {
 
@@ -95,9 +94,7 @@ public class DTOMapper {
             partie.ajouterJoueurs(joueurFromDTO(jDTO));
         }
 
-        for (CarteDTO cDTO : dto.pioche) {
-            partie.getPioche().ajouterCarte(carteFromDTO(cDTO));
-        }
+        partie.getPioche().chargerDepuisDTO(dto.pioche);
 
         for (CarteDTO cDTO : dto.trophees) {
             partie.getTrophees().add(carteFromDTO(cDTO));

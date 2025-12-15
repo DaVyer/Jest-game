@@ -129,7 +129,10 @@ public class Pioche {
         }
     }
 
-    public void ajouterCarte(Carte carte) {
-        this.pioche.add(carte);
+    public void chargerDepuisDTO(List<CarteDTO> cartesDTO) {
+        this.pioche = new LinkedList<>();
+        for (CarteDTO cDTO : cartesDTO) {
+            this.pioche.add(DTOMapper.carteFromDTO(cDTO));
+        }
     }
 }

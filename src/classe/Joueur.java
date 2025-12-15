@@ -30,10 +30,6 @@ public class Joueur {
         return main;
     }
 
-    // public abstract void choisirOffre(Joueur joueur, Offre offre);
-
-    // public abstract Offre FaireOffre(Joueur joueur);
-
     public void ajouterAuJest(Carte carte){
         main.ajouterAuJest(carte);
     }
