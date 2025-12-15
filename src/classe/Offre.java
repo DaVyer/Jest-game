@@ -46,11 +46,16 @@ public class Offre {
         if (visible != null) {
             Carte c = visible;
             visible = null;
+            disponible = false;
             return c;
         }
-        Carte c = cachee;
-        cachee = null;
-        return c;
+        if (cachee != null) {
+            Carte c = cachee;
+            cachee = null;
+            disponible = false;
+            return c;
+        }
+        return null;
     }
 
 
