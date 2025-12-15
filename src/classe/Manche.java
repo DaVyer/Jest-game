@@ -34,4 +34,8 @@ public class Manche {
     public void incrementNumero() {
         this.numero++;
     }
+
+    public void setNumero(int numeroManche) {
+        this.numero = numeroManche;
+    }
 }

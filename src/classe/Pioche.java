@@ -1,6 +1,7 @@
 package classe;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.Random;
 
@@ -119,5 +120,16 @@ public class Pioche {
      */
     public boolean estVide(){
         return this.pioche.isEmpty();
+    }
+
+    public void setPiocheDepuisDTO(List<CarteDTO> pioche) {
+        this.pioche = new LinkedList<>();
+        for (CarteDTO cDTO : pioche) {
+            this.pioche.add(DTOMapper.carteFromDTO(cDTO));
+        }
+    }
+
+    public void ajouterCarte(Carte carte) {
+        this.pioche.add(carte);
     }
 }

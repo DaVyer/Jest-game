@@ -1,5 +1,6 @@
 import classe.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -107,6 +108,23 @@ public class Main {
                 }
                 if (input.equalsIgnoreCase("manche")) {
                     partie.jouerManche(scanner);
+                }
+                if (input.equalsIgnoreCase("save")) {
+                    try {
+                        Save.sauvegarder(partie, "sauvegarde.ser");
+                        System.out.println("Partie sauvegardée.");
+                    } catch (IOException e) {
+                        System.out.println("Erreur sauvegarde : " + e.getMessage());
+                    }
+                }
+
+                if (input.equalsIgnoreCase("load")) {
+                    try {
+                        partie = Load.charger("sauvegarde.ser");
+                        System.out.println("Partie chargée.");
+                    } catch (Exception e) {
+                        System.out.println("Erreur chargement : " + e.getMessage());
+                    }
                 }
                 if (input.equalsIgnoreCase("help")) {
                     System.out.println("Commandes disponibles :");

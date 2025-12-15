@@ -45,6 +45,18 @@ public class Partie{
         this.setJoueurs();
     }
 
+    public Partie(boolean initialiser) {
+        this.idPartie = ID_GENERATOR.getAndIncrement();
+        this.joueurs = new LinkedList<>();
+        this.trophees = new LinkedList<>();
+        this.pioche = new Pioche();
+
+        if (initialiser) {
+            this.pioche.setPioche();
+            setTrophees();
+        }
+    }
+
     /**
      * Retourne l'identifiant de la partie.
      *
@@ -338,7 +350,26 @@ public class Partie{
         // On est sur que c'est un void ?
     }
 
-    // Je mets pas le accept de visitor on verra ca direct au moment du patron de conception
+    public int getNumeroManche() {
+        return manche.getNumero();
+    }
 
+    public boolean isPartieTerminee() {
+        return partieTerminee;
+    }
 
+    public void setTropheesDepuisDTO(List<CarteDTO> trophees) {
+        this.trophees = new LinkedList<>();
+        for (CarteDTO cDTO : trophees) {
+            this.trophees.add(DTOMapper.carteFromDTO(cDTO));
+        }
+    }
+
+    public void setNumeroManche(int numeroManche) {
+        this.manche.setNumero(numeroManche);
+    }
+
+    public void setPartieTerminee(boolean partieTerminee) {
+        this.partieTerminee = partieTerminee;
+    }
 }

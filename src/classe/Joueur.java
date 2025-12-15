@@ -60,4 +60,8 @@ public class Joueur {
     public void accept(Visitor visitor) {
         visitor.visit(this);
     }
+
+    public StrategieJoueur getStrategie() {
+        return strategieJoueur;
+    }
 }
