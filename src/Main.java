@@ -70,16 +70,12 @@ public class Main {
                     }
                     if (input.equalsIgnoreCase("manche")) {
                         partie.jouerManche(scanner);
-                        if (partie.getPioche().estVide()) {
-                            partie.finDePartie();
-                        } else {
-                            System.out.println("\n--- Nouvelle manche ---");
-                        }
                     }
                     if (input.equalsIgnoreCase("help")) {
                         System.out.println("Commandes disponibles :");
                         System.out.println("-----------");
                         System.out.println("manche - Jouer une nouvelle manche");
+                        System.out.println("status - Afficher le statut actuel de la partie (non implémenté)");
                         System.out.println("exit   - Quitter le jeu");
                         System.out.println("help   - Afficher cette aide");
                         System.out.println("save   - Sauvegarder la partie (non implémenté)");
