@@ -121,7 +121,6 @@ public class Partie{
      */
     public void ajouterJoueurs(Joueur joueur){
         this.joueurs.add(joueur);
-        System.out.println("\n===============\n\n\t Joueur " + joueur.getIdJoueur() + " ajouté");
     }
 
     /**

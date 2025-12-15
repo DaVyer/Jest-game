@@ -49,8 +49,8 @@ public class Main {
 
     private static int demanderNombreJoueurs(Scanner scanner) {
         int nb = 0;
-        while (nb < 2 || nb > 4) {
-            System.out.print("Nombre de joueurs (2 à 4) : ");
+        while (nb < 3 || nb > 4) {
+            System.out.print("Nombre de joueurs (3 à 4) : ");
             try {
                 nb = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
