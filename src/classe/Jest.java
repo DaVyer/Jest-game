@@ -42,9 +42,4 @@ public class Jest extends Carte{
     public int taille(){
         return cartes.size();
     }
-
-
-    public int recupererCarteOffre(Carte carte) {
-        return 0;
-    }
 }
