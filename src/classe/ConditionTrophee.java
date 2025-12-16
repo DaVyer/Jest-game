@@ -1,8 +1,5 @@
 package classe;
 
-import java.util.Map;
-import java.util.HashMap;
-
 /**
  * Énumération des différentes conditions de trophée dans le jeu.
  * 
