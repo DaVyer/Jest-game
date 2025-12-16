@@ -3,8 +3,28 @@ package classe;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Stratégie de jeu pour un joueur humain.
+ * 
+ * <p>Implémente les méthodes de stratégie en demandant
+ * les choix au joueur via l'entrée standard.</p>
+ * 
+ * @author Gwendal Rodrigues
+ * @version %I%, %G%
+ * @see StrategieJoueur
+ */
 public class StrategieHumaine implements StrategieJoueur {
 
+    /**
+     * Demande au joueur humain de créer une offre.
+     * 
+     * <p>Le joueur choisit quelle carte mettre face cachée
+     * et quelle carte mettre face visible.</p>
+     * 
+     * @param joueur le joueur qui crée l'offre
+     * @param scanner le scanner pour lire les entrées
+     * @return l'offre créée par le joueur
+     */
     @Override
     public Offre faireOffre(Joueur joueur, Scanner scanner) {
 
@@ -27,6 +47,14 @@ public class StrategieHumaine implements StrategieJoueur {
         return new Offre(cachee, visible, joueur);
     }
 
+    /**
+     * Demande au joueur de choisir une carte parmi sa main.
+     * 
+     * @param scanner le scanner pour lire les entrées
+     * @param mainManche la main de cartes disponibles
+     * @param message le message à afficher
+     * @return l'index de la carte choisie
+     */
     private int choisirCarte(Scanner scanner, List<Carte> mainManche, String message) {
         while (true) {
             System.out.print(message);
@@ -40,6 +68,14 @@ public class StrategieHumaine implements StrategieJoueur {
         }
     }
 
+    /**
+     * Demande au joueur humain de choisir une offre parmi les offres disponibles.
+     * 
+     * @param offres la liste des offres disponibles
+     * @param joueur le joueur qui fait le choix
+     * @param scanner le scanner pour lire les entrées
+     * @return l'offre choisie
+     */
     @Override
     public Offre choisirOffre(List<Offre> offres, Joueur joueur, Scanner scanner) {
 
@@ -65,6 +101,14 @@ public class StrategieHumaine implements StrategieJoueur {
         return offres.get(choix);
     }
 
+    /**
+     * Demande au joueur humain de choisir une carte dans l'offre sélectionnée.
+     * 
+     * @param offre l'offre dans laquelle choisir
+     * @param joueur le joueur qui fait le choix
+     * @param scanner le scanner pour lire les entrées
+     * @return la carte choisie
+     */
     @Override
     public Carte choisirCarteOffre(Offre offre, Joueur joueur, Scanner scanner) {
 

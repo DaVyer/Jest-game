@@ -4,10 +4,31 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
+/**
+ * Stratégie de jeu pour un robot jouant aléatoirement.
+ * 
+ * <p>Implémente les méthodes de stratégie en faisant des choix
+ * aléatoires parmi les options disponibles.</p>
+ * 
+ * @author Gwendal Rodrigues
+ * @version %I%, %G%
+ * @see StrategieJoueur
+ */
 public class StrategieRobotAleatoire implements StrategieJoueur {
 
+    /** Générateur de nombres aléatoires. */
     private final Random random = new Random();
 
+    /**
+     * Crée une offre aléatoirement pour le robot.
+     * 
+     * <p>Sélectionne aléatoirement quelle carte sera visible
+     * et quelle carte sera cachée.</p>
+     * 
+     * @param joueur le joueur robot
+     * @param scanner le scanner (non utilisé par le robot)
+     * @return l'offre créée aléatoirement
+     */
     @Override
     public Offre faireOffre(Joueur joueur, Scanner scanner) {
 
@@ -34,7 +55,14 @@ public class StrategieRobotAleatoire implements StrategieJoueur {
         return new Offre(cachee, visible, joueur);
     }
 
-
+    /**
+     * Choisit aléatoirement une offre parmi celles disponibles.
+     * 
+     * @param offres la liste des offres disponibles
+     * @param joueur le joueur robot
+     * @param scanner le scanner (non utilisé par le robot)
+     * @return l'offre choisie aléatoirement
+     */
     @Override
     public Offre choisirOffre(List<Offre> offres, Joueur joueur, Scanner scanner) {
         Offre offre = offres.get(random.nextInt(offres.size()));
@@ -42,6 +70,14 @@ public class StrategieRobotAleatoire implements StrategieJoueur {
         return offre;
     }
 
+    /**
+     * Choisit aléatoirement entre la carte visible et la carte cachée.
+     * 
+     * @param offre l'offre dans laquelle choisir
+     * @param joueur le joueur robot
+     * @param scanner le scanner (non utilisé par le robot)
+     * @return la carte choisie aléatoirement
+     */
     @Override
     public Carte choisirCarteOffre(Offre offre, Joueur joueur, Scanner scanner) {
         Carte carte = random.nextBoolean()
