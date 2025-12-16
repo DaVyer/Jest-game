@@ -88,7 +88,7 @@ public class Main {
         System.out.println("        BIENVENUE DANS JEST      ");
         System.out.println("================================");
         System.out.println("Jeu de cartes stratégique");
-        System.out.println("2 à 4 joueurs | Humains ou Robots");
+        System.out.println("3 à 4 joueurs | Humains ou Robots");
         System.out.println();
     }
 
