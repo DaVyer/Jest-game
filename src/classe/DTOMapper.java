@@ -2,12 +2,34 @@ package classe;
 
 import java.util.ArrayList;
 
+/**
+ * Classe utilitaire pour la conversion entre objets métier et objets DTO.
+ * 
+ * <p>Fournit des méthodes statiques pour convertir les entités du jeu
+ * (Carte, Joueur, Partie) en leurs équivalents DTO et vice-versa,
+ * facilitant la sérialisation et la désérialisation.</p>
+ * 
+ * @author Gwendal Rodrigues
+ * @version %I%, %G%
+ */
 public class DTOMapper {
 
+    /**
+     * Convertit un CarteDTO en objet Carte.
+     * 
+     * @param dto le DTO de carte à convertir
+     * @return une nouvelle instance de Carte
+     */
     public static Carte carteFromDTO(CarteDTO dto) {
         return new Carte(dto.valeur, dto.couleur, dto.condition);
     }
 
+    /**
+     * Convertit une Carte en CarteDTO.
+     * 
+     * @param c la carte à convertir
+     * @return un nouveau DTO de carte
+     */
     public static CarteDTO carteToDTO(Carte c) {
         CarteDTO dto = new CarteDTO();
         dto.valeur = c.getValeur();
@@ -16,6 +38,15 @@ public class DTOMapper {
         return dto;
     }
 
+    /**
+     * Convertit un JoueurDTO en objet Joueur.
+     * 
+     * <p>Crée un joueur avec sa stratégie appropriée (humaine ou robot)
+     * et reconstitue son Jest avec toutes les cartes sauvegardées.</p>
+     * 
+     * @param dto le DTO de joueur à convertir
+     * @return une nouvelle instance de Joueur
+     */
     public static Joueur joueurFromDTO(JoueurDTO dto) {
 
         StrategieJoueur strategie = dto.typeStrategie.equals("StrategieRobotAleatoire")
@@ -38,6 +69,15 @@ public class DTOMapper {
         return j;
     }
 
+    /**
+     * Convertit un Joueur en JoueurDTO.
+     * 
+     * <p>Sauvegarde toutes les informations du joueur y compris
+     * son nom, son type de stratégie et toutes les cartes de son Jest.</p>
+     * 
+     * @param j le joueur à convertir
+     * @return un nouveau DTO de joueur
+     */
     public static JoueurDTO joueurToDTO(Joueur j) {
 
         JoueurDTO dto = new JoueurDTO();
@@ -56,6 +96,15 @@ public class DTOMapper {
         return dto;
     }
 
+    /**
+     * Convertit une Partie en PartieDTO.
+     * 
+     * <p>Sauvegarde l'état complet de la partie : joueurs, pioche,
+     * trophées, numéro de manche et statut de fin de partie.</p>
+     * 
+     * @param partie la partie à convertir
+     * @return un nouveau DTO de partie
+     */
     public static PartieDTO partieToDTO(Partie partie) {
 
         PartieDTO dto = new PartieDTO();
@@ -81,6 +130,15 @@ public class DTOMapper {
         return dto;
     }
 
+    /**
+     * Convertit un PartieDTO en objet Partie.
+     * 
+     * <p>Reconstitue une partie complète depuis ses données sérialisées,
+     * en restaurant tous les joueurs, la pioche, les trophées et l'état de la partie.</p>
+     * 
+     * @param dto le DTO de partie à convertir
+     * @return une nouvelle instance de Partie
+     */
     public static Partie partieFromDTO(PartieDTO dto) {
 
         Partie partie = new Partie(false);
