@@ -34,3 +34,6 @@ bin/
 ### Compiled Java files ###
 *.class
 
+### saved game files ###
+*.ser
+
