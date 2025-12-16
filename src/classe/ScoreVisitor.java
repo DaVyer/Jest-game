@@ -8,7 +8,7 @@ public class ScoreVisitor implements Visitor {
 
     @Override
     public void visit(Joueur joueur) {
-        score = calculerScore(joueur.getMain());
+        score = calculerScore(joueur.getJest());
     }
 
     public int getScore() {

@@ -62,7 +62,7 @@ public class TropheeVisitor implements Visitor {
         Carte meilleure = null;
 
         for (Joueur j : joueurs) {
-            Carte c = carteExtremeCouleur(j.getMain(), couleur, true);
+            Carte c = carteExtremeCouleur(j.getJest(), couleur, true);
             if (c == null) continue;
 
             if (meilleure == null || comparerCartes(c, meilleure) > 0) {
@@ -79,7 +79,7 @@ public class TropheeVisitor implements Visitor {
         Carte pire = null;
 
         for (Joueur j : joueurs) {
-            Carte c = carteExtremeCouleur(j.getMain(), couleur, false);
+            Carte c = carteExtremeCouleur(j.getJest(), couleur, false);
             if (c == null) continue;
 
             if (pire == null || comparerCartes(c, pire) < 0) {
@@ -115,7 +115,7 @@ public class TropheeVisitor implements Visitor {
         Carte meilleure = null;
 
         for (Joueur j : joueurs) {
-            Carte c = carteLaPlusForte(j.getMain());
+            Carte c = carteLaPlusForte(j.getJest());
             if (meilleure == null || comparerCartes(c, meilleure) > 0) {
                 meilleure = c;
                 best = j;
@@ -130,7 +130,7 @@ public class TropheeVisitor implements Visitor {
         Carte meilleure = null;
 
         for (Joueur j : liste) {
-            Carte c = carteLaPlusForte(j.getMain());
+            Carte c = carteLaPlusForte(j.getJest());
             if (meilleure == null || comparerCartes(c, meilleure) > 0) {
                 meilleure = c;
                 best = j;
@@ -144,7 +144,7 @@ public class TropheeVisitor implements Visitor {
         List<Joueur> sansJoker = new ArrayList<>();
 
         for (Joueur j : joueurs) {
-            if (!possedeJoker(j.getMain())) {
+            if (!possedeJoker(j.getJest())) {
                 sansJoker.add(j);
             }
         }
@@ -170,7 +170,7 @@ public class TropheeVisitor implements Visitor {
         List<Joueur> candidats = new ArrayList<>();
 
         for (Joueur j : joueurs) {
-            if (possedeJoker(j.getMain())) {
+            if (possedeJoker(j.getJest())) {
                 candidats.add(j);
             }
         }
@@ -196,7 +196,7 @@ public class TropheeVisitor implements Visitor {
         List<Joueur> egalite = new ArrayList<>();
 
         for (Joueur j : joueurs) {
-            int nb = compterValeur(j.getMain(), valeur);
+            int nb = compterValeur(j.getJest(), valeur);
 
             if (nb > max) {
                 max = nb;
@@ -226,7 +226,7 @@ public class TropheeVisitor implements Visitor {
         int bestForce = -1;
 
         for (Joueur j : candidats) {
-            int force = meilleureForceCouleur(j.getMain(), valeur);
+            int force = meilleureForceCouleur(j.getJest(), valeur);
             if (force > bestForce) {
                 bestForce = force;
                 best = j;

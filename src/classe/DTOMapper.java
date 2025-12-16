@@ -1,7 +1,6 @@
 package classe;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class DTOMapper {
 
@@ -47,8 +46,8 @@ public class DTOMapper {
 
         JestDTO jestDTO = new JestDTO();
 
-        for (int i = 0; i < j.getMain().taille(); i++) {
-            jestDTO.cartes.add(carteToDTO(j.getMain().getCarte(i)));
+        for (int i = 0; i < j.getJest().taille(); i++) {
+            jestDTO.cartes.add(carteToDTO(j.getJest().getCarte(i)));
         }
 
         dto.jest = jestDTO;

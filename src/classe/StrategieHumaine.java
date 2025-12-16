@@ -10,15 +10,15 @@ public class StrategieHumaine implements StrategieJoueur {
 
         joueur.afficherMainManche();
 
-        int indexCachee = choisirCarte(scanner, joueur.getMainManche(),
-                "Choisissez la carte FACE CACHÉE : ");
-        Carte cachee = joueur.getMainManche().remove(indexCachee);
+        int indexCachee = choisirCarte(scanner, joueur.getMainCourante(),
+                "Choisissez la carte FACE CACHÉE (Sélectionner le numéro) : ");
+        Carte cachee = joueur.getMainCourante().remove(indexCachee);
 
         joueur.afficherMainManche();
 
-        int indexVisible = choisirCarte(scanner, joueur.getMainManche(),
-                "Choisissez la carte FACE VISIBLE : ");
-        Carte visible = joueur.getMainManche().remove(indexVisible);
+        int indexVisible = choisirCarte(scanner, joueur.getMainCourante(),
+                "Choisissez la carte FACE VISIBLE (Sélectionner le numéro) : ");
+        Carte visible = joueur.getMainCourante().remove(indexVisible);
 
         System.out.println("\nOffre créée :");
         System.out.println(" - Carte face cachée : [cachée]");

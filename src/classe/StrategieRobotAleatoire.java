@@ -11,7 +11,7 @@ public class StrategieRobotAleatoire implements StrategieJoueur {
     @Override
     public Offre faireOffre(Joueur joueur, Scanner scanner) {
 
-        List<Carte> mainManche = joueur.getMainManche();
+        List<Carte> mainManche = joueur.getMainCourante();
 
         if (mainManche.size() != 2) {
             throw new IllegalStateException(

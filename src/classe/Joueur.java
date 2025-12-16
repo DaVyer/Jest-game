@@ -1,22 +1,21 @@
 package classe;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Joueur {
     private static final AtomicInteger ID_GENERATOR = new AtomicInteger(1);
     private final int idJoueur;
     private String nom;
-    private final Jest main;
-    private List<Carte> mainManche = new ArrayList<>();
+    private final Jest jest;
+    private List<Carte> mainCourante = new ArrayList<>();
     private final StrategieJoueur strategieJoueur;
 
     public Joueur(String nom, StrategieJoueur strategieJoueur) {
         idJoueur = ID_GENERATOR.getAndIncrement();
         this.nom = nom;
         this.strategieJoueur = strategieJoueur;
-        this.main = new Jest();
+        this.jest = new Jest();
         System.out.println("\n===============\n\n\tNouveau Joueur créé :\t " + this.getNom() + "\n\tJoueur numéro :\t" + this.getIdJoueur() + "\n\n===============\n");
     }
 
@@ -28,17 +27,17 @@ public class Joueur {
         return this.nom;
     }
 
-    public Jest getMain() {
-        return main;
+    public Jest getJest() {
+        return jest;
     }
 
     public void ajouterAuJest(Carte carte){
-        main.ajouterAuJest(carte);
+        jest.ajouterAuJest(carte);
     }
 
     public void afficherMain() {
-        System.out.println("Main de " + nom + " :");
-        main.afficher();
+        System.out.println("Jest de " + nom + " :");
+        jest.afficher();
     }
 
     public void accept(Visitor visitor) {
@@ -50,21 +49,21 @@ public class Joueur {
     }
 
     public void ajouterCarteManche(Carte c) {
-        mainManche.add(c);
+        mainCourante.add(c);
     }
 
     public void viderMainManche() {
-        mainManche.clear();
+        mainCourante.clear();
     }
 
-    public List<Carte> getMainManche() {
-        return mainManche;
+    public List<Carte> getMainCourante() {
+        return mainCourante;
     }
 
     public void afficherMainManche() {
         System.out.println("Cartes de manche de " + nom + " :");
-        for (int i = 0; i < mainManche.size(); i++) {
-            System.out.println("[" + i + "] " + mainManche.get(i));
+        for (int i = 0; i < mainCourante.size(); i++) {
+            System.out.println("[" + i + "] " + mainCourante.get(i));
         }
     }
 }
