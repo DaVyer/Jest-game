@@ -125,11 +125,6 @@ public class Main {
 
     private static void sauvegarder(Partie partie) {
         try {
-            System.out.println("DEBUG AVANT SAVE");
-            for (Joueur j : partie.getJoueurs()) {
-                System.out.println(" - " + j.getNom()
-                        + " jest=" + j.getMain().taille());
-            }
             Save.sauvegarder(partie, "sauvegarde.ser");
             System.out.println("Partie sauvegardée avec succès.");
         } catch (Exception e) {
@@ -140,11 +135,7 @@ public class Main {
     private static Partie charger() {
         try {
             Partie partie = Load.charger("sauvegarde.ser");
-            System.out.println("DEBUG APRÈS LOAD");
-            for (Joueur j : partie.getJoueurs()) {
-                System.out.println(" - " + j.getNom()
-                        + " jest=" + j.getMain().taille());
-            }
+
             System.out.println("Partie chargée avec succès.");
             return partie;
         } catch (Exception e) {
