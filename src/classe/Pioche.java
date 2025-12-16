@@ -96,6 +96,11 @@ public class Pioche {
         return this.pioche.pop();
     }
 
+    /**
+     * Retourne le nombre de cartes restantes dans la pioche.
+     * 
+     * @return le nombre de cartes dans la pioche
+     */
     public int getNombreCartes() {
         return pioche.size();
     }
@@ -122,6 +127,12 @@ public class Pioche {
         return this.pioche.isEmpty();
     }
 
+    /**
+     * Initialise la pioche depuis une liste de DTO.
+     * 
+     * @param pioche la liste de CarteDTO à convertir
+     * @deprecated Utiliser chargerDepuisDTO à la place
+     */
     public void setPiocheDepuisDTO(List<CarteDTO> pioche) {
         this.pioche = new LinkedList<>();
         for (CarteDTO cDTO : pioche) {
@@ -129,6 +140,13 @@ public class Pioche {
         }
     }
 
+    /**
+     * Charge la pioche depuis une liste de DTO.
+     * 
+     * <p>Utilisé lors du chargement d'une partie sauvegardée.</p>
+     * 
+     * @param cartesDTO la liste de CarteDTO à convertir
+     */
     public void chargerDepuisDTO(List<CarteDTO> cartesDTO) {
         this.pioche = new LinkedList<>();
         for (CarteDTO cDTO : cartesDTO) {
@@ -136,6 +154,13 @@ public class Pioche {
         }
     }
 
+    /**
+     * Remet une carte dans la pioche.
+     * 
+     * <p>La carte est ajoutée à la fin de la pioche.</p>
+     * 
+     * @param carte la carte à remettre dans la pioche
+     */
     public void remettre(Carte carte) {
         if (carte == null) return;
         this.pioche.addLast(carte); // ou add(carte) selon ton type

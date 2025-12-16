@@ -42,6 +42,14 @@ public class Offre {
         this.disponible = true;
     }
 
+    /**
+     * Récupère la carte restante de l'offre.
+     * 
+     * <p>Prend la carte visible si elle existe, sinon la carte cachée.
+     * Marque l'offre comme indisponible.</p>
+     * 
+     * @return la carte restante, ou null si aucune carte disponible
+     */
     public Carte prendreCarteRestante() {
         if (visible != null) {
             Carte c = visible;
@@ -107,6 +115,11 @@ public class Offre {
         return carte;
     }
 
+    /**
+     * Vérifie si l'offre est toujours disponible.
+     * 
+     * @return true si l'offre est disponible, false sinon
+     */
     public boolean isDisponible() {
         return disponible;
     }
