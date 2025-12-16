@@ -1,7 +1,6 @@
 package classe;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 /**
  * Représente la partie, du début jusqu'à la fin de la partie
@@ -15,13 +14,28 @@ import java.util.stream.Collectors;
  */
 
 public class Partie{
+    /** Générateur d'identifiants uniques pour les parties. */
     private final static AtomicInteger ID_GENERATOR = new AtomicInteger(0);
+    
+    /** Identifiant unique de la partie. */
     private int idPartie;
+    
+    /** La pioche de cartes de la partie. */
     private final Pioche pioche;
+    
+    /** Liste des joueurs participant à la partie. */
     private LinkedList<Joueur> joueurs;
+    
+    /** Liste des cartes trophées de la partie. */
     private LinkedList<Carte> trophees;
+    
+    /** Liste des offres en cours pour la manche actuelle. */
     private List<Offre> offres = new ArrayList<>();
+    
+    /** Indique si la partie est terminée. */
     private boolean partieTerminee = false;
+    
+    /** La manche courante. */
     private final Manche manche = new Manche();
 
     /**
@@ -45,6 +59,14 @@ public class Partie{
         this.setJoueurs();
     }
 
+    /**
+     * Constructeur de la classe Partie avec option d'initialisation.
+     * 
+     * <p>Permet de créer une partie vide sans initialiser la pioche
+     * et les trophées, utile pour le chargement de parties.</p>
+     * 
+     * @param initialiser true pour initialiser la pioche et les trophées, false sinon
+     */
     public Partie(boolean initialiser) {
         this.idPartie = ID_GENERATOR.getAndIncrement();
         this.joueurs = new LinkedList<>();
@@ -133,6 +155,14 @@ public class Partie{
         this.joueurs.remove(joueur);
     }
 
+    /**
+     * Joue une manche complète de la partie.
+     * 
+     * <p>Gère le déroulement d'une manche : distribution des cartes,
+     * création des offres, résolution des offres et fin de manche.</p>
+     * 
+     * @param scanner le scanner pour les interactions avec les joueurs
+     */
     public void jouerManche(Scanner scanner) {
         int cartesNecessaires = joueurs.size() * 2;
 
@@ -159,6 +189,11 @@ public class Partie{
         System.out.println("\nTapez 'manche' pour jouer une nouvelle manche ou 'exit' pour terminer la partie. Tapez help pour l'aide.");
     }
 
+    /**
+     * Initialise le début d'une manche.
+     * 
+     * <p>Vide les mains des joueurs et distribue 2 cartes à chaque joueur.</p>
+     */
     private void debutManche() {
         for (Joueur j : joueurs) {
             j.viderMainManche();
@@ -167,6 +202,14 @@ public class Partie{
         }
     }
 
+    /**
+     * Crée les offres de tous les joueurs.
+     * 
+     * <p>Chaque joueur utilise sa stratégie pour créer une offre
+     * avec une carte visible et une carte cachée.</p>
+     * 
+     * @param scanner le scanner pour les interactions avec les joueurs
+     */
     private void creerOffres(Scanner scanner) {
         offres.clear();
         for (Joueur j : joueurs) {
@@ -174,6 +217,14 @@ public class Partie{
         }
     }
 
+    /**
+     * Résout les offres pour tous les joueurs.
+     * 
+     * <p>Chaque joueur choisit une offre disponible (pas la sienne si possible)
+     * et prend une carte de cette offre pour l'ajouter à son Jest.</p>
+     * 
+     * @param scanner le scanner pour les interactions avec les joueurs
+     */
     private void resolutionOffres(Scanner scanner) {
 
         Set<Joueur> joueursAyantJoue = new HashSet<>();
@@ -207,6 +258,12 @@ public class Partie{
         }
     }
 
+    /**
+     * Finalise la manche en cours.
+     * 
+     * <p>Remet les cartes restantes des offres dans la pioche
+     * et vide la liste des offres.</p>
+     */
     private void finManche() {
         for (Offre o : offres) {
             Carte restante = o.prendreCarteRestante();
@@ -217,6 +274,12 @@ public class Partie{
         offres.clear();
     }
 
+    /**
+     * Termine la partie et affiche les résultats.
+     * 
+     * <p>Attribue les trophées, affiche les Jests finaux
+     * et calcule les scores de tous les joueurs.</p>
+     */
     public void finDePartie() {
         if (!partieTerminee) {
             partieTerminee = true;
@@ -233,6 +296,9 @@ public class Partie{
         }
     }
 
+    /**
+     * Affiche les Jests finaux de tous les joueurs.
+     */
     private void jestFinaux(){
         System.out.println("\n===== JESTS FINAUX =====");
         for (Joueur j : joueurs) {
@@ -240,6 +306,12 @@ public class Partie{
         }
     }
 
+    /**
+     * Calcule et affiche les scores finaux de tous les joueurs.
+     * 
+     * <p>Utilise le ScoreVisitor pour calculer le score de chaque joueur
+     * et détermine le gagnant.</p>
+     */
     private void scoreFinaux() {
         System.out.println("\n===== SCORES FINAUX =====");
 
@@ -260,6 +332,12 @@ public class Partie{
         }
     }
 
+    /**
+     * Attribue les trophées aux joueurs.
+     * 
+     * <p>Utilise le TropheeVisitor pour déterminer quel joueur remporte
+     * chaque trophée selon les conditions. Ajoute les trophées aux Jests des gagnants.</p>
+     */
     private void attribuerTrophees() {
 
         TropheeVisitor visitor = new TropheeVisitor(trophees);
@@ -303,14 +381,31 @@ public class Partie{
         // On est sur que c'est un void ?
     }
 
+    /**
+     * Récupère le numéro de la manche courante.
+     * 
+     * @return le numéro de la manche
+     */
     public int getNumeroManche() {
         return manche.getNumero();
     }
 
+    /**
+     * Vérifie si la partie est terminée.
+     * 
+     * @return true si la partie est terminée, false sinon
+     */
     public boolean isPartieTerminee() {
         return partieTerminee;
     }
 
+    /**
+     * Définit les trophées depuis une liste de DTO.
+     * 
+     * <p>Utilisé lors du chargement d'une partie sauvegardée.</p>
+     * 
+     * @param trophees la liste de CarteDTO à convertir
+     */
     public void setTropheesDepuisDTO(List<CarteDTO> trophees) {
         this.trophees = new LinkedList<>();
         for (CarteDTO cDTO : trophees) {
@@ -318,14 +413,30 @@ public class Partie{
         }
     }
 
+    /**
+     * Définit le numéro de la manche courante.
+     * 
+     * @param numeroManche le numéro de manche à définir
+     */
     public void setNumeroManche(int numeroManche) {
         this.manche.setNumero(numeroManche);
     }
 
+    /**
+     * Définit si la partie est terminée.
+     * 
+     * @param partieTerminee true si la partie est terminée, false sinon
+     */
     public void setPartieTerminee(boolean partieTerminee) {
         this.partieTerminee = partieTerminee;
     }
 
+    /**
+     * Affiche l'état actuel de la partie.
+     * 
+     * <p>Affiche le nombre de joueurs, les Jests de chaque joueur
+     * et le nombre de cartes restantes dans la pioche.</p>
+     */
     public void afficherEtat() {
         System.out.println("\n===== ÉTAT DE LA PARTIE =====");
         System.out.println("Nombre de joueurs : " + joueurs.size());
