@@ -49,8 +49,8 @@ public class Main {
 
     private static int demanderNombreJoueurs(Scanner scanner) {
         int nb = 0;
-        while (nb < 2 || nb > 4) {
-            System.out.print("Nombre de joueurs (2 à 4) : ");
+        while (nb < 3 || nb > 4) {
+            System.out.print("Nombre de joueurs (3 à 4) : ");
             try {
                 nb = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
@@ -88,7 +88,7 @@ public class Main {
         System.out.println("        BIENVENUE DANS JEST      ");
         System.out.println("================================");
         System.out.println("Jeu de cartes stratégique");
-        System.out.println("2 à 4 joueurs | Humains ou Robots");
+        System.out.println("3 à 4 joueurs | Humains ou Robots");
         System.out.println();
     }
 
@@ -125,11 +125,6 @@ public class Main {
 
     private static void sauvegarder(Partie partie) {
         try {
-            System.out.println("DEBUG AVANT SAVE");
-            for (Joueur j : partie.getJoueurs()) {
-                System.out.println(" - " + j.getNom()
-                        + " jest=" + j.getMain().taille());
-            }
             Save.sauvegarder(partie, "sauvegarde.ser");
             System.out.println("Partie sauvegardée avec succès.");
         } catch (Exception e) {
@@ -140,11 +135,7 @@ public class Main {
     private static Partie charger() {
         try {
             Partie partie = Load.charger("sauvegarde.ser");
-            System.out.println("DEBUG APRÈS LOAD");
-            for (Joueur j : partie.getJoueurs()) {
-                System.out.println(" - " + j.getNom()
-                        + " jest=" + j.getMain().taille());
-            }
+
             System.out.println("Partie chargée avec succès.");
             return partie;
         } catch (Exception e) {

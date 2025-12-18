@@ -2,20 +2,47 @@ package classe;
 
 import java.util.*;
 
+/**
+ * Visiteur pour l'attribution des trophées.
+ * 
+ * <p>Implémente le pattern Visitor pour déterminer quels joueurs
+ * remportent les trophées selon les conditions associées à chaque carte trophée.</p>
+ * 
+ * @author Gwendal Rodrigues
+ * @version %I%, %G%
+ * @see Visitor
+ */
 public class TropheeVisitor implements Visitor {
+    /** Liste des cartes trophées à attribuer. */
     private final List<Carte> trophees;
+    
+    /** Liste des joueurs visités. */
     private final List<Joueur> joueurs = new ArrayList<>();
 
+    /**
+     * Constructeur du TropheeVisitor.
+     * 
+     * @param trophees la liste des cartes trophées à attribuer
+     */
     public TropheeVisitor(List<Carte> trophees) {
         this.trophees = trophees;
     }
 
+    /**
+     * Visite un joueur et l'ajoute à la liste des joueurs.
+     * 
+     * @param joueur le joueur à visiter
+     */
     @Override
     public void visit(Joueur joueur) {
         joueurs.add(joueur);
     }
 
-
+    /**
+     * Attribue les trophées aux joueurs gagnants.
+     * 
+     * @return une map associant chaque joueur gagnant à ses trophées
+     */
     public Map<Joueur, List<Carte>> attribuerTrophees() {
 
         Map<Joueur, List<Carte>> gains = new HashMap<>();
@@ -28,6 +55,12 @@ public class TropheeVisitor implements Visitor {
         return gains;
     }
 
+    /**
+     * Détermine le gagnant d'un trophée selon sa condition.
+     * 
+     * @param trophee le trophée à attribuer
+     * @return le joueur gagnant du trophée
+     */
     private Joueur determinerGagnant(Carte trophee) {
         ConditionTrophee condition = trophee.getTrophee();
         return switch (condition) {
@@ -56,13 +89,19 @@ public class TropheeVisitor implements Visitor {
         };
     }
 
+    /**
+     * Détermine le gagnant ayant la carte la plus haute d'une couleur.
+     * 
+     * @param couleur la couleur à évaluer
+     * @return le joueur gagnant
+     */
     private Joueur gagnantPlusHauteCouleur(CouleurCarte couleur) {
 
         Joueur best = null;
         Carte meilleure = null;
 
         for (Joueur j : joueurs) {
-            Carte c = carteExtremeCouleur(j.getMain(), couleur, true);
+            Carte c = carteExtremeCouleur(j.getJest(), couleur, true);
             if (c == null) continue;
 
             if (meilleure == null || comparerCartes(c, meilleure) > 0) {
@@ -73,13 +112,19 @@ public class TropheeVisitor implements Visitor {
         return best;
     }
 
+    /**
+     * Détermine le gagnant ayant la carte la plus basse d'une couleur.
+     * 
+     * @param couleur la couleur à évaluer
+     * @return le joueur gagnant
+     */
     private Joueur gagnantPlusBasseCouleur(CouleurCarte couleur) {
 
         Joueur best = null;
         Carte pire = null;
 
         for (Joueur j : joueurs) {
-            Carte c = carteExtremeCouleur(j.getMain(), couleur, false);
+            Carte c = carteExtremeCouleur(j.getJest(), couleur, false);
             if (c == null) continue;
 
             if (pire == null || comparerCartes(c, pire) < 0) {
@@ -90,6 +135,14 @@ public class TropheeVisitor implements Visitor {
         return best;
     }
 
+    /**
+     * Trouve la carte extrême (plus haute ou plus basse) d'une couleur dans un Jest.
+     * 
+     * @param jest le Jest à analyser
+     * @param couleur la couleur recherchée
+     * @param max true pour la plus haute, false pour la plus basse
+     * @return la carte extrême, ou null si aucune carte de cette couleur
+     */
     private Carte carteExtremeCouleur(Jest jest,
                                       CouleurCarte couleur,
                                       boolean max) {
@@ -109,13 +162,18 @@ public class TropheeVisitor implements Visitor {
         return best;
     }
 
+    /**
+     * Détermine le gagnant ayant le meilleur Jest (carte la plus forte).
+     * 
+     * @return le joueur gagnant
+     */
     private Joueur gagnantBestJest() {
 
         Joueur best = null;
         Carte meilleure = null;
 
         for (Joueur j : joueurs) {
-            Carte c = carteLaPlusForte(j.getMain());
+            Carte c = carteLaPlusForte(j.getJest());
             if (meilleure == null || comparerCartes(c, meilleure) > 0) {
                 meilleure = c;
                 best = j;
@@ -124,13 +182,19 @@ public class TropheeVisitor implements Visitor {
         return best;
     }
 
+    /**
+     * Détermine le gagnant ayant le meilleur Jest parmi une liste de joueurs.
+     * 
+     * @param liste la liste de joueurs à évaluer
+     * @return le joueur gagnant
+     */
     private Joueur gagnantBestJest(List<Joueur> liste) {
 
         Joueur best = null;
         Carte meilleure = null;
 
         for (Joueur j : liste) {
-            Carte c = carteLaPlusForte(j.getMain());
+            Carte c = carteLaPlusForte(j.getJest());
             if (meilleure == null || comparerCartes(c, meilleure) > 0) {
                 meilleure = c;
                 best = j;
@@ -139,12 +203,17 @@ public class TropheeVisitor implements Visitor {
         return best;
     }
 
+    /**
+     * Détermine le gagnant ayant le meilleur Jest sans joker.
+     * 
+     * @return le joueur gagnant
+     */
     private Joueur gagnantBestJestSansJoker() {
 
         List<Joueur> sansJoker = new ArrayList<>();
 
         for (Joueur j : joueurs) {
-            if (!possedeJoker(j.getMain())) {
+            if (!possedeJoker(j.getJest())) {
                 sansJoker.add(j);
             }
         }
@@ -153,6 +222,12 @@ public class TropheeVisitor implements Visitor {
         return gagnantBestJest(sansJoker);
     }
 
+    /**
+     * Trouve la carte la plus forte dans un Jest.
+     * 
+     * @param jest le Jest à analyser
+     * @return la carte la plus forte
+     */
     private Carte carteLaPlusForte(Jest jest) {
 
         Carte best = null;
@@ -165,12 +240,19 @@ public class TropheeVisitor implements Visitor {
         return best;
     }
 
+    /**
+     * Détermine le gagnant possédant un joker.
+     * 
+     * <p>En cas de plusieurs jokers, départage par le meilleur Jest.</p>
+     * 
+     * @return le joueur gagnant
+     */
     private Joueur gagnantAvecJoker() {
 
         List<Joueur> candidats = new ArrayList<>();
 
         for (Joueur j : joueurs) {
-            if (possedeJoker(j.getMain())) {
+            if (possedeJoker(j.getJest())) {
                 candidats.add(j);
             }
         }
@@ -181,6 +263,12 @@ public class TropheeVisitor implements Visitor {
         return gagnantBestJest(candidats);
     }
 
+    /**
+     * Vérifie si un Jest contient un joker.
+     * 
+     * @param jest le Jest à vérifier
+     * @return true si le Jest contient un joker, false sinon
+     */
     private boolean possedeJoker(Jest jest) {
         for (int i = 0; i < jest.taille(); i++) {
             if (jest.getCarte(i).getCouleur() == CouleurCarte.JOKER) {
@@ -190,13 +278,19 @@ public class TropheeVisitor implements Visitor {
         return false;
     }
 
+    /**
+     * Détermine le gagnant ayant la majorité d'une valeur.
+     * 
+     * @param valeur la valeur à évaluer
+     * @return le joueur gagnant
+     */
     private Joueur gagnantMajorite(ValeurCarte valeur) {
 
         int max = -1;
         List<Joueur> egalite = new ArrayList<>();
 
         for (Joueur j : joueurs) {
-            int nb = compterValeur(j.getMain(), valeur);
+            int nb = compterValeur(j.getJest(), valeur);
 
             if (nb > max) {
                 max = nb;
@@ -211,6 +305,13 @@ public class TropheeVisitor implements Visitor {
         return departagerMajorite(egalite, valeur);
     }
 
+    /**
+     * Compte le nombre de cartes d'une valeur donnée dans un Jest.
+     * 
+     * @param jest le Jest à analyser
+     * @param valeur la valeur à compter
+     * @return le nombre de cartes de cette valeur
+     */
     private int compterValeur(Jest jest, ValeurCarte valeur) {
 
         int count = 0;
@@ -220,13 +321,22 @@ public class TropheeVisitor implements Visitor {
         return count;
     }
 
+    /**
+     * Départage les joueurs à égalité pour une majorité.
+     * 
+     * <p>Le départage se fait par la force de la couleur la plus forte.</p>
+     * 
+     * @param candidats la liste des joueurs à départager
+     * @param valeur la valeur concernée
+     * @return le joueur gagnant
+     */
     private Joueur departagerMajorite(List<Joueur> candidats, ValeurCarte valeur) {
 
         Joueur best = null;
         int bestForce = -1;
 
         for (Joueur j : candidats) {
-            int force = meilleureForceCouleur(j.getMain(), valeur);
+            int force = meilleureForceCouleur(j.getJest(), valeur);
             if (force > bestForce) {
                 bestForce = force;
                 best = j;
@@ -235,6 +345,13 @@ public class TropheeVisitor implements Visitor {
         return best;
     }
 
+    /**
+     * Trouve la meilleure force de couleur pour une valeur dans un Jest.
+     * 
+     * @param jest le Jest à analyser
+     * @param valeur la valeur à évaluer
+     * @return la force de couleur maximale
+     */
     private int meilleureForceCouleur(Jest jest, ValeurCarte valeur) {
 
         int best = -1;
@@ -247,6 +364,13 @@ public class TropheeVisitor implements Visitor {
         return best;
     }
 
+    /**
+     * Compare deux cartes selon leur valeur faciale et leur couleur.
+     * 
+     * @param a la première carte
+     * @param b la deuxième carte
+     * @return un nombre négatif, zéro ou positif selon que a est inférieure, égale ou supérieure à b
+     */
     private int comparerCartes(Carte a, Carte b) {
 
         int cmp = Integer.compare(valeurFaciale(a), valeurFaciale(b));
@@ -258,6 +382,12 @@ public class TropheeVisitor implements Visitor {
         );
     }
 
+    /**
+     * Récupère la valeur faciale d'une carte.
+     * 
+     * @param c la carte à évaluer
+     * @return la valeur faciale (0 pour joker, 1 pour As, sinon valeur numérique)
+     */
     private int valeurFaciale(Carte c) {
 
         if (c.getCouleur() == CouleurCarte.JOKER) return 0;
@@ -265,6 +395,14 @@ public class TropheeVisitor implements Visitor {
         return c.getValeur().getValeur();
     }
 
+    /**
+     * Récupère la force d'une couleur.
+     * 
+     * <p>Pique > Trèfle > Carreau > Cœur > Joker</p>
+     * 
+     * @param c la couleur à évaluer
+     * @return la force de la couleur (4 pour Pique, 3 pour Trèfle, 2 pour Carreau, 1 pour Cœur, 0 pour Joker)
+     */
     private int forceCouleur(CouleurCarte c) {
 
         return switch (c) {

@@ -13,6 +13,7 @@ import java.util.List;
  * @version %I%, %G%
  */
 public class Manche {
+    /** Le numéro de la manche courante. */
     private int numero = 0;
 
     /**
@@ -31,10 +32,18 @@ public class Manche {
         return this.numero;
     }
 
+    /**
+     * Incrémente le numéro de la manche de 1.
+     */
     public void incrementNumero() {
         this.numero++;
     }
 
+    /**
+     * Définit le numéro de la manche.
+     * 
+     * @param numeroManche le numéro de manche à définir
+     */
     public void setNumero(int numeroManche) {
         this.numero = numeroManche;
     }
