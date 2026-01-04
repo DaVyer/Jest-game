@@ -24,9 +24,6 @@ public class Partie{
 
     /**
      * Constructeur
-     *
-     * @param id identifiant de la partie
-     * @param joueurs liste initiale des joueurs participant à la partie
      */
     public Partie(){
         this.idPartie = ID_GENERATOR.getAndIncrement();
