@@ -63,23 +63,23 @@ public class Pioche {
      * Cette méthode est utilisé lors de l'appel de la méthode setPioche().</p>
      */
     public void initPioche(){
-        this.pioche.add(new Carte(ValeurCarte.AS, CouleurCarte.JOKER, ConditionTrophee.MEILLEURJEST)); // Je ne savais pas quelle valeur mettre pour le joker, j'ai mis l'as, mais on s'en fou
-        this.pioche.add(new Carte(ValeurCarte.AS, CouleurCarte.COEUR, ConditionTrophee.JOKER));
-        this.pioche.add(new Carte(ValeurCarte.QUATRE, CouleurCarte.PIQUE, ConditionTrophee.PLUSBASSE_TREFLE));
-        this.pioche.add(new Carte(ValeurCarte.QUATRE, CouleurCarte.TREFLE, ConditionTrophee.PLUSBASSE_PIQUE));
-        this.pioche.add(new Carte(ValeurCarte.DEUX, CouleurCarte.COEUR, ConditionTrophee.JOKER));
-        this.pioche.add(new Carte(ValeurCarte.QUATRE, CouleurCarte.CARREAU, ConditionTrophee.MEILLEURJESTSANSJOKER));
-        this.pioche.add(new Carte(ValeurCarte.QUATRE, CouleurCarte.COEUR, ConditionTrophee.JOKER));
-        this.pioche.add(new Carte(ValeurCarte.TROIS, CouleurCarte.COEUR, ConditionTrophee.JOKER));
-        this.pioche.add(new Carte(ValeurCarte.AS, CouleurCarte.PIQUE, ConditionTrophee.PLUSHAUTE_TREFLE));
-        this.pioche.add(new Carte(ValeurCarte.AS, CouleurCarte.TREFLE, ConditionTrophee.PLUSHAUTE_PIQUE));
-        this.pioche.add(new Carte(ValeurCarte.AS, CouleurCarte.CARREAU, ConditionTrophee.MAJORITE_4));
-        this.pioche.add(new Carte(ValeurCarte.DEUX, CouleurCarte.PIQUE, ConditionTrophee.MAJORITE_3));
-        this.pioche.add(new Carte(ValeurCarte.DEUX, CouleurCarte.TREFLE, ConditionTrophee.PLUSBASSE_COEUR));
-        this.pioche.add(new Carte(ValeurCarte.DEUX, CouleurCarte.CARREAU, ConditionTrophee.PLUSHAUTE_CARREAU));
-        this.pioche.add(new Carte(ValeurCarte.TROIS, CouleurCarte.PIQUE, ConditionTrophee.MAJORITE_2));
-        this.pioche.add(new Carte(ValeurCarte.TROIS, CouleurCarte.TREFLE, ConditionTrophee.PLUSHAUTE_COEUR));
-        this.pioche.add(new Carte(ValeurCarte.TROIS, CouleurCarte.CARREAU, ConditionTrophee.PLUSBASSE_CARREAU));
+        this.pioche.add(new Carte(ValeurCarte.AS, CouleurCarte.JOKER, ConditionTrophee.MEILLEURJEST, "./Jest-game/image/cartes/joker.png")); // Je ne savais pas quelle valeur mettre pour le joker, j'ai mis l'as, mais on s'en fou
+        this.pioche.add(new Carte(ValeurCarte.AS, CouleurCarte.COEUR, ConditionTrophee.JOKER, "./Jest-game/image/cartes/coeur_as.png"));
+        this.pioche.add(new Carte(ValeurCarte.QUATRE, CouleurCarte.PIQUE, ConditionTrophee.PLUSBASSE_TREFLE, "./Jest-game/image/cartes/pique_4.png"));
+        this.pioche.add(new Carte(ValeurCarte.QUATRE, CouleurCarte.TREFLE, ConditionTrophee.PLUSBASSE_PIQUE, "./Jest-game/image/cartes/trefle_4.png"));
+        this.pioche.add(new Carte(ValeurCarte.DEUX, CouleurCarte.COEUR, ConditionTrophee.JOKER, "./Jest-game/image/cartes/coeur_2.png"));
+        this.pioche.add(new Carte(ValeurCarte.QUATRE, CouleurCarte.CARREAU, ConditionTrophee.MEILLEURJESTSANSJOKER, "./Jest-game/image/cartes/carreau_4.png"));
+        this.pioche.add(new Carte(ValeurCarte.QUATRE, CouleurCarte.COEUR, ConditionTrophee.JOKER, "./Jest-game/image/cartes/coeur_4.png"));
+        this.pioche.add(new Carte(ValeurCarte.TROIS, CouleurCarte.COEUR, ConditionTrophee.JOKER, "./Jest-game/image/cartes/coeur_3.png"));
+        this.pioche.add(new Carte(ValeurCarte.AS, CouleurCarte.PIQUE, ConditionTrophee.PLUSHAUTE_TREFLE, "./Jest-game/image/cartes/pique_as.png"));
+        this.pioche.add(new Carte(ValeurCarte.AS, CouleurCarte.TREFLE, ConditionTrophee.PLUSHAUTE_PIQUE, "./Jest-game/image/cartes/trefle_as.png"));
+        this.pioche.add(new Carte(ValeurCarte.AS, CouleurCarte.CARREAU, ConditionTrophee.MAJORITE_4, "./Jest-game/image/cartes/carreau_as.png"));
+        this.pioche.add(new Carte(ValeurCarte.DEUX, CouleurCarte.PIQUE, ConditionTrophee.MAJORITE_3, "./Jest-game/image/cartes/pique_2.png"));
+        this.pioche.add(new Carte(ValeurCarte.DEUX, CouleurCarte.TREFLE, ConditionTrophee.PLUSBASSE_COEUR, "./Jest-game/image/cartes/trefle_2.png"));
+        this.pioche.add(new Carte(ValeurCarte.DEUX, CouleurCarte.CARREAU, ConditionTrophee.PLUSHAUTE_CARREAU, "./Jest-game/image/cartes/carreau_2.png"));
+        this.pioche.add(new Carte(ValeurCarte.TROIS, CouleurCarte.PIQUE, ConditionTrophee.MAJORITE_2, "./Jest-game/image/cartes/pique_3.png"));
+        this.pioche.add(new Carte(ValeurCarte.TROIS, CouleurCarte.TREFLE, ConditionTrophee.PLUSHAUTE_COEUR, "./Jest-game/image/cartes/trefle_3.png"));
+        this.pioche.add(new Carte(ValeurCarte.TROIS, CouleurCarte.CARREAU, ConditionTrophee.PLUSBASSE_CARREAU, "./Jest-game/image/cartes/carreau_3.png"));
     }
 
     /**
