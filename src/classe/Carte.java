@@ -10,17 +10,18 @@ public class Carte {
     private CouleurCarte couleur;
     private ValeurCarte valeur;
     private ConditionTrophee trophee;
+    private String img;
 
     /**
      * Constructor of the Carte class
      * @param valeur the value of the card (see @CouleurCarte enum).
      * @param couleur the color of the card (see @ValeurCarte enum).
      */
-    public Carte(ValeurCarte valeur,  CouleurCarte couleur, ConditionTrophee trophee) {
+    public Carte(ValeurCarte valeur,  CouleurCarte couleur, ConditionTrophee trophee, String img) {
         this.valeur = valeur;
         this.couleur = couleur;
         this.trophee = trophee;
-
+        this.img = img;
     }
     /**
      * Method that get the current color of a card.
@@ -60,6 +61,10 @@ public class Carte {
      */
     public ConditionTrophee getTrophee(){
         return this.trophee;
+    }
+
+    public String getImg(){
+        return this.img;
     }
 
     /**
