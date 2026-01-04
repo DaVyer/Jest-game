@@ -12,6 +12,8 @@ public class Carte {
     
     /** La valeur de la carte. */
     private ValeurCarte valeur;
+    private ConditionTrophee trophee;
+    private String img;
     
     /** La condition de trophée associée à la carte. */
     private final ConditionTrophee trophee;
@@ -21,11 +23,11 @@ public class Carte {
      * @param valeur the value of the card (see @CouleurCarte enum).
      * @param couleur the color of the card (see @ValeurCarte enum).
      */
-    public Carte(ValeurCarte valeur,  CouleurCarte couleur, ConditionTrophee trophee) {
+    public Carte(ValeurCarte valeur,  CouleurCarte couleur, ConditionTrophee trophee, String img) {
         this.valeur = valeur;
         this.couleur = couleur;
         this.trophee = trophee;
-
+        this.img = img;
     }
     /**
      * Method that get the current color of a card.
@@ -65,6 +67,10 @@ public class Carte {
      */
     public ConditionTrophee getTrophee(){
         return this.trophee;
+    }
+
+    public String getImg(){
+        return this.img;
     }
 
     /**
