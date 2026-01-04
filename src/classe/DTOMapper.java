@@ -21,7 +21,7 @@ public class DTOMapper {
      * @return une nouvelle instance de Carte
      */
     public static Carte carteFromDTO(CarteDTO dto) {
-        return new Carte(dto.valeur, dto.couleur, dto.condition);
+        return new Carte(dto.valeur, dto.couleur, dto.condition, dto.img);
     }
 
     /**

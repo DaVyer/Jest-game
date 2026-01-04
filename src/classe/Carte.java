@@ -14,9 +14,6 @@ public class Carte {
     private ValeurCarte valeur;
     private ConditionTrophee trophee;
     private String img;
-    
-    /** La condition de trophée associée à la carte. */
-    private final ConditionTrophee trophee;
 
     /**
      * Constructor of the Carte class

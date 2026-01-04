@@ -27,6 +27,9 @@ public class CarteDTO implements Serializable {
     /** La condition de trophée associée à la carte. */
     public ConditionTrophee condition;
 
+    /** L'image associée à la carte. */
+    public String img;
+
     /**
      * Convertit un objet Carte en CarteDTO.
      * 
@@ -38,6 +41,7 @@ public class CarteDTO implements Serializable {
         dto.valeur = c.getValeur();
         dto.couleur = c.getCouleur();
         dto.condition = c.getTrophee();
+        dto.img = c.getImg();
         return dto;
     }
 
@@ -48,6 +52,6 @@ public class CarteDTO implements Serializable {
      * @return la carte correspondant au DTO
      */
     public static Carte carteFromDTO(CarteDTO dto) {
-        return new Carte(dto.valeur, dto.couleur, dto.condition);
+        return new Carte(dto.valeur, dto.couleur, dto.condition, dto.img);
     }
 }
