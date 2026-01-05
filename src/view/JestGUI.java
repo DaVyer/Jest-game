@@ -19,6 +19,7 @@ public class JestGUI {
     private JButton btnSave;
     private JButton btnStatus;
     private JButton btnManche;
+    private JButton btnResultats;
     private JButton btnExit;
 
     private JTextArea output;
@@ -54,6 +55,7 @@ public class JestGUI {
         btnSave = new JButton("Sauvegarder");
         btnStatus = new JButton("État");
         btnManche = new JButton("Jouer une manche");
+        btnResultats = new JButton("Résultats");
         btnExit = new JButton("Quitter");
 
         JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -62,6 +64,7 @@ public class JestGUI {
         top.add(btnSave);
         top.add(btnStatus);
         top.add(btnManche);
+        top.add(btnResultats);
         top.add(btnExit);
 
         // Zone sortie
@@ -169,10 +172,20 @@ public class JestGUI {
                 new Thread(() -> {
                     try {
                         GuiInputProvider guiInput = new GuiInputProvider(frame);
+                        Partie partie = gameManager.getPartie();
                         synchronized (gameManager) {
-                            gameManager.getPartie().jouerManche(guiInput);
+                            partie.jouerManche(guiInput);
                         }
-                        SwingUtilities.invokeLater(() -> showInfo("Manche terminée !"));
+                        
+                        // Vérifier si la partie est terminée
+                        if (partie.isPartieTerminee()) {
+                            SwingUtilities.invokeLater(() -> {
+                                showInfo("Partie terminée !");
+                                afficherResultatsFinaux();
+                            });
+                        } else {
+                            SwingUtilities.invokeLater(() -> showInfo("Manche terminée !"));
+                        }
                     } catch (Exception ex) {
                         SwingUtilities.invokeLater(() -> {
                             showInfo("Erreur : " + ex.getMessage());
@@ -180,6 +193,16 @@ public class JestGUI {
                         });
                     }
                 }).start();
+            }
+        });
+
+        btnResultats.addActionListener(e -> {
+            synchronized (gameManager) {
+                if (!gameManager.hasPartie()) {
+                    showInfo("Aucune partie en cours.");
+                    return;
+                }
+                afficherResultatsFinaux();
             }
         });
 
@@ -193,7 +216,8 @@ public class JestGUI {
         boolean has = gameManager.hasPartie();
         btnSave.setEnabled(has);
         btnStatus.setEnabled(has);
-        btnManche.setEnabled(has); // Maintenant activé !
+        btnManche.setEnabled(has);
+        btnResultats.setEnabled(has);
     }
 
     /* ========= Dialogs ========= */
@@ -357,6 +381,96 @@ public class JestGUI {
         } catch (Exception e) {
             return creerImageParDefaut(carte.toString());
         }
+    }
+    
+    /**
+     * Affiche une fenêtre avec les résultats finaux de la partie.
+     */
+    public void afficherResultatsFinaux() {
+        if (!gameManager.hasPartie()) {
+            JOptionPane.showMessageDialog(frame, 
+                "Aucune partie en cours.", 
+                "Erreur", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        Partie partie = gameManager.getPartie();
+        
+        // Calculer les scores
+        java.util.Map<Joueur, Integer> scores = new java.util.LinkedHashMap<>();
+        for (Joueur j : partie.getJoueurs()) {
+            ScoreVisitor visitor = new ScoreVisitor();
+            j.accept(visitor);
+            scores.put(j, visitor.getScore());
+        }
+        
+        // Trier par score décroissant
+        java.util.List<java.util.Map.Entry<Joueur, Integer>> classement = 
+            new java.util.ArrayList<>(scores.entrySet());
+        classement.sort((a, b) -> Integer.compare(b.getValue(), a.getValue()));
+        
+        // Créer la fenêtre des résultats
+        JFrame resultFrame = new JFrame("Résultats finaux - Jest");
+        resultFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        resultFrame.setSize(500, 400);
+        resultFrame.setLocationRelativeTo(frame);
+        
+        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        
+        // Titre
+        JLabel titleLabel = new JLabel("RÉSULTATS DE LA PARTIE");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        titleLabel.setHorizontalAlignment(JLabel.CENTER);
+        mainPanel.add(titleLabel, BorderLayout.NORTH);
+        
+        // Classement
+        JPanel classementPanel = new JPanel();
+        classementPanel.setLayout(new BoxLayout(classementPanel, BoxLayout.Y_AXIS));
+        classementPanel.setBorder(BorderFactory.createTitledBorder("Classement"));
+        
+        int position = 1;
+        for (java.util.Map.Entry<Joueur, Integer> entry : classement) {
+            Joueur joueur = entry.getKey();
+            int score = entry.getValue();
+            
+            JPanel joueurPanel = new JPanel(new BorderLayout());
+            joueurPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            joueurPanel.setBackground(position == 1 ? new Color(255, 215, 0) : Color.WHITE);
+            
+            JLabel posLabel = new JLabel((position) + ".");
+            posLabel.setFont(new Font("Arial", Font.BOLD, 14));
+            posLabel.setPreferredSize(new Dimension(30, 30));
+            
+            JLabel nomLabel = new JLabel(joueur.getNom());
+            nomLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+            
+            JLabel scoreLabel = new JLabel(score + " pts");
+            scoreLabel.setFont(new Font("Arial", Font.BOLD, 14));
+            scoreLabel.setHorizontalAlignment(JLabel.RIGHT);
+            
+            joueurPanel.add(posLabel, BorderLayout.WEST);
+            joueurPanel.add(nomLabel, BorderLayout.CENTER);
+            joueurPanel.add(scoreLabel, BorderLayout.EAST);
+            
+            classementPanel.add(joueurPanel);
+            position++;
+        }
+        
+        JScrollPane scrollClassement = new JScrollPane(classementPanel);
+        mainPanel.add(scrollClassement, BorderLayout.CENTER);
+        
+        // Boutons
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton btnFermer = new JButton("Fermer");
+        btnFermer.addActionListener(e -> resultFrame.dispose());
+        buttonPanel.add(btnFermer);
+        
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+        
+        resultFrame.add(mainPanel);
+        resultFrame.setVisible(true);
     }
     
     /**
