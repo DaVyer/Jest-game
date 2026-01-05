@@ -1,13 +1,13 @@
 package model;
 
+import view.GuiInputProvider;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * Stratégie de jeu pour un joueur humain.
  * 
  * <p>Implémente les méthodes de stratégie en demandant
- * les choix au joueur via l'entrée standard.</p>
+ * les choix au joueur via InputProvider (console ou GUI).</p>
  * 
  * @author Gwendal Rodrigues
  * @version %I%, %G%
@@ -15,116 +15,95 @@ import java.util.Scanner;
  */
 public class StrategieHumaine implements StrategieJoueur {
 
-    /**
-     * Demande au joueur humain de créer une offre.
-     * 
-     * <p>Le joueur choisit quelle carte mettre face cachée
-     * et quelle carte mettre face visible.</p>
-     * 
-     * @param joueur le joueur qui crée l'offre
-     * @param scanner le scanner pour lire les entrées
-     * @return l'offre créée par le joueur
-     */
     @Override
-    public Offre faireOffre(Joueur joueur, Scanner scanner) {
-
+    public Offre faireOffre(Joueur joueur, InputProvider input) {
         joueur.afficherMainManche();
 
-        int indexCachee = choisirCarte(scanner, joueur.getMainCourante(),
-                "Choisissez la carte FACE CACHÉE (Sélectionner le numéro) : ");
+        int indexCachee;
+        
+        // Si c'est une interface graphique, utiliser l'affichage avec images
+        if (input instanceof GuiInputProvider) {
+            GuiInputProvider guiInput = (GuiInputProvider) input;
+            indexCachee = guiInput.demanderChoixCarte(
+                joueur.getNom() + ", choisissez la carte FACE CACHÉE :", 
+                joueur.getMainCourante()
+            );
+        } else {
+            indexCachee = input.demanderChoixEntier(
+                "Choisissez la carte FACE CACHÉE (numéro) : ", 
+                0, 
+                joueur.getMainCourante().size() - 1
+            );
+        }
+        
         Carte cachee = joueur.getMainCourante().remove(indexCachee);
+        Carte visible = joueur.getMainCourante().remove(0);
 
-        joueur.afficherMainManche();
-
-        int indexVisible = choisirCarte(scanner, joueur.getMainCourante(),
-                "Choisissez la carte FACE VISIBLE (Sélectionner le numéro) : ");
-        Carte visible = joueur.getMainCourante().remove(indexVisible);
-
-        System.out.println("\nOffre créée :");
-        System.out.println(" - Carte face cachée : [cachée]");
-        System.out.println(" - Carte face visible : " + visible);
+        // Afficher l'offre créée
+        if (input instanceof GuiInputProvider) {
+            GuiInputProvider guiInput = (GuiInputProvider) input;
+            guiInput.afficherOffreCreee(visible, cachee);
+        } else {
+            input.afficherMessage("\nOffre créée :\n - Carte face cachée : [cachée]\n - Carte face visible : " + visible);
+        }
 
         return new Offre(cachee, visible, joueur);
     }
 
-    /**
-     * Demande au joueur de choisir une carte parmi sa main.
-     * 
-     * @param scanner le scanner pour lire les entrées
-     * @param mainManche la main de cartes disponibles
-     * @param message le message à afficher
-     * @return l'index de la carte choisie
-     */
-    private int choisirCarte(Scanner scanner, List<Carte> mainManche, String message) {
-        while (true) {
-            System.out.print(message);
-            try {
-                int choix = Integer.parseInt(scanner.nextLine());
-                if (choix >= 0 && choix < mainManche.size()) {
-                    return choix;
-                }
-            } catch (NumberFormatException ignored) {}
-            System.out.println("Choix invalide. Réessayez.");
-        }
-    }
-
-    /**
-     * Demande au joueur humain de choisir une offre parmi les offres disponibles.
-     * 
-     * @param offres la liste des offres disponibles
-     * @param joueur le joueur qui fait le choix
-     * @param scanner le scanner pour lire les entrées
-     * @return l'offre choisie
-     */
     @Override
-    public Offre choisirOffre(List<Offre> offres, Joueur joueur, Scanner scanner) {
-
-        System.out.println("\n" + joueur.getNom() + ", choisissez une offre :");
-
-        for (int i = 0; i < offres.size(); i++) {
-            Offre o = offres.get(i);
-            System.out.println(
-                    "[" + i + "] Offre de " + o.getJoueur().getNom()
-                            + " | Carte visible : " + o.getVisible()
+    public Offre choisirOffre(List<Offre> offres, Joueur joueur, InputProvider input) {
+        int choix;
+        
+        // Si c'est une interface graphique, utiliser l'affichage avec images
+        if (input instanceof GuiInputProvider) {
+            GuiInputProvider guiInput = (GuiInputProvider) input;
+            choix = guiInput.demanderChoixOffre(
+                joueur.getNom() + ", choisissez une offre :", 
+                offres
             );
-        }
-
-        int choix = -1;
-        while (choix < 0 || choix >= offres.size()) {
-            try {
-                choix = Integer.parseInt(scanner.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Choix invalide.");
+        } else {
+            StringBuilder message = new StringBuilder(joueur.getNom() + ", choisissez une offre :\n");
+            for (int i = 0; i < offres.size(); i++) {
+                Offre o = offres.get(i);
+                message.append("[").append(i).append("] Offre de ").append(o.getJoueur().getNom())
+                       .append(" | Carte visible : ").append(o.getVisible()).append("\n");
             }
+            input.afficherMessage(message.toString());
+            choix = input.demanderChoixEntier("Votre choix : ", 0, offres.size() - 1);
         }
 
         return offres.get(choix);
     }
 
-    /**
-     * Demande au joueur humain de choisir une carte dans l'offre sélectionnée.
-     * 
-     * @param offre l'offre dans laquelle choisir
-     * @param joueur le joueur qui fait le choix
-     * @param scanner le scanner pour lire les entrées
-     * @return la carte choisie
-     */
     @Override
-    public Carte choisirCarteOffre(Offre offre, Joueur joueur, Scanner scanner) {
-
-        System.out.println("\n" + joueur.getNom() + ", choisissez une carte :");
-        System.out.println("[0] Carte visible : " + offre.getVisible());
-        System.out.println("[1] Carte cachée");
-
-        int choix = -1;
-        while (choix != 0 && choix != 1) {
-            try {
-                choix = Integer.parseInt(scanner.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Choix invalide.");
-            }
+    public Carte choisirCarteOffre(Offre offre, Joueur joueur, InputProvider input) {
+        int choix;
+        
+        // Si c'est une interface graphique, utiliser l'affichage avec images
+        if (input instanceof GuiInputProvider) {
+            GuiInputProvider guiInput = (GuiInputProvider) input;
+            choix = guiInput.demanderChoixCarteOffre(
+                joueur.getNom() + ", choisissez une carte :", 
+                offre
+            );
+        } else {
+            String message = joueur.getNom() + ", choisissez une carte :\n" +
+                    "[0] Carte visible : " + offre.getVisible() + "\n" +
+                    "[1] Carte cachée";
+            input.afficherMessage(message);
+            choix = input.demanderChoixEntier("Votre choix : ", 0, 1);
         }
 
-        return offre.prendreCarte(choix == 0);
+        Carte cartePrise = offre.prendreCarte(choix == 0);
+        
+        // Afficher la carte choisie (révélation de la carte cachée si applicable)
+        if (input instanceof GuiInputProvider) {
+            GuiInputProvider guiInput = (GuiInputProvider) input;
+            guiInput.afficherCarteChoisie(cartePrise);
+        } else {
+            input.afficherMessage(joueur.getNom() + " a choisi : " + cartePrise);
+        }
+        
+        return cartePrise;
     }
 }

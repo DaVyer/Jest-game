@@ -2,7 +2,6 @@ package model;
 
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
 
 /**
  * Stratégie de jeu pour un robot jouant aléatoirement.
@@ -19,19 +18,8 @@ public class StrategieRobotAleatoire implements StrategieJoueur {
     /** Générateur de nombres aléatoires. */
     private final Random random = new Random();
 
-    /**
-     * Crée une offre aléatoirement pour le robot.
-     * 
-     * <p>Sélectionne aléatoirement quelle carte sera visible
-     * et quelle carte sera cachée.</p>
-     * 
-     * @param joueur le joueur robot
-     * @param scanner le scanner (non utilisé par le robot)
-     * @return l'offre créée aléatoirement
-     */
     @Override
-    public Offre faireOffre(Joueur joueur, Scanner scanner) {
-
+    public Offre faireOffre(Joueur joueur, InputProvider input) {
         List<Carte> mainManche = joueur.getMainCourante();
 
         if (mainManche.size() != 2) {
@@ -41,8 +29,6 @@ public class StrategieRobotAleatoire implements StrategieJoueur {
             );
         }
 
-        Random random = new Random();
-
         int indexCachee = random.nextInt(mainManche.size());
         Carte cachee = mainManche.remove(indexCachee);
 
@@ -50,36 +36,20 @@ public class StrategieRobotAleatoire implements StrategieJoueur {
         Carte visible = mainManche.remove(indexVisible);
 
         System.out.println(joueur.getNom()
-                + " \n(robot) crée une offre : carte visible=" + visible + ", carte cachée=[cachée]");
+                + " (robot) crée une offre : carte visible=" + visible + ", carte cachée=[cachée]");
 
         return new Offre(cachee, visible, joueur);
     }
 
-    /**
-     * Choisit aléatoirement une offre parmi celles disponibles.
-     * 
-     * @param offres la liste des offres disponibles
-     * @param joueur le joueur robot
-     * @param scanner le scanner (non utilisé par le robot)
-     * @return l'offre choisie aléatoirement
-     */
     @Override
-    public Offre choisirOffre(List<Offre> offres, Joueur joueur, Scanner scanner) {
+    public Offre choisirOffre(List<Offre> offres, Joueur joueur, InputProvider input) {
         Offre offre = offres.get(random.nextInt(offres.size()));
         System.out.println(joueur.getNom() + " a choisi l'offre de " + offre.getJoueur().getNom());
         return offre;
     }
 
-    /**
-     * Choisit aléatoirement entre la carte visible et la carte cachée.
-     * 
-     * @param offre l'offre dans laquelle choisir
-     * @param joueur le joueur robot
-     * @param scanner le scanner (non utilisé par le robot)
-     * @return la carte choisie aléatoirement
-     */
     @Override
-    public Carte choisirCarteOffre(Offre offre, Joueur joueur, Scanner scanner) {
+    public Carte choisirCarteOffre(Offre offre, Joueur joueur, InputProvider input) {
         Carte carte = random.nextBoolean()
                 ? offre.prendreCarte(true)
                 : offre.prendreCarte(false);

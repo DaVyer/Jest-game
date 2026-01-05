@@ -1,7 +1,6 @@
 package model;
 
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * Interface définissant une stratégie de jeu.
@@ -18,28 +17,28 @@ public interface StrategieJoueur {
      * Crée une offre pour le joueur.
      * 
      * @param joueur le joueur qui crée l'offre
-     * @param scanner le scanner pour les interactions
+     * @param input le fournisseur d'entrées (console ou GUI)
      * @return l'offre créée
      */
-    Offre faireOffre(Joueur joueur, Scanner scanner);
+    Offre faireOffre(Joueur joueur, InputProvider input);
 
     /**
      * Choisit une offre parmi celles disponibles.
      * 
      * @param offresDisponibles la liste des offres disponibles
      * @param joueur le joueur qui fait le choix
-     * @param scanner le scanner pour les interactions
+     * @param input le fournisseur d'entrées (console ou GUI)
      * @return l'offre choisie
      */
-    Offre choisirOffre(List<Offre> offresDisponibles, Joueur joueur, Scanner scanner);
+    Offre choisirOffre(List<Offre> offresDisponibles, Joueur joueur, InputProvider input);
 
     /**
      * Choisit une carte dans une offre.
      * 
      * @param offre l'offre dans laquelle choisir
      * @param joueur le joueur qui fait le choix
-     * @param scanner le scanner pour les interactions
+     * @param input le fournisseur d'entrées (console ou GUI)
      * @return la carte choisie
      */
-    Carte choisirCarteOffre(Offre offre, Joueur joueur, Scanner scanner);
+    Carte choisirCarteOffre(Offre offre, Joueur joueur, InputProvider input);
 }

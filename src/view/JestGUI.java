@@ -22,6 +22,7 @@ public class JestGUI {
     private JButton btnExit;
 
     private JTextArea output;
+    private JPanel trophiesPanel;
 
     public JestGUI(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -32,16 +33,20 @@ public class JestGUI {
     private void initGUI() {
         frame = new JFrame("Jeu de JEST");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(650, 420);
+        frame.setSize(900, 550);
         frame.setLocationRelativeTo(null);
 
         URL url = getClass().getResource("/image/logo.png");
+        Image icon = null;
         if (url != null) {
-            frame.setIconImage(Toolkit.getDefaultToolkit().getImage(url));
+            icon = Toolkit.getDefaultToolkit().getImage(url);
+        } else {
+            // Fallback si la ressource n'est pas sur le classpath (ex: lancement via `-cp src`)
+            icon = new ImageIcon("image/logo.png").getImage();
         }
-
-        Image icon = Toolkit.getDefaultToolkit().getImage(url);
-        frame.setIconImage(icon);
+        if (icon != null) {
+            frame.setIconImage(icon);
+        }
 
         // Boutons
         btnNew = new JButton("Nouvelle partie");
@@ -67,9 +72,15 @@ public class JestGUI {
 
         JScrollPane scroll = new JScrollPane(output);
 
+        // Panel des trophées
+        trophiesPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        trophiesPanel.setBorder(BorderFactory.createTitledBorder("Trophées de la partie"));
+        trophiesPanel.setBackground(new Color(240, 240, 240));
+
         frame.setLayout(new BorderLayout(8, 8));
         frame.add(top, BorderLayout.NORTH);
         frame.add(scroll, BorderLayout.CENTER);
+        frame.add(trophiesPanel, BorderLayout.SOUTH);
 
         addListeners();
 
@@ -101,6 +112,12 @@ public class JestGUI {
 
                 gameManager.nouvellePartie(joueurs);
                 showInfo("Nouvelle partie créée (" + nb + " joueurs).");
+                
+                // Afficher les trophées dans une fenêtre de dialogue
+                GuiInputProvider guiInput = new GuiInputProvider(frame);
+                guiInput.afficherTrophees(gameManager.getPartie().getTrophees());
+                
+                afficherTrophees();
                 refreshUI();
             }
         });
@@ -111,6 +128,7 @@ public class JestGUI {
                 if (p != null) {
                     gameManager.chargerPartie(p);
                     showInfo("Partie chargée.");
+                    afficherTrophees();
                 }
                 refreshUI();
             }
@@ -147,12 +165,21 @@ public class JestGUI {
                     return;
                 }
 
-                // ⚠️ Problème : jouerManche(scanner) demande des entrées console.
-                // En GUI, on ne veut pas lire au clavier console.
-                // => Solution minimale : empêcher ce bouton si jouerManche dépend du Scanner.
-                // => Solution propre : refactorer Partie pour accepter des choix fournis par contrôleur GUI.
-                showInfo("Impossible en l'état : jouerManche(Scanner) dépend de la console.\n"
-                        + "Solution : refactorer pour séparer logique et entrée utilisateur.");
+                // Lancer la manche dans un thread séparé pour ne pas bloquer l'UI
+                new Thread(() -> {
+                    try {
+                        GuiInputProvider guiInput = new GuiInputProvider(frame);
+                        synchronized (gameManager) {
+                            gameManager.getPartie().jouerManche(guiInput);
+                        }
+                        SwingUtilities.invokeLater(() -> showInfo("Manche terminée !"));
+                    } catch (Exception ex) {
+                        SwingUtilities.invokeLater(() -> {
+                            showInfo("Erreur : " + ex.getMessage());
+                            ex.printStackTrace();
+                        });
+                    }
+                }).start();
             }
         });
 
@@ -166,8 +193,7 @@ public class JestGUI {
         boolean has = gameManager.hasPartie();
         btnSave.setEnabled(has);
         btnStatus.setEnabled(has);
-        // btnManche : désactivé tant que Partie.jouerManche dépend du Scanner
-        btnManche.setEnabled(false);
+        btnManche.setEnabled(has); // Maintenant activé !
     }
 
     /* ========= Dialogs ========= */
@@ -261,5 +287,100 @@ public class JestGUI {
     private void showInfo(String msg) {
         output.append(msg + "\n");
         output.setCaretPosition(output.getDocument().getLength());
+    }
+
+    /**
+     * Affiche les trophées de la partie en cours dans le panel.
+     */
+    private void afficherTrophees() {
+        trophiesPanel.removeAll();
+        
+        if (!gameManager.hasPartie()) {
+            trophiesPanel.add(new JLabel("Aucune partie en cours"));
+            trophiesPanel.revalidate();
+            trophiesPanel.repaint();
+            return;
+        }
+        
+        Partie partie = gameManager.getPartie();
+        java.util.LinkedList<Carte> trophees = partie.getTrophees();
+        
+        if (trophees == null || trophees.isEmpty()) {
+            trophiesPanel.add(new JLabel("Aucun trophée"));
+            trophiesPanel.revalidate();
+            trophiesPanel.repaint();
+            return;
+        }
+        
+        // Afficher les trophées avec leurs images
+        for (int i = 0; i < trophees.size(); i++) {
+            Carte trophee = trophees.get(i);
+            JPanel cartePanel = new JPanel(new BorderLayout());
+            cartePanel.setBorder(BorderFactory.createTitledBorder("Trophée " + (i + 1)));
+            
+            // Charger l'image
+            ImageIcon icon = chargerImageCarte(trophee);
+            JLabel imageLabel = new JLabel(icon);
+            imageLabel.setHorizontalAlignment(JLabel.CENTER);
+            
+            // Afficher la condition du trophée
+            JLabel conditionLabel = new JLabel(trophee.getTrophee().toString());
+            conditionLabel.setHorizontalAlignment(JLabel.CENTER);
+            conditionLabel.setFont(new Font("Arial", Font.PLAIN, 9));
+            
+            cartePanel.add(imageLabel, BorderLayout.CENTER);
+            cartePanel.add(conditionLabel, BorderLayout.SOUTH);
+            trophiesPanel.add(cartePanel);
+        }
+        
+        trophiesPanel.revalidate();
+        trophiesPanel.repaint();
+    }
+    
+    /**
+     * Charge l'image d'une carte.
+     */
+    private ImageIcon chargerImageCarte(Carte carte) {
+        try {
+            String chemin = carte.getImg();
+            if (chemin.startsWith("./Jest-game/")) {
+                chemin = chemin.substring("./Jest-game/".length());
+            }
+            
+            ImageIcon icon = new ImageIcon(chemin);
+            if (icon.getIconWidth() <= 0) {
+                return creerImageParDefaut(carte.toString());
+            }
+            
+            Image img = icon.getImage().getScaledInstance(80, 110, Image.SCALE_SMOOTH);
+            return new ImageIcon(img);
+        } catch (Exception e) {
+            return creerImageParDefaut(carte.toString());
+        }
+    }
+    
+    /**
+     * Crée une image par défaut avec le texte.
+     */
+    private ImageIcon creerImageParDefaut(String texte) {
+        java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(80, 110, java.awt.image.BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = img.createGraphics();
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(0, 0, 80, 110);
+        g2d.setColor(Color.BLACK);
+        g2d.drawRect(0, 0, 79, 109);
+        g2d.setFont(new Font("Arial", Font.PLAIN, 8));
+        
+        String[] mots = texte.split(" ");
+        int y = 50;
+        for (String mot : mots) {
+            FontMetrics fm = g2d.getFontMetrics();
+            int x = (80 - fm.stringWidth(mot)) / 2;
+            g2d.drawString(mot, x, y);
+            y += 12;
+        }
+        
+        g2d.dispose();
+        return new ImageIcon(img);
     }
 }

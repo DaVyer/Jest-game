@@ -49,7 +49,7 @@ public class CliController implements Runnable {
                 } else {
                     Partie partie = gameManager.getPartie();
                     switch (input) {
-                        case "manche" -> partie.jouerManche(scanner);
+                        case "manche" -> partie.jouerManche(new ConsoleInputProvider(scanner));
                         case "save" -> sauvegarder(partie);
                         case "status" -> partie.afficherEtat();
                         case "help" -> afficherCommandesJeu();
