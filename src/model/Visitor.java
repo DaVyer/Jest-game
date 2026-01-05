@@ -1,4 +1,4 @@
-package classe;
+package model;
 
 /**
  * Interface du pattern Visitor pour les joueurs.

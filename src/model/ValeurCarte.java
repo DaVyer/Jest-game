@@ -1,4 +1,4 @@
-package classe;
+package model;
 
 /**
  * Énumération des valeurs de carte possibles dans le jeu.

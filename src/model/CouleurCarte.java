@@ -1,4 +1,4 @@
-package classe;
+package model;
 
 /**
  * Énumération des couleurs de carte possibles dans le jeu.

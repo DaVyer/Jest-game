@@ -1,4 +1,4 @@
-package classe;
+package model;
 
 /**
  * Énumération des différentes conditions de trophée dans le jeu.
