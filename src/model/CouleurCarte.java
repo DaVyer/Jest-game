@@ -10,5 +10,5 @@ package model;
  * @version %I%, %G%
  */
 public enum CouleurCarte {
-    TREFLE, CARREAU, PIQUE, COEUR, JOKER
+    TREFLE, CARREAU, PIQUE, COEUR, JOKER, MIROIR
 }

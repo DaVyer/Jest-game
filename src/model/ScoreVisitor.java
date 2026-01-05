@@ -16,6 +16,18 @@ public class ScoreVisitor implements Visitor {
 
     /** Le score calculé du joueur. */
     private int score;
+    
+    /** Mode de jeu : true pour variante, false pour règles de base. */
+    private boolean modeVariante;
+    
+    /**
+     * Constructeur du ScoreVisitor.
+     * 
+     * @param modeVariante true pour la variante, false pour les règles de base
+     */
+    public ScoreVisitor(boolean modeVariante) {
+        this.modeVariante = modeVariante;
+    }
 
     /**
      * Visite un joueur et calcule son score.
@@ -97,10 +109,25 @@ public class ScoreVisitor implements Visitor {
                                      boolean hasJoker) {
 
         int total = 0;
+        boolean hasMiroir = parCouleur.containsKey(CouleurCarte.MIROIR);
+        int maxValeurAbsolue = 0;
 
         for (int i = 0; i < jest.taille(); i++) {
             Carte c = jest.getCarte(i);
-            total += valeurCarte(c, parCouleur, hasJoker);
+            int valeur = valeurCarte(c, parCouleur, hasJoker);
+            total += valeur;
+
+            // Conserver la carte de valeur absolue maximale (signe inclus)
+            if (hasMiroir && c.getCouleur() != CouleurCarte.MIROIR) {
+                if (Math.abs(valeur) > Math.abs(maxValeurAbsolue)) {
+                    maxValeurAbsolue = valeur;
+                }
+            }
+        }
+
+        // Ajouter la valeur copiée par le Miroir
+        if (hasMiroir) {
+            total += maxValeurAbsolue;
         }
         return total;
     }
@@ -148,6 +175,10 @@ public class ScoreVisitor implements Visitor {
             return valeurJoker(parCouleur);
         }
 
+        if (c.getCouleur() == CouleurCarte.MIROIR) {
+            return 0; // Calculé à la fin (copie de la meilleure carte)
+        }
+
         if (c.getCouleur() == CouleurCarte.COEUR) {
             return valeurCoeur(c, parCouleur, hasJoker);
         }
@@ -187,7 +218,13 @@ public class ScoreVisitor implements Visitor {
         int nbCoeurs = parCouleur.getOrDefault(CouleurCarte.COEUR, List.of()).size();
         int v = valeurNumerique(c.getValeur());
 
-        return (nbCoeurs >= 3) ? v*2 : -v;
+        if (modeVariante) {
+            // Variante : si 3+ coeurs et joker -> double, sinon négatif
+            return (nbCoeurs >= 3) ? v*2 : -v;
+        } else {
+            // Règles de base : si 1-3 coeurs et joker -> négatif, si 4 coeurs -> positif
+            return (nbCoeurs == 4) ? v : -v;
+        }
     }
 
     /**

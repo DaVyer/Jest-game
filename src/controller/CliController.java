@@ -34,7 +34,13 @@ public class CliController implements Runnable {
                         case "new" -> {
                             int nb = demanderNombreJoueurs(scanner);
                             List<Joueur> joueurs = creerJoueurs(scanner, nb);
+                            boolean modeVariante = demanderModeJeu(scanner);
+                            boolean extensionActive = demanderExtension(scanner);
                             gameManager.nouvellePartie(joueurs);
+                            Partie p = gameManager.getPartie();
+                            p.setModeVariante(modeVariante);
+                            p.setExtensionActive(extensionActive);
+                            p.initialiserPiocheEtTrophees();
                             afficherCommandesJeu();
                         }
                         case "load" -> {
@@ -91,6 +97,57 @@ public class CliController implements Runnable {
         return nom;
     }
 
+    private static boolean demanderModeJeu(Scanner scanner) {
+        System.out.println("\n===== MODE DE JEU =====");
+        System.out.println("1. Règles de base :");
+        System.out.println("   - Joker + 1-3 Coeurs : les Coeurs sont NÉGATIFS, Joker = 0");
+        System.out.println("   - Joker + 4 Coeurs : les Coeurs sont POSITIFS, Joker = 0");
+        System.out.println("\n2. Variante :");
+        System.out.println("   - Joker + 3+ Coeurs : les Coeurs valent le DOUBLE");
+        System.out.println("   - Joker + moins de 3 Coeurs : les Coeurs sont NÉGATIFS");
+        
+        while (true) {
+            System.out.print("\nChoisissez le mode (1 = Base, 2 = Variante) : ");
+            try {
+                int choix = Integer.parseInt(scanner.nextLine());
+                if (choix == 1) {
+                    System.out.println("Mode : Règles de base sélectionnées.\n");
+                    return false;
+                } else if (choix == 2) {
+                    System.out.println("Mode : Variante sélectionnée.\n");
+                    return true;
+                } else {
+                    System.out.println("Choix invalide. Tapez 1 ou 2.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Entrée invalide. Tapez 1 ou 2.");
+            }
+        }
+    }
+    
+    private static boolean demanderExtension(Scanner scanner) {
+        System.out.println("\n===== EXTENSION MIROIR =====");
+        System.out.println("Le Miroir copie la valeur (avec le signe) de votre carte la plus forte.");
+        System.out.println("Exemples : meilleur +5 => Miroir +5, meilleur -4 => Miroir -4.");
+        while (true) {
+            System.out.print("\nActiver l'extension Miroir ? (1 = Oui, 2 = Non) : ");
+            try {
+                int choix = Integer.parseInt(scanner.nextLine());
+                if (choix == 1) {
+                    System.out.println("Extension Miroir activée.\n");
+                    return true;
+                } else if (choix == 2) {
+                    System.out.println("Extension Miroir désactivée.\n");
+                    return false;
+                } else {
+                    System.out.println("Choix invalide. Tapez 1 ou 2.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Entrée invalide. Tapez 1 ou 2.");
+            }
+        }
+    }
+    
     private static int demanderNombreJoueurs(Scanner scanner) {
         int nb = 0;
         while (nb < 3 || nb > 4) {

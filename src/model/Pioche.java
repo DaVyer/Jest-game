@@ -46,6 +46,19 @@ public class Pioche {
     }
 
     /**
+     * Initialise la pioche en ajoutant la carte spéciale Miroir.
+     * 
+     * <p>Utilisée lorsque l'extension Miroir est activée.</p>
+     */
+    public void setPiocheAvecExtension(){
+        this.pioche = new LinkedList<>();
+        initPioche();
+        // Carte Miroir (valeur placeholder AS, couleur MIROIR)
+        this.pioche.add(new Carte(ValeurCarte.AS, CouleurCarte.MIROIR, ConditionTrophee.MEILLEURJEST, "./Jest-game/image/cartes/miroir.png"));
+        melanger();
+    }
+
+    /**
      * Remplie la pioche avec toutes les combinaisons de carte et de valeur possible présente dans CouleurCarte et ValeurCarte.
      *
      * <p>Cette méthode prend la liste vide courante et insert toutes les combinaisons de cartes possibles.

@@ -112,8 +112,15 @@ public class JestGUI {
 
                     joueurs.add(new Joueur(nom, strat));
                 }
+                
+                boolean modeVariante = demanderModeJeu();
+                boolean extensionActive = demanderExtension();
 
                 gameManager.nouvellePartie(joueurs);
+                Partie p = gameManager.getPartie();
+                p.setModeVariante(modeVariante);
+                p.setExtensionActive(extensionActive);
+                p.initialiserPiocheEtTrophees();
                 showInfo("Nouvelle partie créée (" + nb + " joueurs).");
                 
                 // Afficher les trophées dans une fenêtre de dialogue
@@ -172,20 +179,16 @@ public class JestGUI {
                 new Thread(() -> {
                     try {
                         GuiInputProvider guiInput = new GuiInputProvider(frame);
-                        Partie partie = gameManager.getPartie();
                         synchronized (gameManager) {
-                            partie.jouerManche(guiInput);
+                            gameManager.getPartie().jouerManche(guiInput);
                         }
-                        
-                        // Vérifier si la partie est terminée
-                        if (partie.isPartieTerminee()) {
-                            SwingUtilities.invokeLater(() -> {
-                                showInfo("Partie terminée !");
+                        SwingUtilities.invokeLater(() -> {
+                            showInfo("Manche terminée !");
+                            // Si la partie est finie, afficher automatiquement les résultats
+                            if (gameManager.hasPartie() && gameManager.getPartie().isPartieTerminee()) {
                                 afficherResultatsFinaux();
-                            });
-                        } else {
-                            SwingUtilities.invokeLater(() -> showInfo("Manche terminée !"));
-                        }
+                            }
+                        });
                     } catch (Exception ex) {
                         SwingUtilities.invokeLater(() -> {
                             showInfo("Erreur : " + ex.getMessage());
@@ -400,7 +403,7 @@ public class JestGUI {
         // Calculer les scores
         java.util.Map<Joueur, Integer> scores = new java.util.LinkedHashMap<>();
         for (Joueur j : partie.getJoueurs()) {
-            ScoreVisitor visitor = new ScoreVisitor();
+            ScoreVisitor visitor = new ScoreVisitor(partie.isModeVariante());
             j.accept(visitor);
             scores.put(j, visitor.getScore());
         }
@@ -496,5 +499,73 @@ public class JestGUI {
         
         g2d.dispose();
         return new ImageIcon(img);
+    }
+    
+    /**
+     * Demande à l'utilisateur de choisir le mode de jeu.
+     * 
+     * @return true pour la variante, false pour les règles de base
+     */
+    private boolean demanderModeJeu() {
+        String[] options = {"Règles de base", "Variante"};
+        
+        String message = "<html><body style='width: 400px;'>" +
+                "<h3>Choisissez le mode de jeu :</h3>" +
+                "<br><b>1. Règles de base :</b>" +
+                "<ul>" +
+                "<li>Joker + 1-3 Cœurs : les Cœurs sont <b>NÉGATIFS</b>, Joker = 0</li>" +
+                "<li>Joker + 4 Cœurs : les Cœurs sont <b>POSITIFS</b>, Joker = 0</li>" +
+                "</ul>" +
+                "<br><b>2. Variante :</b>" +
+                "<ul>" +
+                "<li>Joker + 3+ Cœurs : les Cœurs valent le <b>DOUBLE</b></li>" +
+                "<li>Joker + moins de 3 Cœurs : les Cœurs sont <b>NÉGATIFS</b></li>" +
+                "</ul>" +
+                "</body></html>";
+        
+        int choix = JOptionPane.showOptionDialog(
+                frame,
+                message,
+                "Mode de jeu",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+        
+        return choix == 1; // true si variante, false si règles de base
+    }
+
+    /**
+     * Demande si l'extension Miroir est activée.
+     * 
+     * @return true si l'extension est activée, false sinon
+     */
+    private boolean demanderExtension() {
+        String[] options = {"Oui", "Non"};
+
+        String message = "<html><body style='width: 420px;'>" +
+                "<h3>Extension Miroir</h3>" +
+                "<p>Le <b>Miroir</b> copie la valeur (avec le signe) de ta carte la plus forte.</p>" +
+                "<ul>" +
+                "<li>Meilleure carte = +5 &rarr; Miroir = +5</li>" +
+                "<li>Meilleure carte = -4 &rarr; Miroir = -4</li>" +
+                "</ul>" +
+                "<p>Activer l'extension ?</p>" +
+                "</body></html>";
+
+        int choix = JOptionPane.showOptionDialog(
+                frame,
+                message,
+                "Extension Miroir",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[1]
+        );
+
+        return choix == 0; // Oui
     }
 }
