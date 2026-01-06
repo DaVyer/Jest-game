@@ -42,14 +42,12 @@ public class JestGUI {
         if (url != null) {
             icon = Toolkit.getDefaultToolkit().getImage(url);
         } else {
-            // Fallback si la ressource n'est pas sur le classpath (ex: lancement via `-cp src`)
             icon = new ImageIcon("image/logo.png").getImage();
         }
         if (icon != null) {
             frame.setIconImage(icon);
         }
 
-        // Boutons
         btnNew = new JButton("Nouvelle partie");
         btnLoad = new JButton("Charger");
         btnSave = new JButton("Sauvegarder");
@@ -67,7 +65,6 @@ public class JestGUI {
         top.add(btnResultats);
         top.add(btnExit);
 
-        // Zone sortie
         output = new JTextArea(18, 60);
         output.setEditable(false);
         output.setLineWrap(true);
@@ -75,7 +72,6 @@ public class JestGUI {
 
         JScrollPane scroll = new JScrollPane(output);
 
-        // Panel des trophées
         trophiesPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         trophiesPanel.setBorder(BorderFactory.createTitledBorder("Trophées de la partie"));
         trophiesPanel.setBackground(new Color(240, 240, 240));
@@ -163,7 +159,7 @@ public class JestGUI {
                     return;
                 }
 
-                showInfo("Affichage de l'état dans la console (ou implémente un toString/DTO).");
+                showInfo("Affichage de l'état dans la console.");
                 gameManager.getPartie().afficherEtat();
             }
         });
@@ -175,7 +171,6 @@ public class JestGUI {
                     return;
                 }
 
-                // Lancer la manche dans un thread séparé pour ne pas bloquer l'UI
                 new Thread(() -> {
                     try {
                         GuiInputProvider guiInput = new GuiInputProvider(frame);
@@ -184,7 +179,6 @@ public class JestGUI {
                         }
                         SwingUtilities.invokeLater(() -> {
                             showInfo("Manche terminée !");
-                            // Si la partie est finie, afficher automatiquement les résultats
                             if (gameManager.hasPartie() && gameManager.getPartie().isPartieTerminee()) {
                                 afficherResultatsFinaux();
                             }
@@ -222,8 +216,6 @@ public class JestGUI {
         btnManche.setEnabled(has);
         btnResultats.setEnabled(has);
     }
-
-    /* ========= Dialogs ========= */
 
     private Integer demanderNombreJoueurs() {
         Object[] options = {"3", "4"};
@@ -267,7 +259,7 @@ public class JestGUI {
     }
 
     private StrategieJoueur demanderStrategie(int numeroJoueur) {
-        Object[] options = {"Humain", "Robot (aléatoire)"};
+        Object[] options = {"Humain", "Robot (aléatoire)", "Robot (glouton)"};
         int choix = JOptionPane.showOptionDialog(
                 frame,
                 "Choisissez le type du joueur " + numeroJoueur + " :",
@@ -280,11 +272,15 @@ public class JestGUI {
         );
         if (choix == JOptionPane.CLOSED_OPTION) return null;
 
-        if (choix == 0) return new StrategieHumaine();
-        return new StrategieRobotAleatoire();
+        if (choix == 0) {
+            return new StrategieHumaine();
+        } else if (choix == 1) {
+            return new StrategieRobotAleatoire();
+        } else if (choix == 2) {
+            return new StrategieRobotGlouton();
+        }
+        return null;
     }
-
-    /* ========= Save/Load ========= */
 
     private void sauvegarder(Partie partie) {
         try {
@@ -308,8 +304,6 @@ public class JestGUI {
             return null;
         }
     }
-
-    /* ========= Util ========= */
 
     private void showInfo(String msg) {
         output.append(msg + "\n");
@@ -339,18 +333,15 @@ public class JestGUI {
             return;
         }
         
-        // Afficher les trophées avec leurs images
         for (int i = 0; i < trophees.size(); i++) {
             Carte trophee = trophees.get(i);
             JPanel cartePanel = new JPanel(new BorderLayout());
             cartePanel.setBorder(BorderFactory.createTitledBorder("Trophée " + (i + 1)));
-            
-            // Charger l'image
+
             ImageIcon icon = chargerImageCarte(trophee);
             JLabel imageLabel = new JLabel(icon);
             imageLabel.setHorizontalAlignment(JLabel.CENTER);
             
-            // Afficher la condition du trophée
             JLabel conditionLabel = new JLabel(trophee.getTrophee().toString());
             conditionLabel.setHorizontalAlignment(JLabel.CENTER);
             conditionLabel.setFont(new Font("Arial", Font.PLAIN, 9));
@@ -400,7 +391,6 @@ public class JestGUI {
         
         Partie partie = gameManager.getPartie();
         
-        // Calculer les scores
         java.util.Map<Joueur, Integer> scores = new java.util.LinkedHashMap<>();
         for (Joueur j : partie.getJoueurs()) {
             ScoreVisitor visitor = new ScoreVisitor(partie.isModeVariante());
@@ -408,12 +398,10 @@ public class JestGUI {
             scores.put(j, visitor.getScore());
         }
         
-        // Trier par score décroissant
-        java.util.List<java.util.Map.Entry<Joueur, Integer>> classement = 
+        java.util.List<java.util.Map.Entry<Joueur, Integer>> classement =
             new java.util.ArrayList<>(scores.entrySet());
         classement.sort((a, b) -> Integer.compare(b.getValue(), a.getValue()));
         
-        // Créer la fenêtre des résultats
         JFrame resultFrame = new JFrame("Résultats finaux - Jest");
         resultFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         resultFrame.setSize(500, 400);
@@ -422,13 +410,11 @@ public class JestGUI {
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         
-        // Titre
         JLabel titleLabel = new JLabel("RÉSULTATS DE LA PARTIE");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
         mainPanel.add(titleLabel, BorderLayout.NORTH);
         
-        // Classement
         JPanel classementPanel = new JPanel();
         classementPanel.setLayout(new BoxLayout(classementPanel, BoxLayout.Y_AXIS));
         classementPanel.setBorder(BorderFactory.createTitledBorder("Classement"));
@@ -464,7 +450,6 @@ public class JestGUI {
         JScrollPane scrollClassement = new JScrollPane(classementPanel);
         mainPanel.add(scrollClassement, BorderLayout.CENTER);
         
-        // Boutons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton btnFermer = new JButton("Fermer");
         btnFermer.addActionListener(e -> resultFrame.dispose());
@@ -534,7 +519,7 @@ public class JestGUI {
                 options[0]
         );
         
-        return choix == 1; // true si variante, false si règles de base
+        return choix == 1;
     }
 
     /**
@@ -566,6 +551,6 @@ public class JestGUI {
                 options[1]
         );
 
-        return choix == 0; // Oui
+        return choix == 0;
     }
 }
