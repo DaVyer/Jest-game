@@ -1,4 +1,4 @@
-package classe;
+package model;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -37,6 +37,12 @@ public class Partie{
     
     /** La manche courante. */
     private final Manche manche = new Manche();
+    
+    /** Indique si on joue avec la variante (true) ou les règles de base (false). */
+    private boolean modeVariante = false;
+    
+    /** Indique si l'extension Miroir est activée. */
+    private boolean extensionActive = false;
 
     /**
      * Constructeur de la classe Partie
@@ -46,17 +52,8 @@ public class Partie{
         // System.out.println("\nNouvelle partie créé :\n\t" + this.getIdPartie() + "\n\n===============" );
 
         this.pioche = new Pioche();
-        this.pioche.setPioche();
-        System.out.println("\nPioche créé : \n" + this.pioche.getPioche() +"\n\n==============="); // A supprimer, on ne veut pas voir la pioche a chaque parties.
-
-        this.setTrophees();
-        System.out.println("\nTrophé Tiré : "); 
-        System.out.println("Trophé 1 : " + this.trophees.get(0) + " de condition : " + this.trophees.get(0).getTrophee());
-        System.out.println("Trophé 2 : " + this.trophees.get(1) + " de condition : " + this.trophees.get(1).getTrophee());
-        System.out.println("Pioche : " + this.getPioche().getPioche());
-        System.out.println("\n===============\n"); 
-
         this.setJoueurs();
+        this.trophees = new LinkedList<>();
     }
 
     /**
@@ -161,9 +158,9 @@ public class Partie{
      * <p>Gère le déroulement d'une manche : distribution des cartes,
      * création des offres, résolution des offres et fin de manche.</p>
      * 
-     * @param scanner le scanner pour les interactions avec les joueurs
+     * @param input le fournisseur d'entrées (console ou GUI) pour les interactions
      */
-    public void jouerManche(Scanner scanner) {
+    public void jouerManche(InputProvider input) {
         int cartesNecessaires = joueurs.size() * 2;
 
         if (pioche.getNombreCartes() < cartesNecessaires) {
@@ -178,8 +175,8 @@ public class Partie{
         System.out.println("===============");
 
         debutManche();
-        creerOffres(scanner);
-        resolutionOffres(scanner);
+        creerOffres(input);
+        resolutionOffres(input);
         finManche();
 
         System.out.println("\n===== Fin de la manche =====");
@@ -208,12 +205,12 @@ public class Partie{
      * <p>Chaque joueur utilise sa stratégie pour créer une offre
      * avec une carte visible et une carte cachée.</p>
      * 
-     * @param scanner le scanner pour les interactions avec les joueurs
+     * @param input le fournisseur d'entrées pour les interactions
      */
-    private void creerOffres(Scanner scanner) {
+    private void creerOffres(InputProvider input) {
         offres.clear();
         for (Joueur j : joueurs) {
-            offres.add(j.getStrategie().faireOffre(j, scanner));
+            offres.add(j.getStrategie().faireOffre(j, input));
         }
     }
 
@@ -223,9 +220,9 @@ public class Partie{
      * <p>Chaque joueur choisit une offre disponible (pas la sienne si possible)
      * et prend une carte de cette offre pour l'ajouter à son Jest.</p>
      * 
-     * @param scanner le scanner pour les interactions avec les joueurs
+     * @param input le fournisseur d'entrées pour les interactions
      */
-    private void resolutionOffres(Scanner scanner) {
+    private void resolutionOffres(InputProvider input) {
 
         Set<Joueur> joueursAyantJoue = new HashSet<>();
 
@@ -250,8 +247,8 @@ public class Partie{
 
             StrategieJoueur strategie = joueurActuel.getStrategie();
 
-            Offre choisie = strategie.choisirOffre(offresDisponibles, joueurActuel, scanner);
-            Carte prise = strategie.choisirCarteOffre(choisie, joueurActuel, scanner);
+            Offre choisie = strategie.choisirOffre(offresDisponibles, joueurActuel, input);
+            Carte prise = strategie.choisirCarteOffre(choisie, joueurActuel, input);
             joueurActuel.ajouterAuJest(prise);
 
             joueursAyantJoue.add(joueurActuel);
@@ -319,7 +316,7 @@ public class Partie{
         int meilleur = Integer.MIN_VALUE;
 
         for (Joueur j : joueurs) {
-            ScoreVisitor visitor = new ScoreVisitor();
+            ScoreVisitor visitor = new ScoreVisitor(modeVariante);
             j.accept(visitor);
             int score = visitor.getScore();
 
@@ -397,6 +394,60 @@ public class Partie{
      */
     public boolean isPartieTerminee() {
         return partieTerminee;
+    }
+    
+    /**
+     * Vérifie si l'extension Miroir est activée.
+     * 
+     * @return true si l'extension est active, false sinon
+     */
+    public boolean isExtensionActive() {
+        return extensionActive;
+    }
+    
+    /**
+     * Définit si l'extension Miroir est activée.
+     * 
+     * @param extensionActive true pour activer l'extension, false sinon
+     */
+    public void setExtensionActive(boolean extensionActive) {
+        this.extensionActive = extensionActive;
+        if (extensionActive) {
+            System.out.println("===== EXTENSION MIROIR ACTIVÉE =====\n");
+        }
+    }
+    
+    /**
+     * Initialise la pioche et les trophées en fonction des options choisies.
+     * À appeler après avoir configuré modeVariante et extensionActive.
+     */
+    public void initialiserPiocheEtTrophees() {
+        if (extensionActive) {
+            this.pioche.setPiocheAvecExtension();
+        } else {
+            this.pioche.setPioche();
+        }
+        this.setTrophees();
+    }
+    
+    /**
+     * Vérifie si le mode variante est activé.
+     * 
+     * @return true si mode variante, false pour règles de base
+     */
+    public boolean isModeVariante() {
+        return modeVariante;
+    }
+    
+    /**
+     * Définit le mode de jeu.
+     * 
+     * @param modeVariante true pour la variante, false pour les règles de base
+     */
+    public void setModeVariante(boolean modeVariante) {
+        this.modeVariante = modeVariante;
+        String mode = modeVariante ? "VARIANTE" : "RÈGLES DE BASE";
+        System.out.println("\n===== MODE DE JEU : " + mode + " =====\n");
     }
 
     /**

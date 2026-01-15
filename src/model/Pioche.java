@@ -1,4 +1,4 @@
-package classe;
+package model;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,6 +42,19 @@ public class Pioche {
     public void setPioche(){
         this.pioche = new LinkedList<>();
         initPioche();
+        melanger();
+    }
+
+    /**
+     * Initialise la pioche en ajoutant la carte spéciale Miroir.
+     * 
+     * <p>Utilisée lorsque l'extension Miroir est activée.</p>
+     */
+    public void setPiocheAvecExtension(){
+        this.pioche = new LinkedList<>();
+        initPioche();
+        // Carte Miroir (valeur placeholder AS, couleur MIROIR)
+        this.pioche.add(new Carte(ValeurCarte.AS, CouleurCarte.MIROIR, ConditionTrophee.MEILLEURJEST, "./Jest-game/image/cartes/miroir.png"));
         melanger();
     }
 

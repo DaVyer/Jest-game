@@ -1,4 +1,4 @@
-package classe;
+package model;
 
 /**
  * Représente une offre d'un joueur

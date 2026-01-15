@@ -1,4 +1,4 @@
-package classe;
+package model;
 import java.util.ArrayList;
 
 /**
@@ -25,7 +25,7 @@ public class Jest extends Carte{
      * Le joueur propriétaire est initialisé à null.</p>
      */
     public Jest() {
-        super(ValeurCarte.AS, CouleurCarte.JOKER, ConditionTrophee.MEILLEURJEST); // Jest est un joker
+        super(ValeurCarte.AS, CouleurCarte.JOKER, ConditionTrophee.MEILLEURJEST, "/image/cartes/joker.png"); // Jest est un joker
         this.cartes = new ArrayList<>();
         this.joueur = null;
     }

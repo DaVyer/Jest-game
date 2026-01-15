@@ -1,4 +1,4 @@
-package classe;
+package model;
 
 /**
  * Énumération des couleurs de carte possibles dans le jeu.
@@ -10,5 +10,5 @@ package classe;
  * @version %I%, %G%
  */
 public enum CouleurCarte {
-    TREFLE, CARREAU, PIQUE, COEUR, JOKER
+    TREFLE, CARREAU, PIQUE, COEUR, JOKER, MIROIR
 }
