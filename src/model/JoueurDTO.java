@@ -9,7 +9,7 @@ import java.io.Serializable;
  * son nom, son type de stratégie et son Jest.</p>
  * 
  * @author Gwendal Rodrigues
- * @version %I%, %G%
+ * @version 03/01/2026
  * @see Joueur
  */
 public class JoueurDTO implements Serializable {

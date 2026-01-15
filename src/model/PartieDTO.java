@@ -11,7 +11,7 @@ import java.util.List;
  * pour la sauvegarde et le chargement.</p>
  * 
  * @author Gwendal Rodrigues
- * @version %I%, %G%
+ * @version 03/01/2026
  * @see Partie
  */
 public class PartieDTO implements Serializable {

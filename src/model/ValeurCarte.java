@@ -6,7 +6,7 @@ package model;
  * <p>Chaque valeur possède une valeur numérique associée.</p>
  * 
  * @author Gwendal Rodrigues
- * @version %I%, %G%
+ * @version 03/01/2026
  */
 public enum ValeurCarte {
     AS(1),

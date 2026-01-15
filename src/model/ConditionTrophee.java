@@ -7,7 +7,7 @@ package model;
  * un trophée à la fin de la partie.</p>
  * 
  * @author Gwendal Rodrigues
- * @version %I%, %G%
+ * @version 03/01/2026
  */
 public enum ConditionTrophee {
     PLUSHAUTE_TREFLE,

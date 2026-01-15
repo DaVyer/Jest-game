@@ -12,7 +12,7 @@ import java.util.List;
  * sous forme de liste de CarteDTO.</p>
  * 
  * @author Gwendal Rodrigues
- * @version %I%, %G%
+ * @version 03/01/2026
  * @see Jest
  */
 public class JestDTO implements Serializable {

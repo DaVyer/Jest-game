@@ -14,7 +14,7 @@ import java.util.Random;
  * 
  *
  * @author Tristan Crémonat, Gwendal Rodrigues
- * @version %I%, %G%
+ * @version 03/01/2026
  */
 public class Pioche {
     private final static AtomicInteger ID_GENERATOR = new AtomicInteger(0);
@@ -141,19 +141,7 @@ public class Pioche {
     }
 
     /**
-     * Initialise la pioche depuis une liste de DTO.
-     * 
-     * @param pioche la liste de CarteDTO à convertir
-     * @deprecated Utiliser chargerDepuisDTO à la place
-     */
-    public void setPiocheDepuisDTO(List<CarteDTO> pioche) {
-        this.pioche = new LinkedList<>();
-        for (CarteDTO cDTO : pioche) {
-            this.pioche.add(DTOMapper.carteFromDTO(cDTO));
-        }
-    }
 
-    /**
      * Charge la pioche depuis une liste de DTO.
      * 
      * <p>Utilisé lors du chargement d'une partie sauvegardée.</p>

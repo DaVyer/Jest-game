@@ -9,7 +9,7 @@ package model;
  * 
  *
  * @author Tristan
- * @version %I%, %G%
+ * @version 03/01/2026
  */
 
 public class Offre {

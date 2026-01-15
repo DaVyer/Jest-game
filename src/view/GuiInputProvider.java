@@ -8,13 +8,26 @@ import java.awt.*;
 import java.util.List;
 
 /**
- * Implémentation pour l'interface graphique.
- * Utilise JOptionPane pour afficher des dialogues avec images.
+ * Implémentation de {@link InputProvider} pour l'interface graphique.
+ * 
+ * <p>Utilise des {@link JOptionPane} et des dialogues personnalisés
+ * pour afficher des informations et demander des choix à l'utilisateur,
+ * avec affichage des images des cartes.</p>
+ * 
+ * @author Gwendal Rodrigues
+ * @version 03/01/2026
+ * @see InputProvider
  */
 public class GuiInputProvider implements InputProvider {
     
+    /** La fenêtre parente pour les dialogues. */
     private final JFrame parent;
     
+    /**
+     * Constructeur du GuiInputProvider.
+     * 
+     * @param parent la fenêtre parente pour centrer les dialogues
+     */
     public GuiInputProvider(JFrame parent) {
         this.parent = parent;
     }
@@ -57,7 +70,12 @@ public class GuiInputProvider implements InputProvider {
     }
     
     /**
-     * Affiche les trophées de la partie.
+     * Affiche les trophées de la partie dans un dialogue.
+     * 
+     * <p>Affiche chaque carte trophée avec son image et sa condition
+     * dans une fenêtre modale.</p>
+     * 
+     * @param trophees la liste des cartes trophées à afficher
      */
     public void afficherTrophees(java.util.LinkedList<Carte> trophees) {
         if (trophees == null || trophees.isEmpty()) {
@@ -95,6 +113,11 @@ public class GuiInputProvider implements InputProvider {
     
     /**
      * Affiche une offre créée avec les images des cartes.
+     * 
+     * <p>Montre la carte visible et le dos de la carte cachée.</p>
+     * 
+     * @param carteVisible la carte visible de l'offre
+     * @param carteCachee la carte cachée de l'offre (affichée comme dos)
      */
     public void afficherOffreCreee(Carte carteVisible, Carte carteCachee) {
         JPanel panel = new JPanel(new GridLayout(1, 2, 20, 0));
@@ -133,6 +156,10 @@ public class GuiInputProvider implements InputProvider {
     
     /**
      * Affiche une carte révélée après que le joueur l'ait choisie.
+     * 
+     * <p>Montre l'image de la carte sélectionnée avec son nom.</p>
+     * 
+     * @param carte la carte choisie à afficher
      */
     public void afficherCarteChoisie(Carte carte) {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
@@ -158,6 +185,13 @@ public class GuiInputProvider implements InputProvider {
     
     /**
      * Demande à l'utilisateur de choisir une carte avec affichage des images.
+     * 
+     * <p>Affiche toutes les cartes avec leurs images et des boutons radio
+     * pour permettre la sélection.</p>
+     * 
+     * @param message le message à afficher
+     * @param cartes la liste des cartes parmi lesquelles choisir
+     * @return l'index de la carte choisie
      */
     public int demanderChoixCarte(String message, List<Carte> cartes) {
         JPanel panel = new JPanel(new GridLayout(1, cartes.size(), 10, 0));
@@ -203,6 +237,13 @@ public class GuiInputProvider implements InputProvider {
     
     /**
      * Demande à l'utilisateur de choisir une offre avec affichage des images.
+     * 
+     * <p>Affiche chaque offre avec la carte visible et le dos de la carte cachée,
+     * ainsi que le nom du joueur qui a créé l'offre.</p>
+     * 
+     * @param message le message à afficher
+     * @param offres la liste des offres disponibles
+     * @return l'index de l'offre choisie
      */
     public int demanderChoixOffre(String message, List<Offre> offres) {
         JPanel panel = new JPanel(new GridLayout(1, offres.size(), 10, 0));
@@ -259,7 +300,14 @@ public class GuiInputProvider implements InputProvider {
     }
     
     /**
-     * Demande de choisir entre carte visible (0) ou cachée (1) dans une offre.
+     * Demande de choisir entre carte visible ou cachée dans une offre.
+     * 
+     * <p>Affiche les deux cartes de l'offre : l'une avec son image,
+     * l'autre avec le dos de carte.</p>
+     * 
+     * @param message le message à afficher
+     * @param offre l'offre dans laquelle choisir
+     * @return 0 pour la carte visible, 1 pour la carte cachée
      */
     public int demanderChoixCarteOffre(String message, Offre offre) {
         JPanel panel = new JPanel(new GridLayout(1, 2, 10, 0));
@@ -306,7 +354,13 @@ public class GuiInputProvider implements InputProvider {
     }
     
     /**
-     * Charge l'image d'une carte.
+     * Charge l'image d'une carte depuis son chemin.
+     * 
+     * <p>Redimensionne l'image à 100x140 pixels. Si le chargement échoue,
+     * crée une image par défaut avec le texte de la carte.</p>
+     * 
+     * @param carte la carte dont charger l'image
+     * @return l'icône de l'image redimensionnée
      */
     private ImageIcon chargerImageCarte(Carte carte) {
         try {
@@ -334,6 +388,11 @@ public class GuiInputProvider implements InputProvider {
     
     /**
      * Charge l'image du dos de carte.
+     * 
+     * <p>Essaie plusieurs chemins possibles. Si aucune image n'est trouvée,
+     * crée un dos de carte par défaut de style classique.</p>
+     * 
+     * @return l'icône du dos de carte
      */
     private ImageIcon chargerImageDos() {
         // Essayer plusieurs chemins possibles
@@ -362,7 +421,12 @@ public class GuiInputProvider implements InputProvider {
     }
     
     /**
-     * Crée une image de dos de carte par défaut (style classique).
+     * Crée une image de dos de carte par défaut de style classique.
+     * 
+     * <p>Génère une image avec un fond bleu, une bordure dorée,
+     * des motifs décoratifs et le texte "Dos" au centre.</p>
+     * 
+     * @return l'icône du dos de carte généré
      */
     private ImageIcon creerDosParDefaut() {
         java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(100, 140, java.awt.image.BufferedImage.TYPE_INT_RGB);
@@ -402,6 +466,12 @@ public class GuiInputProvider implements InputProvider {
     
     /**
      * Crée une image par défaut avec le texte de la carte.
+     * 
+     * <p>Génère une image blanche avec bordure noire contenant
+     * le texte de la carte découpé sur plusieurs lignes.</p>
+     * 
+     * @param texte le texte à afficher sur l'image
+     * @return l'icône de l'image générée
      */
     private ImageIcon creerImageParDefaut(String texte) {
         // Créer une image simple avec le texte

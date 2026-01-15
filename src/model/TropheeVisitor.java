@@ -9,7 +9,7 @@ import java.util.*;
  * remportent les trophées selon les conditions associées à chaque carte trophée.</p>
  * 
  * @author Gwendal Rodrigues
- * @version %I%, %G%
+ * @version 03/01/2026
  * @see Visitor
  */
 public class TropheeVisitor implements Visitor {

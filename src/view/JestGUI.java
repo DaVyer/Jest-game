@@ -9,28 +9,73 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Interface graphique principale du jeu Jest.
+ * 
+ * <p>Fournit une interface graphique complète avec des boutons pour :</p>
+ * <ul>
+ * <li>Créer une nouvelle partie</li>
+ * <li>Charger/sauvegarder une partie</li>
+ * <li>Jouer des manches</li>
+ * <li>Afficher l'état et les résultats</li>
+ * </ul>
+ * <p>L'interface affiche également les trophées de la partie en cours.</p>
+ * 
+ * @author Gwendal Rodrigues, Tristan Crémonat
+ * @version 03/01/2026
+ */
 public class JestGUI {
 
+    /** Le gestionnaire de jeu partagé avec l'interface CLI. */
     private final GameManager gameManager;
 
+    /** La fenêtre principale. */
     private JFrame frame;
+    
+    /** Bouton pour créer une nouvelle partie. */
     private JButton btnNew;
+    
+    /** Bouton pour charger une partie. */
     private JButton btnLoad;
+    
+    /** Bouton pour sauvegarder la partie. */
     private JButton btnSave;
+    
+    /** Bouton pour afficher l'état de la partie. */
     private JButton btnStatus;
+    
+    /** Bouton pour jouer une manche. */
     private JButton btnManche;
+    
+    /** Bouton pour afficher les résultats finaux. */
     private JButton btnResultats;
+    
+    /** Bouton pour quitter l'application. */
     private JButton btnExit;
 
+    /** Zone de texte pour afficher les messages. */
     private JTextArea output;
+    
+    /** Panel pour afficher les trophées. */
     private JPanel trophiesPanel;
 
+    /**
+     * Constructeur de l'interface graphique.
+     * 
+     * @param gameManager le gestionnaire de jeu
+     */
     public JestGUI(GameManager gameManager) {
         this.gameManager = gameManager;
         initGUI();
         refreshUI();
     }
 
+    /**
+     * Initialise l'interface graphique.
+     * 
+     * <p>Crée la fenêtre principale, les boutons, la zone de texte
+     * et le panel des trophées. Configure également l'icône de l'application.</p>
+     */
     private void initGUI() {
         frame = new JFrame("Jeu de JEST");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -86,6 +131,11 @@ public class JestGUI {
         frame.setVisible(true);
     }
 
+    /**
+     * Ajoute les écouteurs d'événements aux boutons.
+     * 
+     * <p>Configure les actions pour chaque bouton de l'interface.</p>
+     */
     private void addListeners() {
 
         btnNew.addActionListener(e -> {
@@ -209,6 +259,11 @@ public class JestGUI {
         });
     }
 
+    /**
+     * Rafraîchi l'état des boutons selon qu'une partie est en cours ou non.
+     * 
+     * <p>Active ou désactive les boutons en fonction de la présence d'une partie.</p>
+     */
     private void refreshUI() {
         boolean has = gameManager.hasPartie();
         btnSave.setEnabled(has);
@@ -217,6 +272,13 @@ public class JestGUI {
         btnResultats.setEnabled(has);
     }
 
+    /* ========= Dialogs ========= */
+
+    /**
+     * Demande le nombre de joueurs pour une nouvelle partie.
+     * 
+     * @return le nombre de joueurs (3 ou 4), ou null si annulé
+     */
     private Integer demanderNombreJoueurs() {
         Object[] options = {"3", "4"};
         int choix = JOptionPane.showOptionDialog(
@@ -233,6 +295,15 @@ public class JestGUI {
         return (choix == 0) ? 3 : 4;
     }
 
+    /**
+     * Demande le nom d'un joueur.
+     * 
+     * <p>Valide que le nom contient au moins 2 caractères
+     * et n'est pas composé uniquement de chiffres.</p>
+     * 
+     * @param numeroJoueur le numéro du joueur (pour l'affichage)
+     * @return le nom du joueur, ou null si annulé
+     */
     private String demanderNomJoueur(int numeroJoueur) {
         while (true) {
             String nom = JOptionPane.showInputDialog(
@@ -258,6 +329,12 @@ public class JestGUI {
         }
     }
 
+    /**
+     * Demande le type de stratégie pour un joueur.
+     * 
+     * @param numeroJoueur le numéro du joueur (pour l'affichage)
+     * @return la stratégie choisie (humaine ou robot), ou null si annulé
+     */
     private StrategieJoueur demanderStrategie(int numeroJoueur) {
         Object[] options = {"Humain", "Robot (aléatoire)", "Robot (glouton)"};
         int choix = JOptionPane.showOptionDialog(
@@ -282,6 +359,15 @@ public class JestGUI {
         return null;
     }
 
+    /* ========= Save/Load ========= */
+
+    /**
+     * Sauvegarde la partie en cours dans un fichier.
+     * 
+     * <p>Utilise {@link Save#sauvegarder} pour sérialiser la partie.</p>
+     * 
+     * @param partie la partie à sauvegarder
+     */
     private void sauvegarder(Partie partie) {
         try {
             Save.sauvegarder(partie, "sauvegarde.ser");
@@ -293,6 +379,13 @@ public class JestGUI {
         }
     }
 
+    /**
+     * Charge une partie depuis un fichier de sauvegarde.
+     * 
+     * <p>Utilise {@link Load#charger} pour désérialiser la partie.</p>
+     * 
+     * @return la partie chargée, ou null en cas d'erreur
+     */
     private Partie charger() {
         try {
             return Load.charger("sauvegarde.ser");
@@ -305,6 +398,13 @@ public class JestGUI {
         }
     }
 
+    /* ========= Util ========= */
+
+    /**
+     * Affiche un message dans la zone de texte.
+     * 
+     * @param msg le message à afficher
+     */
     private void showInfo(String msg) {
         output.append(msg + "\n");
         output.setCaretPosition(output.getDocument().getLength());
@@ -312,6 +412,9 @@ public class JestGUI {
 
     /**
      * Affiche les trophées de la partie en cours dans le panel.
+     * 
+     * <p>Met à jour le panel des trophées avec les images et conditions
+     * de chaque carte trophée.</p>
      */
     private void afficherTrophees() {
         trophiesPanel.removeAll();
@@ -356,7 +459,13 @@ public class JestGUI {
     }
     
     /**
-     * Charge l'image d'une carte.
+     * Charge l'image d'une carte depuis son chemin.
+     * 
+     * <p>Redimensionne l'image à 80x110 pixels pour l'affichage dans le panel.
+     * Si le chargement échoue, crée une image par défaut.</p>
+     * 
+     * @param carte la carte dont charger l'image
+     * @return l'icône de l'image redimensionnée
      */
     private ImageIcon chargerImageCarte(Carte carte) {
         try {
@@ -379,6 +488,10 @@ public class JestGUI {
     
     /**
      * Affiche une fenêtre avec les résultats finaux de la partie.
+     * 
+     * <p>Calcule les scores de tous les joueurs, les trie par ordre décroissant
+     * et affiche le classement dans une nouvelle fenêtre. Le premier joueur
+     * est mis en évidence avec un fond doré.</p>
      */
     public void afficherResultatsFinaux() {
         if (!gameManager.hasPartie()) {
@@ -462,7 +575,13 @@ public class JestGUI {
     }
     
     /**
-     * Crée une image par défaut avec le texte.
+     * Crée une image par défaut avec le texte de la carte.
+     * 
+     * <p>Génère une image blanche avec bordure noire contenant
+     * le texte découpé sur plusieurs lignes.</p>
+     * 
+     * @param texte le texte à afficher
+     * @return l'icône de l'image générée
      */
     private ImageIcon creerImageParDefaut(String texte) {
         java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(80, 110, java.awt.image.BufferedImage.TYPE_INT_RGB);
@@ -488,6 +607,9 @@ public class JestGUI {
     
     /**
      * Demande à l'utilisateur de choisir le mode de jeu.
+     * 
+     * <p>Affiche un dialogue expliquant les différences entre
+     * les règles de base et la variante.</p>
      * 
      * @return true pour la variante, false pour les règles de base
      */
@@ -523,7 +645,10 @@ public class JestGUI {
     }
 
     /**
-     * Demande si l'extension Miroir est activée.
+     * Demande si l'extension Miroir doit être activée.
+     * 
+     * <p>Affiche un dialogue expliquant le fonctionnement
+     * de la carte Miroir avec des exemples.</p>
      * 
      * @return true si l'extension est activée, false sinon
      */

@@ -10,7 +10,7 @@ import java.util.Random;
  * aléatoires parmi les options disponibles.</p>
  * 
  * @author Gwendal Rodrigues
- * @version %I%, %G%
+ * @version 03/01/2026
  * @see StrategieJoueur
  */
 public class StrategieRobotAleatoire implements StrategieJoueur {

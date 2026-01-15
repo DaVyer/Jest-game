@@ -10,7 +10,7 @@ import java.util.List;
  * les choix au joueur via InputProvider (console ou GUI).</p>
  * 
  * @author Gwendal Rodrigues
- * @version %I%, %G%
+ * @version 03/01/2026
  * @see StrategieJoueur
  */
 public class StrategieHumaine implements StrategieJoueur {

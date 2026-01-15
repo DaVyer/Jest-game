@@ -2,7 +2,15 @@ package model;
 
 /**
  * Interface pour demander des choix à l'utilisateur.
- * Permet de séparer la logique métier de la source d'entrée (console ou GUI).
+ * 
+ * <p>Permet de séparer la logique métier de la source d'entrée (console ou GUI).
+ * Cette interface applique le pattern Strategy pour permettre différentes
+ * implémentations d'interaction avec l'utilisateur.</p>
+ * 
+ * @author Gwendal Rodrigues
+ * @version 03/01/2026
+ * @see ConsoleInputProvider
+ * @see view.GuiInputProvider
  */
 public interface InputProvider {
     

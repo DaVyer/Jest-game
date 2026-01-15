@@ -10,7 +10,7 @@ import java.util.List;
  * 
  *
  * @author Tristan
- * @version %I%, %G%
+ * @version 03/01/2026
  */
 public class Manche {
     /** Le numéro de la manche courante. */

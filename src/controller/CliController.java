@@ -8,17 +8,46 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Contrôleur pour l'interface en ligne de commande (CLI) du jeu Jest.
+ * 
+ * <p>Gère l'interaction avec l'utilisateur via la console, permettant
+ * de créer des parties, de les charger/sauvegarder, de jouer des manches
+ * et d'afficher l'état du jeu. Le contrôleur s'exécute dans un thread séparé
+ * et communique avec le {@link GameManager} de manière synchronisée.</p>
+ * 
+ * @author Gwendal Rodrigues, Tristan Crémonat
+ * @version 03/01/2026
+ */
 public class CliController implements Runnable {
 
+    /** Le gestionnaire de jeu partagé avec l'interface graphique. */
     private final GameManager gameManager;
+    
+    /** Le scanner pour lire les entrées utilisateur. */
     private final Scanner scanner;
+    
+    /** Indicateur d'exécution du contrôleur. */
     private volatile boolean enCours = true;
 
+    /**
+     * Constructeur du CliController.
+     * 
+     * @param gameManager le gestionnaire de jeu
+     * @param scanner le scanner pour lire les entrées console
+     */
     public CliController(GameManager gameManager, Scanner scanner) {
         this.gameManager = gameManager;
         this.scanner = scanner;
     }
 
+    /**
+     * Méthode principale du thread du contrôleur CLI.
+     * 
+     * <p>Affiche le menu et traite les commandes de l'utilisateur en boucle
+     * jusqu'à ce que la commande 'exit' soit saisie. Les commandes disponibles
+     * varient selon qu'une partie est en cours ou non.</p>
+     */
     @Override
     public void run() {
         presentation();
@@ -67,6 +96,21 @@ public class CliController implements Runnable {
         }
     }
 
+    /**
+     * Demande et valide le nom d'un joueur.
+     * 
+     * <p>Le nom doit :
+     * <ul>
+     * <li>Ne pas être vide ou composé uniquement d'espaces</li>
+     * <li>Ne pas être composé uniquement de chiffres</li>
+     * <li>Contenir au moins 2 caractères</li>
+     * </ul>
+     * La méthode redemande le nom jusqu'à ce qu'il soit valide.</p>
+     * 
+     * @param scanner le scanner pour lire l'entrée
+     * @param numeroJoueur le numéro du joueur (pour l'affichage)
+     * @return le nom valide du joueur
+     */
     private static String demanderNomJoueur(Scanner scanner, int numeroJoueur) {
         String nom = "";
         boolean valide = false;
@@ -97,6 +141,18 @@ public class CliController implements Runnable {
         return nom;
     }
 
+    /**
+     * Demande à l'utilisateur de choisir le mode de jeu.
+     * 
+     * <p>Deux modes sont disponibles :
+     * <ul>
+     * <li>Règles de base : Joker + 1-3 Cœurs = Cœurs négatifs, Joker = 0 ; Joker + 4 Cœurs = Cœurs positifs, Joker = 0</li>
+     * <li>Variante : Joker + 3+ Cœurs = Cœurs valent le double ; Joker + moins de 3 Cœurs = Cœurs négatifs</li>
+     * </ul>
+     * 
+     * @param scanner le scanner pour lire l'entrée
+     * @return false pour les règles de base, true pour la variante
+     */
     private static boolean demanderModeJeu(Scanner scanner) {
         System.out.println("\n===== MODE DE JEU =====");
         System.out.println("1. Règles de base :");
@@ -125,6 +181,15 @@ public class CliController implements Runnable {
         }
     }
     
+    /**
+     * Demande si l'extension Miroir doit être activée.
+     * 
+     * <p>L'extension Miroir ajoute une carte qui copie la valeur
+     * (avec le signe) de la meilleure carte du joueur.</p>
+     * 
+     * @param scanner le scanner pour lire l'entrée
+     * @return true pour activer l'extension, false sinon
+     */
     private static boolean demanderExtension(Scanner scanner) {
         System.out.println("\n===== EXTENSION MIROIR =====");
         System.out.println("Le Miroir copie la valeur (avec le signe) de votre carte la plus forte.");
@@ -148,6 +213,15 @@ public class CliController implements Runnable {
         }
     }
     
+    /**
+     * Demande le nombre de joueurs pour la partie.
+     * 
+     * <p>Le nombre doit être entre 3 et 4 (inclus).
+     * Redemande jusqu'à obtenir un nombre valide.</p>
+     * 
+     * @param scanner le scanner pour lire l'entrée
+     * @return le nombre de joueurs (3 ou 4)
+     */
     private static int demanderNombreJoueurs(Scanner scanner) {
         int nb = 0;
         while (nb < 3 || nb > 4) {
@@ -161,6 +235,18 @@ public class CliController implements Runnable {
         return nb;
     }
 
+    /**
+     * Demande le type de stratégie pour un joueur.
+     * 
+     * <p>Les options sont :
+     * <ul>
+     * <li>'h' pour un joueur humain ({@link StrategieHumaine})</li>
+     * <li>'r' pour un robot aléatoire ({@link StrategieRobotAleatoire})</li>
+     * </ul>
+     * 
+     * @param scanner le scanner pour lire l'entrée
+     * @return la stratégie choisie
+     */
     private static StrategieJoueur demanderStrategie(Scanner scanner) {
         while (true) {
             System.out.print("Type (h = humain, r = robot) : ");
@@ -173,6 +259,16 @@ public class CliController implements Runnable {
         }
     }
 
+    /**
+     * Crée la liste des joueurs pour une nouvelle partie.
+     * 
+     * <p>Pour chaque joueur, demande son nom et sa stratégie,
+     * puis crée l'objet {@link Joueur} correspondant.</p>
+     * 
+     * @param scanner le scanner pour lire les entrées
+     * @param nbJoueurs le nombre de joueurs à créer
+     * @return la liste des joueurs créés
+     */
     private static List<Joueur> creerJoueurs(Scanner scanner, int nbJoueurs) {
         List<Joueur> joueurs = new ArrayList<>();
         for (int i = 1; i <= nbJoueurs; i++) {
@@ -183,6 +279,11 @@ public class CliController implements Runnable {
         return joueurs;
     }
 
+    /**
+     * Affiche le message de bienvenue du jeu.
+     * 
+     * <p>Affiche le titre du jeu et une brève description.</p>
+     */
     private static void presentation() {
         System.out.println("================================");
         System.out.println("        BIENVENUE DANS JEST      ");
@@ -192,6 +293,11 @@ public class CliController implements Runnable {
         System.out.println();
     }
 
+    /**
+     * Affiche le menu principal avec les commandes disponibles.
+     * 
+     * <p>Commandes : new, load, help, exit.</p>
+     */
     private static void afficherMenuPrincipal() {
         System.out.println("Commandes principales :");
         System.out.println(" - new   : Nouvelle partie");
@@ -200,6 +306,11 @@ public class CliController implements Runnable {
         System.out.println(" - exit  : Quitter");
     }
 
+    /**
+     * Affiche les commandes disponibles pendant une partie.
+     * 
+     * <p>Commandes : manche, save, status, help, exit.</p>
+     */
     private static void afficherCommandesJeu() {
         System.out.println("\nCommandes de jeu :");
         System.out.println(" - manche : jouer une manche");
@@ -209,6 +320,14 @@ public class CliController implements Runnable {
         System.out.println(" - exit   : quitter");
     }
 
+    /**
+     * Sauvegarde la partie en cours dans un fichier.
+     * 
+     * <p>Utilise {@link Save#sauvegarder} pour sérialiser la partie
+     * dans le fichier 'sauvegarde.ser'.</p>
+     * 
+     * @param partie la partie à sauvegarder
+     */
     private static void sauvegarder(Partie partie) {
         try {
             Save.sauvegarder(partie, "sauvegarde.ser");
@@ -218,6 +337,14 @@ public class CliController implements Runnable {
         }
     }
 
+    /**
+     * Charge une partie depuis un fichier de sauvegarde.
+     * 
+     * <p>Utilise {@link Load#charger} pour désérialiser la partie
+     * depuis le fichier 'sauvegarde.ser'.</p>
+     * 
+     * @return la partie chargée, ou null en cas d'erreur
+     */
     private static Partie charger() {
         try {
             Partie partie = Load.charger("sauvegarde.ser");
