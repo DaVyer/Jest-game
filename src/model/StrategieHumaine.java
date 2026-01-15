@@ -1,7 +1,7 @@
 package model;
 
-import view.GuiInputProvider;
 import java.util.List;
+import view.GuiInputProvider;
 
 /**
  * Stratégie de jeu pour un joueur humain.
@@ -15,6 +15,13 @@ import java.util.List;
  */
 public class StrategieHumaine implements StrategieJoueur {
 
+    /**
+     * Demande au joueur humain de faire une offre.
+     * 
+     * @param joueur le joueur qui doit faire l'offre
+     * @param input le fournisseur d'entrée pour communiquer avec le joueur
+     * @return l'offre créée par le joueur
+     */
     @Override
     public Offre faireOffre(Joueur joueur, InputProvider input) {
         joueur.afficherMainManche();
@@ -50,6 +57,14 @@ public class StrategieHumaine implements StrategieJoueur {
         return new Offre(cachee, visible, joueur);
     }
 
+    /**
+     * Demande au joueur humain de choisir une offre parmi les offres disponibles.
+     * 
+     * @param offres la liste des offres proposées
+     * @param joueur le joueur qui doit choisir
+     * @param input le fournisseur d'entrée pour communiquer avec le joueur
+     * @return l'offre choisie par le joueur
+     */
     @Override
     public Offre choisirOffre(List<Offre> offres, Joueur joueur, InputProvider input) {
         int choix;
@@ -75,6 +90,14 @@ public class StrategieHumaine implements StrategieJoueur {
         return offres.get(choix);
     }
 
+    /**
+     * Demande au joueur humain de choisir une carte dans une offre.
+     * 
+     * @param offre l'offre à partir de laquelle choisir
+     * @param joueur le joueur qui doit choisir
+     * @param input le fournisseur d'entrée pour communiquer avec le joueur
+     * @return la carte choisie par le joueur
+     */
     @Override
     public Carte choisirCarteOffre(Offre offre, Joueur joueur, InputProvider input) {
         int choix;

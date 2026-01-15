@@ -2,8 +2,8 @@ package model;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Représente une pioche de cartes du jeu.
@@ -25,7 +25,10 @@ public class Pioche {
     private LinkedList<Carte> pioche;
 
     /**
-     * Constructeur de pioche
+     * Constructeur de pioche.
+     * 
+     * <p>Initialise une pioche avec un identifiant unique.
+     * La liste de cartes reste null jusqu'à l'appel de setPioche().</p>
      */
     public Pioche(){
         idPioche = ID_GENERATOR.getAndIncrement();

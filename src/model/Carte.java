@@ -1,11 +1,15 @@
 package model;
+
 /**
- * A class that permits to create cards with their color and value.
- *
+ * Représente une carte du jeu Jest.
+ * 
+ * <p>Une carte possède une couleur et une valeur. Les cartes sont les éléments
+ * fondamentaux du jeu utilisés par les joueurs pour former des combinaisons
+ * gagnantes.</p>
+ * 
  * @author Gwendal Rodrigues
  * @version 03/01/2026
  */
-
 public class Carte {
     /** La couleur de la carte. */
     private CouleurCarte couleur;
@@ -16,9 +20,12 @@ public class Carte {
     private String img;
 
     /**
-     * Constructor of the Carte class
-     * @param valeur the value of the card (see @CouleurCarte enum).
-     * @param couleur the color of the card (see @ValeurCarte enum).
+     * Constructeur de la classe Carte.
+     * 
+     * @param valeur la valeur de la carte (voir énumération {@link ValeurCarte})
+     * @param couleur la couleur de la carte (voir énumération {@link CouleurCarte})
+     * @param trophee la condition de trophée associée à la carte, ou null
+     * @param img le chemin du fichier image de la carte
      */
     public Carte(ValeurCarte valeur,  CouleurCarte couleur, ConditionTrophee trophee, String img) {
         this.valeur = valeur;
@@ -27,32 +34,36 @@ public class Carte {
         this.img = img;
     }
     /**
-     * Method that get the current color of a card.
-     * @return CouleurCarte
+     * Récupère la couleur actuelle de la carte.
+     * 
+     * @return la couleur de la carte
      */
     public CouleurCarte getCouleur() {
         return couleur;
     }
 
     /**
-     * Method that set a "couleur" to the current color of a card.
-     * @param couleur -- color of a card.
+     * Définit la couleur de la carte.
+     * 
+     * @param couleur la couleur à assigner à la carte
      */
     public void setCouleur(CouleurCarte couleur) {
         this.couleur = couleur;
     }
 
     /**
-     * Method that get the current value of a card.
-     * @return ValeurCarte
+     * Récupère la valeur actuelle de la carte.
+     * 
+     * @return la valeur de la carte
      */
     public ValeurCarte getValeur() {
         return valeur;
     }
 
     /**
-     * Method that set a "valeur" to the current value of a card.
-     * @param valeur -- value of a card.
+     * Définit la valeur de la carte.
+     * 
+     * @param valeur la valeur à assigner à la carte
      */
     public void setValeur(ValeurCarte valeur) {
         this.valeur = valeur;

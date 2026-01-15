@@ -6,13 +6,30 @@ import java.util.List;
 /**
  * Stratégie robot "gloutonne" : maximise le gain immédiat.
  *
- * <p>- Offre : montre la carte la plus faible (pour limiter l'intérêt),
- *           cache la plus forte (pour éviter de la donner).</p>
- * <p>- Choix d'offre : prend l'offre dont la carte visible est la plus forte.</p>
- * <p>- Choix de carte : prend la meilleure des deux cartes disponibles.</p>
+ * <p>Cette stratégie implémente une approche gloutonne pour jouer au Jest :</p>
+ * <ul>
+ * <li>Offre : montre la carte la plus faible (pour limiter l'intérêt), 
+ *           cache la plus forte (pour éviter de la donner)</li>
+ * <li>Choix d'offre : prend l'offre dont la carte visible est la plus forte</li>
+ * <li>Choix de carte : prend la meilleure des deux cartes disponibles</li>
+ * </ul>
+ * 
+ * @author Gwendal Rodrigues
+ * @version 03/01/2026
+ * @see StrategieJoueur
  */
 public class StrategieRobotGlouton implements StrategieJoueur {
 
+    /**
+     * Le robot crée une offre avec une stratégie gloutonne.
+     * 
+     * <p>Montre la carte la plus faible (pour limiter l'intérêt)
+     * et cache la plus forte (pour éviter de la donner).</p>
+     * 
+     * @param joueur le robot qui doit faire l'offre
+     * @param input le fournisseur d'entrée (non utilisé pour un robot)
+     * @return l'offre créée selon la stratégie gloutonne
+     */
     @Override
     public Offre faireOffre(Joueur joueur, InputProvider input) {
         List<Carte> mainManche = joueur.getMainCourante();
@@ -39,6 +56,14 @@ public class StrategieRobotGlouton implements StrategieJoueur {
         return new Offre(forte, faible, joueur);
     }
 
+    /**
+     * Le robot choisit l'offre avec la meilleure carte visible.
+     * 
+     * @param offres la liste des offres proposées
+     * @param joueur le robot qui doit choisir
+     * @param input le fournisseur d'entrée (non utilisé pour un robot)
+     * @return l'offre avec la plus forte carte visible
+     */
     @Override
     public Offre choisirOffre(List<Offre> offres, Joueur joueur, InputProvider input) {
         Offre meilleure = offres.stream()
@@ -52,6 +77,17 @@ public class StrategieRobotGlouton implements StrategieJoueur {
         return meilleure;
     }
 
+    /**
+     * Le robot choisit la meilleure carte disponible dans l'offre.
+     * 
+     * <p>Si la carte visible a une faible valeur, le robot prend la carte cachée
+     * en espérant qu'elle soit meilleure.</p>
+     * 
+     * @param offre l'offre à partir de laquelle choisir
+     * @param joueur le robot qui doit choisir
+     * @param input le fournisseur d'entrée (non utilisé pour un robot)
+     * @return la meilleure carte selon la stratégie gloutonne
+     */
     @Override
     public Carte choisirCarteOffre(Offre offre, Joueur joueur, InputProvider input) {
         Carte visible = offre.getVisible();
@@ -70,13 +106,22 @@ public class StrategieRobotGlouton implements StrategieJoueur {
         return prise;
     }
 
+    /**
+     * Retourne la carte avec la plus faible valeur entre deux cartes.
+     * 
+     * @param a la première carte
+     * @param b la deuxième carte
+     * @return la carte ayant la plus faible valeur
+     */
     private Carte minCarte(Carte a, Carte b) {
         return valeurCarte(a) <= valeurCarte(b) ? a : b;
     }
 
     /**
-     * Donne une valeur "immédiate" pour comparer des cartes.
-     * Adapte si ton modèle a un getValeur(), getFaceValue(), etc.
+     * Retourne la valeur numérique d'une carte pour la comparaison.
+     * 
+     * @param c la carte dont on veut connaître la valeur
+     * @return la valeur numérique de la carte
      */
     private int valeurCarte(Carte c) {
         // Cas le plus courant : ValeurCarte enum avec un int

@@ -18,6 +18,13 @@ public class StrategieRobotAleatoire implements StrategieJoueur {
     /** Générateur de nombres aléatoires. */
     private final Random random = new Random();
 
+    /**
+     * Le robot crée une offre avec des choix aléatoires.
+     * 
+     * @param joueur le robot qui doit faire l'offre
+     * @param input le fournisseur d'entrée (non utilisé pour un robot)
+     * @return l'offre créée aléatoirement
+     */
     @Override
     public Offre faireOffre(Joueur joueur, InputProvider input) {
         List<Carte> mainManche = joueur.getMainCourante();
@@ -41,6 +48,14 @@ public class StrategieRobotAleatoire implements StrategieJoueur {
         return new Offre(cachee, visible, joueur);
     }
 
+    /**
+     * Le robot choisit une offre aléatoirement.
+     * 
+     * @param offres la liste des offres proposées
+     * @param joueur le robot qui doit choisir
+     * @param input le fournisseur d'entrée (non utilisé pour un robot)
+     * @return l'offre choisie aléatoirement
+     */
     @Override
     public Offre choisirOffre(List<Offre> offres, Joueur joueur, InputProvider input) {
         Offre offre = offres.get(random.nextInt(offres.size()));
@@ -48,6 +63,14 @@ public class StrategieRobotAleatoire implements StrategieJoueur {
         return offre;
     }
 
+    /**
+     * Le robot choisit une carte aléatoirement dans une offre.
+     * 
+     * @param offre l'offre à partir de laquelle choisir
+     * @param joueur le robot qui doit choisir
+     * @param input le fournisseur d'entrée (non utilisé pour un robot)
+     * @return la carte choisie aléatoirement
+     */
     @Override
     public Carte choisirCarteOffre(Offre offre, Joueur joueur, InputProvider input) {
         Carte carte = random.nextBoolean()
