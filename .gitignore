@@ -33,3 +33,4 @@ out/
 ### saved game files ###
 *.ser
 
+/src/*/*.class
