@@ -3,7 +3,7 @@ package model;
  * A class that permits to create cards with their color and value.
  *
  * @author Gwendal Rodrigues
- * @version %I%, %G%
+ * @version 03/01/2026
  */
 
 public class Carte {
@@ -59,13 +59,19 @@ public class Carte {
     }
 
     /**
-     * Method that return the trophy value of a card?
-     *
+     * Récupère la condition de trophée associée à la carte.
+     * 
+     * @return la condition de trophée de la carte
      */
     public ConditionTrophee getTrophee(){
         return this.trophee;
     }
 
+    /**
+     * Récupère le chemin de l'image de la carte.
+     * 
+     * @return le chemin du fichier image
+     */
     public String getImg(){
         return this.img;
     }

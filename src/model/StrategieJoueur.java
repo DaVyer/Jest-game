@@ -9,7 +9,7 @@ import java.util.List;
  * façons de jouer (humain, robot aléatoire, etc.).</p>
  * 
  * @author Gwendal Rodrigues
- * @version %I%, %G%
+ * @version 03/01/2026
  */
 public interface StrategieJoueur {
 

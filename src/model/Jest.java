@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * au cours de la partie. Le Jest est lui-même considéré comme un joker.</p>
  * 
  * @author Gwendal Rodrigues
- * @version %I%, %G%
+ * @version 03/01/2026
  * @see Carte
  */
 public class Jest extends Carte{

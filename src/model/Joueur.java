@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * et sa stratégie de jeu (humaine ou robot).</p>
  * 
  * @author Gwendal Rodrigues, Tristan Crémonat
- * @version %I%, %G%
+ * @version 03/01/2026
  */
 public class Joueur {
     /** Générateur d'identifiants uniques pour les joueurs. */

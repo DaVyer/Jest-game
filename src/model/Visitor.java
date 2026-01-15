@@ -7,7 +7,7 @@ package model;
  * sans modifier leur classe (calcul de score, attribution de trophées, etc.).</p>
  * 
  * @author Gwendal Rodrigues
- * @version %I%, %G%
+ * @version 03/01/2026
  */
 public interface Visitor {
     /**

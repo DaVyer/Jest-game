@@ -10,7 +10,7 @@ import java.io.Serializable;
  * pour la sauvegarde et le chargement de parties.</p>
  * 
  * @author Gwendal Rodrigues
- * @version %I%, %G%
+ * @version 03/01/2026
  * @see Carte
  */
 public class CarteDTO implements Serializable {

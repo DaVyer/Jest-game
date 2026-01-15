@@ -11,10 +11,10 @@ Avant de lancer notre jeu, assurez vous d'avoir la version 25 de java.
     - Ouvrez un éditeur de commande, utilisant JAVA
     - Rendez vous dans le dossier d'origine 'JEST-GAME'
     - Puis taper la ligne suivante dans
-` javac src/Main.java src/controller/CliController.java src/model/*.java src/service/GameManager.java src/view/JestGUI.java`
+`javac -d bin -sourcepath src src/main/Main.java src/controller/*.java src/service/*.java src/model/*.java src/view/*.java`
 
 - 2) Lancer les fichiers 
-`java -cp src Main`
+`java -cp bin main.Main`
 
 Le terminal devrait vous renvoyer : 
 ```

@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 
  *
  * @author Tristan
- * @version %I%, %G%
+ * @version 03/01/2026
  */
 
 public class Partie{

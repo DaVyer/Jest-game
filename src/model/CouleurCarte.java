@@ -7,7 +7,7 @@ package model;
  * traditionnelles plus le joker.</p>
  * 
  * @author Gwendal Rodrigues
- * @version %I%, %G%
+ * @version 03/01/2026
  */
 public enum CouleurCarte {
     TREFLE, CARREAU, PIQUE, COEUR, JOKER, MIROIR

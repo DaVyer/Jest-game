@@ -9,7 +9,7 @@ import java.util.*;
  * d'un joueur selon les règles du jeu Jest.</p>
  * 
  * @author Gwendal Rodrigues
- * @version %I%, %G%
+ * @version 03/01/2026
  * @see Visitor
  */
 public class ScoreVisitor implements Visitor {

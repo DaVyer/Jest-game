@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * facilitant la sérialisation et la désérialisation.</p>
  * 
  * @author Gwendal Rodrigues
- * @version %I%, %G%
+ * @version 03/01/2026
  */
 public class DTOMapper {
 

@@ -11,7 +11,7 @@ import java.io.ObjectOutputStream;
  * en utilisant les objets DTO.</p>
  * 
  * @author Gwendal Rodrigues
- * @version %I%, %G%
+ * @version 03/01/2026
  */
 public class Save {
     /**
